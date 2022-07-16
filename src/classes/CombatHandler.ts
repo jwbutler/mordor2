@@ -1,3 +1,4 @@
+import { checkNotNull } from '../lib/preconditions';
 import { playAudio } from '../lib/sounds';
 import { levelUp } from '../lib/units';
 import { GameState } from './GameState';
@@ -5,7 +6,6 @@ import { randBoolean } from '../lib/random';
 import type { Unit } from '../lib/units';
 import { sleep } from '../lib/promises';
 import { getAttackDamage, getDodgeChance, getHitChance, getMitigatedDamage } from '../lib/stats';
-import { checkNotNull, checkState } from '../lib/preconditions';
 
 const shortSleepMillis = 150;
 const longSleepMillis = 250;
@@ -14,58 +14,49 @@ const takeDamage = (unit: Unit, damage: number) => {
   unit.life = Math.max(0, unit.life - damage);
 };
 
-type Props = {
-  state: GameState,
-  render: () => void
-};
-
 class CombatHandler {
-  private readonly state: GameState;
-  private readonly render: () => void;
-  
-  private attacker: Unit | null = null;
-  private defender: Unit | null = null;
-  
-  constructor ({ state, render }: Props) {
-    this.state = state;
-    this.render = render;
-  }
-
   startCombat = async (enemy: Unit) => {
-    const { state, render, attacker, defender } = this;
+    const state = GameState.getInstance();
     state.addMessage(`${enemy.name} appeared.`);
     await sleep(shortSleepMillis);
     if (randBoolean()) {
-      this.attacker = enemy;
-      this.defender = this.state.getPlayer().unit;
+      state.setCombatState({
+        attacker: enemy,
+        defender: state.getPlayer().unit
+      });
       state.setMenu('combat');
       await this.playTurn();
     } else {
-      this.attacker = state.getPlayer().unit;
-      this.defender = enemy;
+      state.setCombatState({
+        attacker: state.getPlayer().unit,
+        defender: enemy
+      });
       state.setMenu('combat');
     }
   };
 
-  playTurn = async (): Promise<void> => {
-    const { state, render } = this;
-    const attacker = checkNotNull(this.attacker);
-    const defender = checkNotNull(this.defender);
+  playTurn = async () => {
+    const state = GameState.getInstance();
+    const combatState = checkNotNull(state.getCombatState());
+    const { attacker, defender } = combatState;
+    
     await this._attack(attacker, defender);
     await sleep(longSleepMillis);
-    await render();
 
     if (defender.life <= 0) {
       await sleep(longSleepMillis);
       state.setMenu(null);
+      state.setCombatState(null);
     } else {
-      this.attacker = defender;
-      this.defender = attacker;
+      state.setCombatState({
+        attacker: defender,
+        defender: attacker
+      });
     }
   };
   
-  playTurnPair = async (): Promise<void> => {
-    const { state } = this;
+  playTurnPair = async () => {
+    const state = GameState.getInstance();
     await sleep(shortSleepMillis);
     await this.playTurn();
     await sleep(longSleepMillis);
@@ -75,7 +66,7 @@ class CombatHandler {
   };
 
   _attack = async (attacker: Unit, defender: Unit) => {
-    const { state } = this;
+    const state = GameState.getInstance();
     const hitChance = getHitChance(attacker);
     if (Math.random() < hitChance) {
       const dodgeChance = getDodgeChance(defender);

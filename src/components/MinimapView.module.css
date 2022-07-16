@@ -1,0 +1,70 @@
+.map {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  align-items: stretch;
+  border: 1px solid black;
+  overflow: hidden;
+  background-color: darkgray;
+  border-radius: 0;
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  flex-basis: 100%;
+}
+
+.tile {
+  border: 0 solid black;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-basis: 100%;
+  height: 100%;
+}
+
+.tile.current {
+  background-color: #f0f0e0;
+}
+
+.floor {
+  background-color: #c0c0c0;
+}
+
+.wall {
+  background-color: #808080;
+}
+
+.stairs {
+  background-color: #f00080;
+}
+
+.door_horizontal,.door_vertical {
+  background-color: brown;
+}
+
+.northArrow::after {
+  content: '↑'; 
+}
+
+.southArrow::after {
+  content: '↓'; 
+}
+
+.eastArrow::after {
+  content: '→'; 
+}
+
+.westArrow::after {
+  content: '←'; 
+}
+
+@media (min-width: 768px) {
+  .map {
+    height: 320px;
+    border-radius: 10px;
+  }
+}

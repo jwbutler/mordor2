@@ -1,9 +1,10 @@
 import { useEffect } from 'react';
+import { CombatHandler } from './classes/CombatHandler';
 import { GameState } from './classes/GameState';
 import GameView from './components/GameView';
 import { move, navigate, RelativeDirection } from './lib/geometry';
 import { getRelativeDirection } from './lib/input';
-import { isDoorFacingDirection, isStairs, isWallLike } from './lib/tiles';
+import { isDoorFacingDirection, isStairs, isWallLike, Tile } from './lib/tiles';
 
 const GameController = () => {
   const state = GameState.getInstance();
@@ -12,6 +13,14 @@ const GameController = () => {
     const relativeDirection = getRelativeDirection(e);
     if (relativeDirection) {
       await handleNavigate(relativeDirection);
+    }
+  };
+
+  const loadTile = async (tile: Tile) => {
+    if (tile.enemies.length > 0 && tile.enemies[0].life > 0) {
+      state.disableInput();
+      await new CombatHandler().startCombat(tile.enemies[0]);
+      state.enableInput();
     }
   };
   
@@ -44,11 +53,10 @@ const GameController = () => {
       player.coordinates = coordinates;
     }
     player.direction = direction;
-    // console.log(`navigate... ${player.coordinates.x} ${player.coordinates.y} ${player.direction}`);
     
     // TODO need to setup combat and stuff
-    // const tile = state.getLevel().tiles[player.coordinates.y][player.coordinates.x] as Tile;
-    // await loadTile(tile);
+    const tile = state.getLevel().tiles[player.coordinates.y][player.coordinates.x] as Tile;
+    await loadTile(tile);
   };
   
   useEffect(() => {

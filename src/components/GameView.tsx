@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react';
 import { GameState } from '../classes/GameState';
 import { RelativeDirection } from '../lib/geometry';
+import CombatView from './CombatView';
 import IntroView from './IntroView';
 import MainView from './MainView';
 import styles from './GameView.module.css';
+import MinimapView from './MinimapView';
 import UnitView from './UnitView';
 
 type Props = {
@@ -36,6 +38,10 @@ const GameView = ({ navigate }: Props) => {
       )}
       <div className={`${styles.column} ${styles.right}`}>
         <UnitView unit={state.getPlayer().unit} player={state.getPlayer()} />
+        {state.getMenu() === 'combat'
+          ? <CombatView />
+          : <MinimapView />
+        }
       </div>
     </main>
   );

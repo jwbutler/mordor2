@@ -30,7 +30,7 @@ const UnitView = ({ unit, player }: Props) => {
                 max={unit.experienceToNextLevel}
               />
             </div>
-            <div>{unit.experience} / {unit.experienceToNextLevel}</div>
+            <div>{unit.experience}/{unit.experienceToNextLevel}</div>
           </td>
         </tr>
         <tr>
@@ -43,7 +43,7 @@ const UnitView = ({ unit, player }: Props) => {
                 max={unit.maxLife}
               />
             </div>
-            <div>{unit.life} / {unit.maxLife}</div>
+            <div>{unit.life}/{unit.maxLife}</div>
           </td>
         </tr>
         <tr>
@@ -56,7 +56,7 @@ const UnitView = ({ unit, player }: Props) => {
                 max={unit.maxMana}
               />
             </div>
-            <div>{unit.mana} / {unit.maxMana}</div>
+            <div>{unit.mana}/{unit.maxMana}</div>
           </td>
         </tr>
         <tr>
