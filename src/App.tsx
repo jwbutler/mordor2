@@ -21,8 +21,6 @@ const App = () => {
   const state = new GameState({ level, player, menu: null });
   GameState.setInstance(state);
 
-  setInterval(() => { state.getPlayer().gold += 10; }, 100);
-
   return (
     <GameController />
   );

@@ -4,6 +4,7 @@ import { RelativeDirection } from '../lib/geometry';
 import IntroView from './IntroView';
 import MainView from './MainView';
 import styles from './GameView.module.css';
+import UnitView from './UnitView';
 
 type Props = {
   navigate: (relativeDirection: RelativeDirection) => void;
@@ -16,7 +17,6 @@ const GameView = ({ navigate }: Props) => {
   
   useEffect(() => {
     const render = () => {
-      console.log(ticks + 1);
       setTicks(ticks + 1);
     };
     const timer = setInterval(render, 50);
@@ -35,7 +35,7 @@ const GameView = ({ navigate }: Props) => {
         </div>
       )}
       <div className={`${styles.column} ${styles.right}`}>
-        <>UNIT</>
+        <UnitView unit={state.getPlayer().unit} player={state.getPlayer()} />
       </div>
     </main>
   );

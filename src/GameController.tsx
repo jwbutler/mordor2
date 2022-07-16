@@ -44,6 +44,7 @@ const GameController = () => {
       player.coordinates = coordinates;
     }
     player.direction = direction;
+    // console.log(`navigate... ${player.coordinates.x} ${player.coordinates.y} ${player.direction}`);
     
     // TODO need to setup combat and stuff
     // const tile = state.getLevel().tiles[player.coordinates.y][player.coordinates.x] as Tile;
@@ -52,6 +53,7 @@ const GameController = () => {
   
   useEffect(() => {
     window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
   // eslint-disable-next-line
   }, []);
   

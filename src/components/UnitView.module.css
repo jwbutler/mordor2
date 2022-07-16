@@ -1,0 +1,26 @@
+.unit {
+  table-layout: fixed;
+  border-collapse: collapse;
+  width: 100%;
+  border: 2px solid #ffffff;
+  background-color: #000000;
+}
+
+td {
+  padding: 10px;
+  vertical-align: top;
+}
+
+td:nth-child(1) {
+  width: 40%;
+  text-align: left;
+}
+
+td:nth-child(2) {
+  text-align: right;
+}
+
+.meter {
+  width: 100%;
+  margin: 0 auto 10px auto;
+}
