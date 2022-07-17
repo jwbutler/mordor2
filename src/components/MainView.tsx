@@ -13,18 +13,16 @@ type Props = {
 const MainView = ({ navigate, returnToDungeon }: Props) => {
   const state = GameState.getInstance();
   return (
-    <div className={styles.container}>
-      <div className={styles.viewport}>
-        {(state.getPlayer().location === 'dungeon') && (
-          <DungeonView />
-        )}
-        {(state.getPlayer().location === 'town') && (
-          <TownView onExit={returnToDungeon} />
-        )}
-        {state.inputEnabled() && (
-          <ControlsView navigate={navigate} />
-        )}
-      </div>
+    <div className={styles.viewport}>
+      {(state.getPlayer().location === 'dungeon') && (
+        <DungeonView />
+      )}
+      {(state.getPlayer().location === 'town') && (
+        <TownView onExit={returnToDungeon} />
+      )}
+      {state.inputEnabled() && (
+        <ControlsView navigate={navigate} />
+      )}
     </div>
   );
 };

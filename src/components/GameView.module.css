@@ -3,6 +3,7 @@ main {
   flex-direction: row;
   width: 1280px;
   height: 720px;
+  max-height: 100vh;
   align-items: center;
   gap: 0;
   scroll-snap-type: x mandatory;
@@ -31,15 +32,15 @@ main {
 }
 
 .left > :nth-child(1) {
-  flex: 1 1 auto;
+  flex: 0 1 auto;
 }
 
 .left > :nth-child(2) {
-  flex: 1 1 auto;
+  flex: 0 1 auto;
 }
 
 .left > :nth-child(3) {
-  flex: 0 1 auto;
+  flex: 1 1 auto;
 }
 
 @media (min-width: 768px) {
@@ -61,11 +62,11 @@ main {
     width: 640px;
   }
 
-  .left > :nth-child(1) {
-    flex: 0 1 auto;
-  }
-
   .right {
     width: 320px;
+  }
+  
+  .right > * {
+    flex: 1 1 auto;
   }
 }

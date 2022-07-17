@@ -8,6 +8,7 @@ import styles from './GameView.module.css';
 import MessagesView from './MessagesView';
 import MinimapView from './MinimapView';
 import UnitView from './UnitView';
+import MobileOnly from './MobileOnly';
 
 type Props = {
   navigate: (relativeDirection: RelativeDirection) => void,
@@ -38,8 +39,13 @@ const GameView = ({ navigate, returnToDungeon }: Props) => {
             navigate={navigate}
             returnToDungeon={returnToDungeon}
           />
-          <MessagesView messages={state.getMessages()} />
-          {/* TODO mobile container */}
+          {(state.getPlayer().location !== 'town') && (
+            <MessagesView messages={state.getMessages()} />
+          )}
+          <MobileOnly>
+            {(state.getMenu() === 'combat') && <CombatView />}
+            {(state.getPlayer().location === 'dungeon' && state.getMenu() !== 'combat') && <MinimapView />}
+          </MobileOnly>
         </div>
       )}
       <div className={`${styles.column} ${styles.right}`}>
