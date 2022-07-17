@@ -4,10 +4,9 @@
   width: 100%;
   height: 100%;
   align-items: stretch;
-  border: 1px solid black;
+  border: 4px solid white;
   overflow: hidden;
-  background-color: darkgray;
-  border-radius: 0;
+  background-color: gray;
 }
 
 .row {
@@ -31,11 +30,11 @@
 }
 
 .floor {
-  background-color: #c0c0c0;
+  background-color: silver;
 }
 
 .wall {
-  background-color: #808080;
+  background-color: gray;
 }
 
 .stairs {
@@ -69,6 +68,5 @@
 @media (min-width: 768px) {
   .map {
     height: 320px;
-    border-radius: 10px;
   }
 }

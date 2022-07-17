@@ -1,23 +1,23 @@
 .meter {
   height: 20px;
   position: relative;
-  background-color: #808080;
-  border: 2px solid #ffffff;
+  background-color: gray;
+  border: 2px solid white;
   overflow: hidden;
 }
 
 .current {
   height: 100%;
   position: absolute;
-  outline: 2px solid #ffffff;
+  outline: 2px solid white;
 }
 
 .life.high {
-  background-color: #00ff00;
+  background-color: lime;
 }
 
 .life.medium {
-  background-color: #ffff00;
+  background-color: yellow;
 }
 
 .life.low {
@@ -25,11 +25,11 @@
 }
 
 .life.critical {
-  background-color: #ff0000;
+  background-color: red;
 }
 
 .mana {
-  background-color: #0000ff;
+  background-color: blue;
 }
 
 .experience {

@@ -1,9 +1,9 @@
 .unit {
   table-layout: fixed;
-  border-collapse: collapse;
   width: 100%;
-  border: 2px solid #ffffff;
-  background-color: #000000;
+  border: 4px solid white;
+  background-color: black;
+  user-select: none;
 }
 
 td {

@@ -30,7 +30,7 @@ class GameState {
     this.level = level;
     this.player = player;
     this._enableInput = true;
-    this.messages = ['test','teest','ete','test'];
+    this.messages = [];
     this.menu = menu;
     this.combatState = null;
   }
