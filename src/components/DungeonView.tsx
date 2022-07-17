@@ -1,21 +1,27 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import DungeonRenderer from '../classes/DungeonRenderer';
 import styles from './DungeonView.module.css';
 
 const renderer = new DungeonRenderer();
+let rendering = false;
 
 const DungeonView = () => {
-  const bufferElement = document.getElementById('buffer-canvas') as HTMLCanvasElement;
-  const dungeonCanvas = document.getElementById('dungeon-canvas') as HTMLCanvasElement;
+  const ref = useRef<HTMLCanvasElement>(null);
+  const canvas = ref.current;
 
   useEffect(() => {
     (async () => {
-      if (bufferElement && dungeonCanvas) {
-        await renderer.renderTiles(bufferElement);
-        const bufferContext = bufferElement.getContext('2d') as CanvasRenderingContext2D;
-        const imageData = bufferContext.getImageData(0, 0, bufferElement.width, bufferElement.height);
-        const dungeonContext = dungeonCanvas.getContext('2d') as CanvasRenderingContext2D;
-        dungeonContext.putImageData(imageData, 0, 0);
+      if (canvas && !rendering) {
+        rendering = true;
+        const buffer = document.createElement('canvas');
+        buffer.width = canvas.width;
+        buffer.height = canvas.height;
+        await renderer.renderTiles(buffer);
+        const bufferContext = buffer.getContext('2d') as CanvasRenderingContext2D;
+        const imageData = bufferContext.getImageData(0, 0, buffer.width, buffer.height);
+        const canvasContext = canvas.getContext('2d') as CanvasRenderingContext2D;
+        canvasContext.putImageData(imageData, 0, 0);
+        rendering = false;
       }
     })();
   });
@@ -23,7 +29,7 @@ const DungeonView = () => {
   return (
     <>
       <canvas
-        id="dungeon-canvas"
+        ref={ref}
         className={styles.dungeon}
         width={640} height={480}
       />

@@ -1,68 +1,44 @@
-.container {
-  border-radius: 100%;
-  position: absolute;
-  right: 10px;
-  bottom: 10px;
-  width: 96px;
-  height: 96px;
-  background-color: gray;
-  border: 2px solid white;
-  opacity: 0.75;
-}
-
 .arrow {
   position: absolute;
-  transform: translate3d(-50%, -50%, 0);
-  font-size: 36px;
+  font-size: 40px;
   font-weight: bold;
   border: none;
-  border-radius: 100%;
   background: transparent;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 37.5%;
-  height: 37.5%;
+  width: 40px;
+  height: 40px;
+  line-height: 40px;
   user-select: none;
   touch-action: manipulation;
   color: white;
 }
 
 .arrow:hover {
-  background-color: silver;
+  color: silver;
 }
 
 .arrow:active {
-  background-color: white;
-  color: gray;
+  color: cyan;
 }
 
 .up {
-  top: 20%;
-  left: 50%;
+  top: 5px;
+  left: calc(50% - 20px);
 }
 
 .down {
-  top: 80%;
-  left: 50%;
+  bottom: 5px;
+  left: calc(50% - 20px);
 }
 
 .left {
-  top: 50%;
-  left: 20%;
+  top: calc(50% - 20px);
+  left: 5px;
 }
 
 .right {
-  top: 50%;
-  left: 80%;
-}
-
-@media (min-width: 768px) {
-  .container {
-    width: 64px;
-    height: 64px;
-  }
-  .arrow {
-    font-size: 20px;
-  }
+  top: calc(50% - 20px);
+  right: 5px;
 }

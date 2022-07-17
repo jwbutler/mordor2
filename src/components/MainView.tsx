@@ -16,10 +16,10 @@ const MainView = ({ navigate }: Props) => {
         {(state.getPlayer().location === 'dungeon') && (
           <DungeonView />
         )}
+        {state.inputEnabled() && (
+          <ControlsView navigate={navigate} />
+        )}
       </div>
-      {state.inputEnabled() && (
-        <ControlsView navigate={navigate} />
-      )}
     </div>
   );
 };
