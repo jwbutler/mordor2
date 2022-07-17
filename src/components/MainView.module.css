@@ -4,7 +4,7 @@
 }
 
 .viewport {
-  border: 2px solid #ffffff;
+  outline: 2px solid #ffffff;
   overflow: hidden;
   width: 100%;
   height: 100%;

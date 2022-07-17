@@ -7,8 +7,9 @@ import styles from './MinimapView.module.css';
 const tileClass = (tile: Tile | null, currentTile: Tile, currentDirection: CompassDirection): string => {
   const classNames: string[] = [styles.tile, styles[tile?.type || 'wall']];
   if (tile === currentTile) {
-    classNames.push(styles.currentcurrent);
-    classNames.push(styles[`${currentDirection}Arrow`]);
+    classNames.push(styles.current);
+    classNames.push(styles[currentDirection]);
+    classNames.push(styles.arrow);
   }
   return classNames.join(' ');
 };

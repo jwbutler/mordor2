@@ -4,6 +4,7 @@ import { GameState } from './classes/GameState';
 import GameView from './components/GameView';
 import { move, navigate, RelativeDirection } from './lib/geometry';
 import { getRelativeDirection } from './lib/input';
+import { getTile } from './lib/levels';
 import { isDoorFacingDirection, isStairs, isWallLike, Tile } from './lib/tiles';
 
 const GameController = () => {
@@ -38,7 +39,7 @@ const GameController = () => {
       relativeDirection
     });
 
-    const nextTile = state.getCurrentTile();
+    const nextTile = getTile(state.getLevel(), coordinates);
     if (isDoorFacingDirection(nextTile, direction)) {
       player.coordinates = move(coordinates, direction); // assume the developer put a floor tile there...
     } else if (isStairs(nextTile)) {
@@ -53,8 +54,7 @@ const GameController = () => {
       player.coordinates = coordinates;
     }
     player.direction = direction;
-    
-    // TODO need to setup combat and stuff
+
     const tile = state.getLevel().tiles[player.coordinates.y][player.coordinates.x] as Tile;
     await loadTile(tile);
   };

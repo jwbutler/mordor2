@@ -46,20 +46,24 @@
   background-color: brown;
 }
 
-.northArrow::after {
-  content: '↑'; 
+.arrow {
+  color: black;
 }
 
-.southArrow::after {
-  content: '↓'; 
+.arrow.north::after {
+  content: '🡱';
 }
 
-.eastArrow::after {
-  content: '→'; 
+.arrow.south::after {
+  content: '🡳'; 
 }
 
-.westArrow::after {
-  content: '←'; 
+.arrow.east::after {
+  content: '🡲'; 
+}
+
+.arrow.west::after {
+  content: '🡰'; 
 }
 
 @media (min-width: 768px) {

@@ -5,6 +5,7 @@ import CombatView from './CombatView';
 import IntroView from './IntroView';
 import MainView from './MainView';
 import styles from './GameView.module.css';
+import MessagesView from './MessagesView';
 import MinimapView from './MinimapView';
 import UnitView from './UnitView';
 
@@ -33,7 +34,8 @@ const GameView = ({ navigate }: Props) => {
       {(state.getMenu() !== 'intro') && (
         <div className={`${styles.column} ${styles.left}`}>
           <MainView navigate={navigate} />
-          <>(MOBILE)</>
+          <MessagesView messages={state.getMessages()} />
+          {/* TODO mobile container */}
         </div>
       )}
       <div className={`${styles.column} ${styles.right}`}>
