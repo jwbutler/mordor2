@@ -58,6 +58,11 @@ const GameController = () => {
     const tile = state.getLevel().tiles[player.coordinates.y][player.coordinates.x] as Tile;
     await loadTile(tile);
   };
+
+  const returnToDungeon = () => {
+    state.getPlayer().location = 'dungeon';
+    state.getPlayer().coordinates = { ...state.getLevel().startingPoint };
+  };
   
   useEffect(() => {
     window.addEventListener('keydown', handleKeyDown);
@@ -65,7 +70,12 @@ const GameController = () => {
   // eslint-disable-next-line
   }, []);
   
-  return <GameView navigate={handleNavigate} />;
+  return (
+    <GameView
+      navigate={handleNavigate}
+      returnToDungeon={returnToDungeon}
+    />
+  );
 };
 
 export default GameController;

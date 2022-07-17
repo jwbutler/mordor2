@@ -10,10 +10,11 @@ import MinimapView from './MinimapView';
 import UnitView from './UnitView';
 
 type Props = {
-  navigate: (relativeDirection: RelativeDirection) => void;
+  navigate: (relativeDirection: RelativeDirection) => void,
+  returnToDungeon: () => void
 }
 
-const GameView = ({ navigate }: Props) => {
+const GameView = ({ navigate, returnToDungeon }: Props) => {
   const [ticks, setTicks] = useState(0);
 
   const state = GameState.getInstance();
@@ -33,7 +34,10 @@ const GameView = ({ navigate }: Props) => {
       )}
       {(state.getMenu() !== 'intro') && (
         <div className={`${styles.column} ${styles.left}`}>
-          <MainView navigate={navigate} />
+          <MainView
+            navigate={navigate}
+            returnToDungeon={returnToDungeon}
+          />
           <MessagesView messages={state.getMessages()} />
           {/* TODO mobile container */}
         </div>

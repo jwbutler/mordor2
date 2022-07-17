@@ -86,6 +86,7 @@ class CombatHandler {
           if (defender === playerUnit) {
             alert('GAME OVER!');
           } else {
+            await sleep(shortSleepMillis);
             const { x, y } = state.getPlayer().coordinates;
             const tile = state.getLevel().tiles[y][x];
             tile.enemies.splice(tile.enemies.indexOf(defender));
