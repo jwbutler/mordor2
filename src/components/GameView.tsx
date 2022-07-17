@@ -40,10 +40,8 @@ const GameView = ({ navigate }: Props) => {
       )}
       <div className={`${styles.column} ${styles.right}`}>
         <UnitView unit={state.getPlayer().unit} player={state.getPlayer()} />
-        {state.getMenu() === 'combat'
-          ? <CombatView />
-          : <MinimapView />
-        }
+        {(state.getMenu() === 'combat') && <CombatView />}
+        {(state.getPlayer().location === 'dungeon' && state.getMenu() !== 'combat') && <MinimapView />}
       </div>
     </main>
   );

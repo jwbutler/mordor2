@@ -18,11 +18,19 @@ const CombatView = ({}: Props) => {
   };
   return (
     <div className={styles.combat}>
-      <button onClick={attack} disabled={!state.inputEnabled()}>
+      <button
+        className={styles.button}
+        onClick={attack}
+        disabled={!state.inputEnabled()}
+      >
         Attack
       </button>
-      <button disabled>Item</button>
-      <button disabled>Run</button>
+      <button className={styles.button} disabled>
+        Item
+      </button>
+      <button className={styles.button} disabled>
+        Run
+      </button>
     </div>
   );
 };

@@ -9,7 +9,7 @@
   gap: 20px;
 }
 
-button {
+.button {
   width: 35%;
   text-align: center;
   border: 2px solid white;
@@ -20,17 +20,17 @@ button {
   cursor: pointer;
 }
 
-button:active:not(:disabled) {
+.button:active:not(:disabled) {
   background-color: gray;
 }
 
-button:disabled {
+.button:disabled {
   color: gray;
   border-color: gray;
 }
 
 @media (max-width: 767px) {
-  button:disabled {
+  .button:disabled {
     color: gray;
     border-color: gray;
   }
@@ -39,7 +39,7 @@ button:disabled {
     justify-content: space-between;
   }
   
-  button {
+  .button {
     width: 90%;
     height: 25%;
   }

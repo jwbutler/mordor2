@@ -9,5 +9,6 @@
   font-family: Alagard, serif;
   font-size: 24px;
   padding: 5px;
-  scrollbar-color: silver gray;
+  scrollbar-color: silver #e0e0e0;
+  outline: none;
 }

@@ -1,8 +1,8 @@
 main {
   display: flex;
   flex-direction: row;
-  height: 640px;
-  max-width: 1280px;
+  width: 1280px;
+  height: 720px;
   align-items: center;
   gap: 0;
   scroll-snap-type: x mandatory;

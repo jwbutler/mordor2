@@ -1,19 +1,19 @@
 .container {
-  border: 1px solid black;
   border-radius: 100%;
   position: absolute;
-  right: 20px;
-  bottom: 20px;
-  width: 64px;
-  height: 64px;
-  background-color: #d0d0d0;
+  right: 10px;
+  bottom: 10px;
+  width: 96px;
+  height: 96px;
+  background-color: gray;
+  border: 2px solid white;
   opacity: 0.75;
 }
 
 .arrow {
   position: absolute;
   transform: translate3d(-50%, -50%, 0);
-  font-size: 16px;
+  font-size: 36px;
   font-weight: bold;
   border: none;
   border-radius: 100%;
@@ -25,45 +25,44 @@
   height: 37.5%;
   user-select: none;
   touch-action: manipulation;
+  color: white;
 }
 
 .arrow:hover {
-  background-color: #f0f0f0;
+  background-color: silver;
 }
 
 .arrow:active {
   background-color: white;
+  color: gray;
 }
 
 .up {
-  top: 25%;
+  top: 20%;
   left: 50%;
 }
 
 .down {
-  top: 75%;
+  top: 80%;
   left: 50%;
 }
 
 .left {
   top: 50%;
-  left: 25%;
+  left: 20%;
 }
 
 .right {
   top: 50%;
-  left: 75%;
+  left: 80%;
 }
 
-@media (max-width: 767px) {
+@media (min-width: 768px) {
   .container {
-    width: 96px;
-    height: 96px;
+    width: 64px;
+    height: 64px;
   }
   .arrow {
-    font-size: 36px;
-  }
-  .arrow:hover:not(:active) {
-    background-color: initial;
+    font-size: 20px;
   }
 }
