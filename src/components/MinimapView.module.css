@@ -46,22 +46,23 @@
 
 .arrow {
   color: black;
+  font-family: sans-serif;
 }
 
 .arrow.north::after {
-  content: '🡱';
+  content: '↑';
 }
 
 .arrow.south::after {
-  content: '🡳'; 
+  content: '↓'; 
 }
 
 .arrow.east::after {
-  content: '🡲'; 
+  content: '→'; 
 }
 
 .arrow.west::after {
-  content: '🡰'; 
+  content: '←'; 
 }
 
 @media (min-width: 768px) {

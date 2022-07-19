@@ -2,6 +2,7 @@ main {
   display: flex;
   flex-direction: row;
   width: 1280px;
+  max-width: 100vw;
   height: 720px;
   max-height: 100vh;
   align-items: center;
@@ -17,7 +18,7 @@ main {
   flex-direction: column;
   justify-content: space-between;
   scroll-snap-align: center;
-  width: 100vw;
+  max-width: 100vw;
   flex-shrink: 0;
   padding: 0;
   flex-basis: auto;
@@ -44,10 +45,6 @@ main {
 }
 
 @media (min-width: 768px) {
-  .mobile-only {
-    display: none;
-  }
-
   main {
     align-items: stretch;
     gap: 20px;
@@ -60,6 +57,10 @@ main {
 
   .left {
     width: 640px;
+  }
+
+  .left > :nth-child(2) {
+    flex: 1 1 auto;
   }
 
   .right {

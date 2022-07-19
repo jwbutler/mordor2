@@ -9,16 +9,16 @@ const ControlsView = ({ navigate }: Props) => {
   return (
     <>
       <button className={`${styles.arrow} ${styles.up}`} onClick={() => navigate('forward')}>
-        ⮝
+        ↑ 
       </button>
       <button className={`${styles.arrow} ${styles.down}`} onClick={() => navigate('backward')}>
-        ⮟
+        ↓
       </button>
       <button className={`${styles.arrow} ${styles.left}`} onClick={() => navigate('left')}>
-        ⮜
+        ←
       </button>
       <button className={`${styles.arrow} ${styles.right}`} onClick={() => navigate('right')}>
-        ⮞
+        →
       </button>
     </>
   );
