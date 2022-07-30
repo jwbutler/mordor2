@@ -4,6 +4,7 @@
   border: 4px solid white;
   background-color: black;
   user-select: none;
+  flex-grow: 0;
 }
 
 td {

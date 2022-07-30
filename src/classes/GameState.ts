@@ -1,16 +1,18 @@
 import { getTile } from '../lib/levels';
 import type { Level } from '../lib/levels';
-import type { Player } from '../lib/player';
+import Player from './Player';
 import { checkNotNull } from '../lib/preconditions';
+import Shop from './Shop';
 import type { Tile } from '../lib/tiles';
-import { Unit } from '../lib/units';
+import Unit from '../classes/Unit';
 
-type Menu = 'intro' | 'combat';
+type Menu = 'intro' | 'combat' | 'inventory';
 
 type Props = {
   level: Level,
   player: Player,
-  menu: Menu | null
+  menu: Menu | null,
+  shop: Shop
 };
 
 type CombatState = {
@@ -19,20 +21,22 @@ type CombatState = {
 };
 
 class GameState {
-  private level: Level;
-  private player: Player;
-  private _enableInput: boolean;
+  private readonly player: Player;
   private readonly messages: string[];
+  private level: Level;
+  private _enableInput: boolean;
   private menu: Menu | null;
   private combatState: CombatState | null;
+  private readonly shop: Shop;
   
-  constructor({ level, player, menu }: Props) {
-    this.level = level;
+  constructor({ level, player, menu, shop }: Props) {
     this.player = player;
+    this.level = level;
     this._enableInput = true;
     this.messages = [];
     this.menu = menu;
     this.combatState = null;
+    this.shop = shop;
   }
   
   getLevel = (): Level => this.level;
@@ -46,7 +50,8 @@ class GameState {
   inputEnabled = () => this._enableInput;
   getCombatState = () => this.combatState;
   setCombatState = (combatState: CombatState | null) => { this.combatState = combatState; };
-  
+  getShop = () => this.shop;
+
   getCurrentTile = (): Tile => checkNotNull(getTile(this.level, this.player.coordinates));
 
   private static instance: GameState | null;

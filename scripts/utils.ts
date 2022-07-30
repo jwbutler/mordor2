@@ -1,5 +1,7 @@
 import { createCanvas, Image, loadImage, ImageData } from 'canvas';
+import { writeFileSync } from 'fs';
 import { Pair, RGBA } from './types';
+import sharp, { Sharp } from 'sharp';
 
 const matches = (a: RGBA, b: RGBA) => JSON.stringify(a) === JSON.stringify(b);
 
@@ -75,16 +77,36 @@ const toImage = async (imageData: ImageData): Promise<Image> => {
   return loadImage(_canvas.toBuffer());
 };
 
-const toBuffer = (image: Image) => {
+const toBuffer = (image: Image): Buffer => {
   const _canvas = createCanvas(image.width, image.height);
   const context = _canvas.getContext('2d');
   context.drawImage(image, 0, 0);
   return _canvas.toBuffer();
 };
 
+const flipHorizontal = async (image: Image): Promise<Image> => {
+  const imageData = getImageData(image);
+  const flipped: Sharp = sharp(imageData.data).flop();
+  return loadImage(await flipped.toBuffer());
+};
+
+const flipVertical = async (image: Image): Promise<Image> => {
+  const imageData = getImageData(image);
+  const flipped: Sharp = sharp(imageData.data).flip();
+  return loadImage(await flipped.toBuffer());
+};
+
+const writeImage = async (image: Image, path: string) => {
+  const buffer = toBuffer(image);
+  writeFileSync(path, buffer);
+};
+
 export {
   flattenColors,
+  flipHorizontal,
+  flipVertical,
   matches,
   replaceColors,
-  toBuffer
+  toBuffer,
+  writeImage
 };

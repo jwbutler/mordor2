@@ -1,5 +1,5 @@
-import { Player } from '../lib/player';
-import { Unit } from '../lib/units';
+import Player from '../classes/Player';
+import Unit from '../classes/Unit';
 import ResourceMeter from './ResourceMeter';
 import styles from './UnitView.module.css';
 

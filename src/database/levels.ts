@@ -1,4 +1,4 @@
-import type { Coordinates } from '../lib/geometry';
+import type { CompassDirection, Coordinates } from '../lib/geometry';
 import type { Level } from '../lib/levels';
 import type { Tile } from '../lib/tiles';
 import { createKobold, createCrocDog, createMudMan } from './units';
@@ -9,7 +9,7 @@ const horizontalDoor = (): Tile => ({ type: 'door_horizontal', enemies: [], obje
 const verticalDoor = (): Tile => ({ type: 'door_vertical', enemies: [], objects: [] });
 const stairs = (): Tile => ({ type: 'stairs', enemies: [], objects: [] });
 
-const fromString = (data: string, startingPoint: Coordinates): Level => {
+const fromString = (data: string, startingPoint: Coordinates, startingDirection: CompassDirection): Level => {
   const tiles: Tile[][] = [];
   const rows = data.split('\n');
   const height = rows.length;
@@ -36,7 +36,8 @@ const fromString = (data: string, startingPoint: Coordinates): Level => {
     tiles,
     width: tiles[0].length,
     height: tiles.length,
-    startingPoint
+    startingPoint,
+    startingDirection
   };
 };
 
@@ -50,7 +51,7 @@ const createFirstLevel = (): Level => {
     #     #
     #######
   `;
-  return fromString(data, { x: 1, y: 1 });
+  return fromString(data, { x: 1, y: 1 }, 'east');
 };
 
 const smallerLevel = (): Level => {
@@ -60,7 +61,7 @@ const smallerLevel = (): Level => {
     ### #
     #####
   `;
-  return fromString(data, { x: 1, y: 1 });
+  return fromString(data, { x: 1, y: 1 }, 'east');
 };
 
 const biggerLevel = () => {
@@ -75,11 +76,21 @@ const biggerLevel = () => {
     ##   C  ###    S
     ################
   `;
-  return fromString(data, { x: 14, y: 7 }); 
+  return fromString(data, { x: 14, y: 7 }, 'west');
+};
+
+const manyKobolds = () => {
+  const data = `
+    ################
+    #KKKKKKKKKKKKK S
+    ################
+  `;
+  return fromString(data, { x: 14, y: 1 }, 'west');
 };
 
 export {
   createFirstLevel,
   biggerLevel,
-  smallerLevel
+  smallerLevel,
+  manyKobolds
 };

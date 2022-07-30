@@ -1,9 +1,8 @@
 import { checkNotNull } from '../lib/preconditions';
 import { playAudio } from '../lib/sounds';
-import { levelUp } from '../lib/units';
 import { GameState } from './GameState';
 import { randBoolean } from '../lib/random';
-import type { Unit } from '../lib/units';
+import Unit from '../classes/Unit';
 import { sleep } from '../lib/promises';
 import { getAttackDamage, getDodgeChance, getHitChance, getMitigatedDamage } from '../lib/stats';
 
@@ -96,7 +95,7 @@ class CombatHandler {
             playerUnit.experience++;
             if (playerUnit.experience >= playerUnit.experienceToNextLevel) {
               await sleep(shortSleepMillis);
-              levelUp(playerUnit);
+              playerUnit.levelUp();
               state.addMessage(`You leveled up! Welcome to level ${playerUnit.level}.`);
             }
           }

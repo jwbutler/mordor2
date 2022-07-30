@@ -1,58 +1,46 @@
-import { titleCase } from './strings';
-import { zeroStats } from './stats';
-import type { Stats } from './stats';
+import Equipment from '../classes/Equipment';
+import { GameState } from '../classes/GameState';
+import { checkState } from './preconditions';
 
-type InventoryItem = {
-  name: string
+interface InventoryItem {
+  name: string;
+  type: ItemType;
+  value: number;
+  onUse: () => void;
+  equals: (item: InventoryItem) => boolean;
+}
+
+type ItemType = 'equipment';
+
+const buyItem = (item: InventoryItem, price: number) => {
+  const player = GameState.getInstance().getPlayer();
+  const shop = GameState.getInstance().getShop();
+
+  checkState(player.gold >= price);
+  player.spendGold(price);
+  player.inventory.addItem(item);
+  shop.removeItem(item);
 };
 
-type Equipment = InventoryItem & {
-  slot: EquipmentSlot,
-  stats: Stats,
-  damage: number,
-  /**
-   * Number from 0 to 1 (ratio of damage mitigated)
-   */
-  mitigation: number,
-  /**
-   * Number from 0 to 1 (chance to dodge)
-   */
-  dodgeChance: number,
-  life: 0,
-  mana: 0
-};
-
-type EquipmentSlot = 'mainHand' | 'offHand' | 'head' | 'body' | 'hands' | 'legs' | 'feet';
-const equipmentSlotValues: EquipmentSlot[] = ['mainHand', 'offHand', 'head', 'body', 'hands', 'legs', 'feet'];
-
-const equipmentSlotToString = (slot: EquipmentSlot): string => {
-  switch (slot) {
-    case 'mainHand': return 'Main Hand';
-    case 'offHand':  return 'Off Hand';
-    default:
-      return titleCase(slot);
+const equipItem = (item: Equipment) => {
+  const state = GameState.getInstance();
+  const player = state.getPlayer();
+  const equippedItem = player.unit.getEquippedItem(item.slot);
+  if (equippedItem !== null) {
+    player.inventory.addItem(equippedItem);
+    player.unit.unequipItem(equippedItem);
   }
-};
 
-const NoobSword: Equipment = {
-  name: 'Noob Sword',
-  slot: 'mainHand',
-  stats: zeroStats,
-  damage: 2,
-  mitigation: 0,
-  dodgeChance: 0,
-  life: 0,
-  mana: 0
+  player.inventory.removeItem(item);
+  player.unit.equipItem(item);
 };
 
 export type {
-  Equipment,
-  EquipmentSlot,
-  InventoryItem
+  InventoryItem,
+  ItemType
 };
 
 export {
-  equipmentSlotValues,
-  NoobSword,
-  equipmentSlotToString
+  buyItem,
+  equipItem
 };

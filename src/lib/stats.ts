@@ -1,4 +1,4 @@
-import type { Unit } from "./units";
+import Unit from '../classes/Unit';
 
 type Stat =
   /**
@@ -26,13 +26,13 @@ type Stats = Record<Stat, number>;
 
 const statValues: Stat[] = ['strength', 'dexterity', 'intelligence', 'wisdom', 'constitution'];
 
-const zeroStats: Stats = {
+const zeroStats = (): Record<Stat, number> => ({
   strength: 0,
   dexterity: 0,
   intelligence: 0,
   wisdom: 0,
   constitution: 0
-};
+});
 
 const strengthToDamage = 1;
 const dexterityToHitChance = 0.05;
@@ -57,7 +57,7 @@ const subtractStats = (first: Stats, second: Stats): Stats => {
 
 const getModifiedStats = (unit: Unit): Stats => {
   let stats = { ...unit.stats };
-  for (const equipment of Object.values(unit.equipment)) {
+  for (const equipment of unit.getEquipment()) {
     stats = addStats(stats, equipment.stats);
   }
   return stats;
@@ -66,7 +66,7 @@ const getModifiedStats = (unit: Unit): Stats => {
 const getAttackDamage = (attacker: Unit): number => {
   let damage = 0;
   damage += (attacker.stats.strength * strengthToDamage);
-  for (const equipment of Object.values(attacker.equipment)) {
+  for (const equipment of attacker.getEquipment()) {
     damage += (equipment.stats.strength * strengthToDamage);
     damage += equipment.damage;
   }
@@ -76,7 +76,7 @@ const getAttackDamage = (attacker: Unit): number => {
 const getMaxLife = (unit: Unit): number => {
   let life = 0;
   life += (unit.stats.constitution * constitutionToLife);
-  for (const equipment of Object.values(unit.equipment)) {
+  for (const equipment of unit.getEquipment()) {
     life += (equipment.stats.constitution * constitutionToLife);
     life += equipment.life;
   }
@@ -86,7 +86,7 @@ const getMaxLife = (unit: Unit): number => {
 const getMaxMana = (unit: Unit): number => {
   let mana = 0;
   mana += (unit.stats.wisdom * wisdomToMana);
-  for (const equipment of Object.values(unit.equipment)) {
+  for (const equipment of unit.getEquipment()) {
     mana += (equipment.stats.wisdom * wisdomToMana);
     mana += equipment.mana;
   }
@@ -95,7 +95,7 @@ const getMaxMana = (unit: Unit): number => {
 
 const getMitigation = (unit: Unit): number => {
   let mitigation = 0;
-  for (const equipment of Object.values(unit.equipment)) {
+  for (const equipment of unit.getEquipment()) {
     mitigation += equipment.mitigation;
   }
   return mitigation;
@@ -103,7 +103,7 @@ const getMitigation = (unit: Unit): number => {
 
 const getDodgeChance = (unit: Unit): number => {
   let dodgeChance = 0;
-  for (const equipment of Object.values(unit.equipment)) {
+  for (const equipment of unit.getEquipment()) {
     dodgeChance += equipment.dodgeChance;
   }
   return dodgeChance;
@@ -115,7 +115,7 @@ const getMitigatedDamage = (defender: Unit, incomingDamage: number): number =>
 const getHitChance = (unit: Unit): number => {
   let hitChance = 0.5;
   hitChance += (unit.stats.dexterity * dexterityToHitChance);
-  for (const equipment of Object.values(unit.equipment)) {
+  for (const equipment of unit.getEquipment()) {
     hitChance += (equipment.stats.dexterity * dexterityToHitChance);
   }
   return hitChance;

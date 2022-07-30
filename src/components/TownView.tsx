@@ -1,12 +1,12 @@
-type Props = {
-  onExit: () => void
-};
+import { returnToDungeon } from '../lib/actions';
 
-const TownView = ({ onExit }: Props) => {
+const TownView = () => {
   return (
     <div>
       hello I am a town
-      <button onClick={onExit}>Exit</button>
+      <button onClick={returnToDungeon}>
+        Exit
+      </button>
     </div>
   );
 };

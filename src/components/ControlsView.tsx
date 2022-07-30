@@ -1,11 +1,7 @@
-import { RelativeDirection } from '../lib/geometry';
 import styles from './ControlsView.module.css';
+import { navigate } from '../lib/actions';
 
-type Props = {
-  navigate: (relativeDirection: RelativeDirection) => void;
-}
-
-const ControlsView = ({ navigate }: Props) => {
+const ControlsView = () => {
   return (
     <>
       <button className={`${styles.arrow} ${styles.up}`} onClick={() => navigate('forward')}>

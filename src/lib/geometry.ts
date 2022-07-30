@@ -47,37 +47,18 @@ const move = ({ x, y }: Coordinates, direction: CompassDirection, distance: numb
   }
 };
 
-type NavigateProps = {
-  coordinates: Coordinates,
-  relativeDirection: RelativeDirection,
-  compassDirection: CompassDirection
-};
-
-type NavigateResult = {
-  coordinates: Coordinates,
-  direction: CompassDirection
-}
-
-const navigate = ({ coordinates, compassDirection, relativeDirection }: NavigateProps): NavigateResult => {
-  return {
-    coordinates: (relativeDirection === 'forward') ? move(coordinates, compassDirection) : coordinates,
-    direction: rotate(compassDirection, relativeDirection)
-  };
-};
-
 export type {
   Coordinates,
   CompassDirection,
-  NavigateResult,
   RelativeDirection
 };
 
 export {
   compassDirectionValues,
   move,
-  navigate,
   relativeDirectionValues,
   rotate180,
   rotateLeft,
-  rotateRight
+  rotateRight,
+  rotate
 };
