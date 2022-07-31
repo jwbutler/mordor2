@@ -2,7 +2,7 @@ const cache: Record<string, ImageData> = {};
 
 const canvas = document.createElement('canvas');
 canvas.width = 640;
-canvas.height = 640;
+canvas.height = 480;
 const context = canvas.getContext('2d') as CanvasRenderingContext2D;
 
 const createImage = async (src: string): Promise<ImageData> => {

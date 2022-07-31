@@ -66,9 +66,11 @@ const generateHallsAndWalls = async (filename: string) => {
     const transformed = await transformImage(image, transform);
     const flattened = await flattenColors(transformed, [Colors.DARK_GRAY, Colors.BLACK, Colors.WHITE, Colors.TRANSPARENT]);
     await writeImage(flattened, path);
-    const flipped = await flipHorizontal(flattened);
-    const flippedPath = `${tmpDir}/${type}_${side}_${depth}_R.png`;
-    await writeImage(flipped, flippedPath);
+
+    // TODO bugged, Sharp sux
+    //const flipped = await flipHorizontal(flattened);
+    //const flippedPath = `${tmpDir}/${type}_${side}_${depth}_R.png`;
+    //await writeImage(flipped, flippedPath);
   }
 };
 

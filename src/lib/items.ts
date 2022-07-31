@@ -26,6 +26,7 @@ const equipItem = (item: Equipment) => {
   const state = GameState.getInstance();
   const player = state.getPlayer();
   const equippedItem = player.unit.getEquippedItem(item.slot);
+
   if (equippedItem !== null) {
     player.inventory.addItem(equippedItem);
     player.unit.unequipItem(equippedItem);

@@ -77,11 +77,13 @@ class CombatHandler {
         const mitigatedDamage = getMitigatedDamage(defender, attackDamage);
         state.addMessage(`${attacker.name} hit ${defender.name} for ${mitigatedDamage}.`);
         takeDamage(defender, mitigatedDamage);
+
         if (defender.life <= 0) {
           await sleep(shortSleepMillis);
           await playAudio(defender.sprite.sounds.die);
           state.addMessage(`${defender.name} died.`);
           const playerUnit = state.getPlayer().unit;
+
           if (defender === playerUnit) {
             alert('GAME OVER!');
           } else {
@@ -93,6 +95,7 @@ class CombatHandler {
             state.getPlayer().gold += gold;
             state.addMessage(`You picked up ${gold} gold.`);
             playerUnit.experience++;
+
             if (playerUnit.experience >= playerUnit.experienceToNextLevel) {
               await sleep(shortSleepMillis);
               playerUnit.levelUp();
