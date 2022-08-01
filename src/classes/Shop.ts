@@ -13,7 +13,7 @@ class Shop {
   };
   removeItem = (item: InventoryItem) => {
     const index = this.items.findIndex(i => i.equals(item));
-    this.items.splice(index);
+    this.items.splice(index, 1);
   };
 }
 

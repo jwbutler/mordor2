@@ -7,10 +7,16 @@ export const playAudio = async (sound: string) => {
   BUSY = true;
   const audio = new Audio(sound);
   await audio.play();
-  setTimeout(
-    () => { BUSY = false; },
-    audio.duration * 1000
-  );
+
+  return new Promise<void>(resolve => {
+    setTimeout(
+      () => {
+        BUSY = false;
+        resolve();
+      },
+      audio.duration * 1000
+    );
+  });
 };
 
 export const playLoop = async (sound: string) => {

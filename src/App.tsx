@@ -18,7 +18,7 @@ const App = () => {
     direction: level.startingDirection,
     location: 'dungeon'
   });
-  player.gold += 50;
+  player.gold += 100;
 
   const shop: Shop = new Shop();
   shop.addItem(createMediumSword());
