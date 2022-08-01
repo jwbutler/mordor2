@@ -1,4 +1,4 @@
-import { createMediumSword } from './database/items';
+import { createAwesomeSword, createMediumSword } from './database/items';
 import { biggerLevel, manyKobolds } from './database/levels';
 import { createPlayerUnit } from './database/units';
 import GameController from './GameController';
@@ -22,6 +22,7 @@ const App = () => {
 
   const shop: Shop = new Shop();
   shop.addItem(createMediumSword());
+  shop.addItem(createAwesomeSword());
   
   const state = new GameState({ level, player, menu: null, shop });
   GameState.setInstance(state);
