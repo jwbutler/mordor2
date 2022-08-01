@@ -18,11 +18,11 @@
 }
 
 .arrow:hover {
-  color: silver;
+  filter: brightness(0.75);
 }
 
 .arrow:active {
-  color: cyan;
+  filter: brightness(0.5);
 }
 
 .up {

@@ -12,7 +12,7 @@ const createMediumSword = (): Equipment => new Equipment({
   slot: 'mainHand',
   stats: { dexterity: 2 },
   damage: 4,
-  value: 10
+  value: 100
 });
 
 export {

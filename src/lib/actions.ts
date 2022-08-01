@@ -1,10 +1,7 @@
 import { CombatHandler } from '../classes/CombatHandler';
-import Equipment from '../classes/Equipment';
 import { GameState } from '../classes/GameState';
 import { Coordinates, move, RelativeDirection, rotate } from './geometry';
-import { InventoryItem } from './items';
 import { getTile } from './levels';
-import { checkState } from './preconditions';
 import { isDoorFacingDirection, isStairs, isWallLike, Tile } from './tiles';
 
 const navigate = async (relativeDirection: RelativeDirection) => {
@@ -44,7 +41,7 @@ const navigate = async (relativeDirection: RelativeDirection) => {
         case 'backward':
           player.location = 'dungeon';
           return;
-        case 'left':
+        case 'forward':
           player.location = 'shop';
           return;
       }
