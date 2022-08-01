@@ -37,8 +37,12 @@ type ItemProps = {
 };
 
 const Item = ({ item, onClick }: ItemProps) => {
+  const classNames = [styles.item];
+  if (onClick) {
+    classNames.push(styles.clickable);
+  }
   return (
-    <div className={styles.item} onClick={onClick}>
+    <div className={classNames.join(' ')} onClick={onClick}>
       {item.name}
     </div>
   );
