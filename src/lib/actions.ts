@@ -40,6 +40,8 @@ const navigate = async (relativeDirection: RelativeDirection) => {
       switch (relativeDirection) {
         case 'backward':
           player.location = 'dungeon';
+          player.coordinates = state.getLevel().startingPoint;
+          player.direction = state.getLevel().startingDirection;
           return;
         case 'forward':
           player.location = 'shop';
