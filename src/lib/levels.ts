@@ -6,7 +6,8 @@ type Level = {
   tiles: Tile[][],
   width: number,
   height: number,
-  startingPoint: Coordinates
+  startingPoint: Coordinates,
+  startingDirection: CompassDirection
 };
 
 const getTile = (level: Level, { x, y }: Coordinates): Tile | null => level.tiles[y]?.[x] || null;

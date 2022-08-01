@@ -1,66 +1,77 @@
-import { NoobSword } from '../lib/items';
 import { koboldSprite } from '../lib/sprites';
 import { crocDogSprite } from '../lib/sprites';
 import { mudManSprite } from '../lib/sprites';
 import { playerSprite } from '../lib/sprites';
-import { UnitBuilder } from '../lib/units';
-import type { Unit } from '../lib/units';
+import Unit from '../classes/Unit';
+import { createNoobSword } from './items';
 
-const createKobold = (): Unit => new UnitBuilder()
-  .name('Kobold')
-  .level(1)
-  .stats({
-    strength: 2,
-    dexterity: 4,
-    intelligence: 3,
-    wisdom: 2,
-    constitution: 2
-  })
-  .equipment(NoobSword)
-  .sprite(koboldSprite)
-  .build();
+const createKobold = (): Unit => {
+  const unit = new Unit({
+    name: 'Kobold',
+    level: 1,
+    stats: {
+      strength: 2,
+      dexterity: 4,
+      intelligence: 3,
+      wisdom: 2,
+      constitution: 2
+    },
+    sprite: koboldSprite
+  });
+  unit.equipItem(createNoobSword());
+  return unit;
+};
 
-const createCrocDog = (): Unit => new UnitBuilder()
-  .name('Croc Dog')
-  .level(1)
-  .stats({
-    strength: 4,
-    dexterity: 6,
-    intelligence: 3,
-    wisdom: 2,
-    constitution: 3
-  })
-  .equipment(NoobSword)
-  .sprite(crocDogSprite)
-  .build();
+const createCrocDog = (): Unit => {
+  const unit = new Unit({
+    name: 'Croc Dog',
+    level: 1,
+    stats: {
+      strength: 4,
+      dexterity: 6,
+      intelligence: 3,
+      wisdom: 2,
+      constitution: 3
+    },
+    sprite: crocDogSprite
+  });
+  unit.equipItem(createNoobSword());
+  return unit;
+};
 
-const createMudMan = (): Unit => new UnitBuilder()
-  .name('Mud Man')
-  .level(1)
-  .stats({
-    strength: 6,
-    dexterity: 4,
-    intelligence: 3,
-    wisdom: 2,
-    constitution: 4
-  })
-  .equipment(NoobSword)
-  .sprite(mudManSprite)
-  .build();
-  
-const createPlayerUnit = (): Unit => new UnitBuilder()
-  .name('Player Guy')
-  .level(1)
-  .stats({
-    strength: 8,
-    dexterity: 8,
-    intelligence: 8,
-    wisdom: 8,
-    constitution: 8
-  })
-  .equipment(NoobSword)
-  .sprite(playerSprite) // just a placeholder
-  .build();
+const createMudMan = (): Unit => {
+  const unit = new Unit({
+    name: 'Mud Man',
+    level: 1,
+    stats: {
+      strength: 6,
+      dexterity: 4,
+      intelligence: 3,
+      wisdom: 2,
+      constitution: 4
+    },
+    sprite: mudManSprite
+  });
+  unit.equipItem(createNoobSword());
+  return unit;
+};
+
+const createPlayerUnit = (): Unit => {
+  const unit = new Unit({
+    name: 'Player Guy',
+    level: 1,
+    stats: {
+      strength: 8,
+      dexterity: 8,
+      intelligence: 8,
+      wisdom: 8,
+      constitution: 8
+    },
+    sprite: playerSprite // just a placeholder
+  });
+  unit.equipItem(createNoobSword());
+  return unit;
+};
 
 export {
   createKobold,

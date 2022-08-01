@@ -1,6 +1,6 @@
 import type { CompassDirection } from './geometry';
 import type { MapObject } from './objects';
-import type { Unit } from './units';
+import Unit from '../classes/Unit';
 
 type TileType = 'floor' | 'wall' | 'door_horizontal' | 'door_vertical' | 'stairs';
 

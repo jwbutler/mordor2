@@ -1,9 +1,8 @@
 import { checkNotNull } from '../lib/preconditions';
 import { playAudio } from '../lib/sounds';
-import { levelUp } from '../lib/units';
 import { GameState } from './GameState';
 import { randBoolean } from '../lib/random';
-import type { Unit } from '../lib/units';
+import Unit from '../classes/Unit';
 import { sleep } from '../lib/promises';
 import { getAttackDamage, getDodgeChance, getHitChance, getMitigatedDamage } from '../lib/stats';
 
@@ -78,11 +77,13 @@ class CombatHandler {
         const mitigatedDamage = getMitigatedDamage(defender, attackDamage);
         state.addMessage(`${attacker.name} hit ${defender.name} for ${mitigatedDamage}.`);
         takeDamage(defender, mitigatedDamage);
+
         if (defender.life <= 0) {
           await sleep(shortSleepMillis);
           await playAudio(defender.sprite.sounds.die);
           state.addMessage(`${defender.name} died.`);
           const playerUnit = state.getPlayer().unit;
+
           if (defender === playerUnit) {
             alert('GAME OVER!');
           } else {
@@ -94,9 +95,10 @@ class CombatHandler {
             state.getPlayer().gold += gold;
             state.addMessage(`You picked up ${gold} gold.`);
             playerUnit.experience++;
+
             if (playerUnit.experience >= playerUnit.experienceToNextLevel) {
               await sleep(shortSleepMillis);
-              levelUp(playerUnit);
+              playerUnit.levelUp();
               state.addMessage(`You leveled up! Welcome to level ${playerUnit.level}.`);
             }
           }

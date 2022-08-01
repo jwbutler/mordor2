@@ -9,38 +9,20 @@
   gap: 20px;
 }
 
-.button {
-  width: 35%;
-  text-align: center;
-  border: 2px solid white;
-  background-color: black;
-  color: white;
-  font-family: Alagard, serif;
-  font-size: 24px;
-  cursor: pointer;
+/* button */
+.combat > * {
+  width: 90%;
+  height: 25%;
 }
 
-.button:active:not(:disabled) {
-  background-color: gray;
-}
-
-.button:disabled {
-  color: gray;
-  border-color: gray;
-}
-
-@media (max-width: 767px) {
-  .button:disabled {
-    color: gray;
-    border-color: gray;
-  }
+@media (min-width: 768px) {
   .combat {
     border-radius: 0;
     justify-content: space-between;
   }
-  
-  .button {
-    width: 90%;
-    height: 25%;
+
+  /* button */
+  .combat > * {
+    width: 35%;
   }
 }

@@ -1,7 +1,7 @@
 import { type Image, createCanvas, loadImage, Canvas } from 'canvas';
 import { mkdirSync, writeFileSync } from 'fs';
 import Colors from './colors';
-import { flattenColors } from './utils';
+import { flattenColors, flipHorizontal, toBuffer, writeImage } from './utils';
 
 // Forcing code down the compiler's throat to make PerspectiveJS work.
 // TODO write some defs
@@ -65,10 +65,12 @@ const generateHallsAndWalls = async (filename: string) => {
     console.log(JSON.stringify(transform));
     const transformed = await transformImage(image, transform);
     const flattened = await flattenColors(transformed, [Colors.DARK_GRAY, Colors.BLACK, Colors.WHITE, Colors.TRANSPARENT]);
-    const _canvas = createCanvas(640, 480);
-    const context = _canvas.getContext('2d');
-    context.drawImage(flattened, 0, 0);
-    writeFileSync(path, _canvas.toBuffer());
+    await writeImage(flattened, path);
+
+    // TODO bugged, Sharp sux
+    //const flipped = await flipHorizontal(flattened);
+    //const flippedPath = `${tmpDir}/${type}_${side}_${depth}_R.png`;
+    //await writeImage(flipped, flippedPath);
   }
 };
 
@@ -154,7 +156,7 @@ const getRight = (depth: Depth): number => {
 const getTop = (depth: Depth): number => {
   switch (depth) {
     case 0: return -375;
-    case 1: return -180;
+    case 1: return -160;
     case 2: return 0;
     case 3: return 55;
     case 4: return 100;

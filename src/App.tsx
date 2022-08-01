@@ -1,24 +1,29 @@
-import { biggerLevel } from './database/levels';
+import { createMediumSword } from './database/items';
+import { biggerLevel, manyKobolds } from './database/levels';
 import { createPlayerUnit } from './database/units';
 import GameController from './GameController';
 import { Level } from './lib/levels';
-import { Player } from './lib/player';
+import Player from './classes/Player';
 import { GameState } from './classes/GameState';
-import { Unit } from './lib/units';
+import Shop from './classes/Shop';
+import Unit from './classes/Unit';
 
 const App = () => {  
   const level: Level = biggerLevel();
   const playerUnit: Unit = createPlayerUnit();
-  
-  const player: Player = {
+
+  const player = new Player({
     unit: playerUnit,
     coordinates: level.startingPoint,
-    direction: 'east',
-    location: 'dungeon',
-    gold: 0
-  };
+    direction: level.startingDirection,
+    location: 'dungeon'
+  });
+  player.gold += 50;
+
+  const shop: Shop = new Shop();
+  shop.addItem(createMediumSword());
   
-  const state = new GameState({ level, player, menu: null });
+  const state = new GameState({ level, player, menu: null, shop });
   GameState.setInstance(state);
 
   return (
