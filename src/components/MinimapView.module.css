@@ -40,8 +40,8 @@
   background-color: #f00080;
 }
 
-.door_horizontal,.door_vertical {
-  background-color: brown;
+.door {
+  background-color: #f00080;
 }
 
 .arrow {

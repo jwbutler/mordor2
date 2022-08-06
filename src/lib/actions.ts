@@ -2,7 +2,7 @@ import { CombatHandler } from '../classes/CombatHandler';
 import { GameState } from '../classes/GameState';
 import { Coordinates, move, RelativeDirection, rotate } from './geometry';
 import { getTile } from './levels';
-import { isDoorFacingDirection, isStairs, isWallLike, Tile } from './tiles';
+import { isDoor, isStairs, isWall, Tile } from './tiles';
 
 const navigate = async (relativeDirection: RelativeDirection) => {
   const state = GameState.getInstance();
@@ -20,16 +20,16 @@ const navigate = async (relativeDirection: RelativeDirection) => {
       const direction = rotate(player.direction, relativeDirection);
 
       const nextTile = getTile(state.getLevel(), coordinates);
-      if (isDoorFacingDirection(nextTile, direction)) {
-        player.coordinates = move(coordinates, direction); // assume the developer put a floor tile there...
-      } else if (isStairs(nextTile)) {
+      //if (isDoorFacingDirection(nextTile, direction)) {
+      //  player.coordinates = move(coordinates, direction); // assume the developer put a floor tile there...
+      if (isDoor(nextTile)) {
         player.location = 'town';
         if (player.unit.life < player.unit.maxLife || player.unit.mana < player.unit.maxMana) {
           player.unit.life = player.unit.maxLife;
           player.unit.mana = player.unit.maxMana;
           state.addMessage('You feel much better.');
         }
-      } else if (!isWallLike(nextTile, direction)) {
+      } else if (!isWall(nextTile)) {
         player.coordinates = coordinates;
       }
       player.direction = direction;

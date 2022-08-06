@@ -1,4 +1,3 @@
-import door2 from '../images/gen/door2.png';
 import floor_ceiling from '../images/gen/floor_ceiling.png';
 import hall_left_0 from '../images/gen/hall_left_0.png';
 import hall_left_1 from '../images/gen/hall_left_1.png';
@@ -20,22 +19,63 @@ import wall_right_1 from '../images/gen/wall_right_1.png';
 import wall_right_2 from '../images/gen/wall_right_2.png';
 import wall_right_3 from '../images/gen/wall_right_3.png';
 import wall_right_4 from '../images/gen/wall_right_4.png';
+import door_hall_left_0 from '../images/gen/door_hall_left_0.png';
+import door_hall_left_1 from '../images/gen/door_hall_left_1.png';
+import door_hall_left_2 from '../images/gen/door_hall_left_2.png';
+import door_hall_left_3 from '../images/gen/door_hall_left_3.png';
+import door_hall_right_0 from '../images/gen/door_hall_right_0.png';
+import door_hall_right_1 from '../images/gen/door_hall_right_1.png';
+import door_hall_right_2 from '../images/gen/door_hall_right_2.png';
+import door_hall_right_3 from '../images/gen/door_hall_right_3.png';
+import door_wall_center_1 from '../images/gen/door_wall_center_1.png';
+import door_wall_center_2 from '../images/gen/door_wall_center_2.png';
+import door_wall_center_3 from '../images/gen/door_wall_center_3.png';
+import door_wall_center_4 from '../images/gen/door_wall_center_4.png';
+import door_wall_left_1 from '../images/gen/door_wall_left_1.png';
+import door_wall_left_2 from '../images/gen/door_wall_left_2.png';
+import door_wall_left_3 from '../images/gen/door_wall_left_3.png';
+import door_wall_left_4 from '../images/gen/door_wall_left_4.png';
+import door_wall_right_1 from '../images/gen/door_wall_right_1.png';
+import door_wall_right_2 from '../images/gen/door_wall_right_2.png';
+import door_wall_right_3 from '../images/gen/door_wall_right_3.png';
+import door_wall_right_4 from '../images/gen/door_wall_right_4.png';
 
-import { rotateLeft, rotateRight } from '../lib/geometry';
 import { createImage } from '../lib/images';
 import { getTile, getTilesInView, TileViewColumn } from '../lib/levels';
-import { isDoor, isDoorFacingDirection, isStairs, isWall, isWallLike, Tile } from '../lib/tiles';
+import { isDoor, isStairs, isWall, Tile } from '../lib/tiles';
 import { GameState } from './GameState';
 
 const maxDepth = 4;
 
+type Direction = 'left' | 'center' | 'right';
+
 type RenderState = {
   floorCeiling: string,
-  left: (string | null)[],
-  center: (string | null)[],
-  right: (string | null)[],
-  doors: (string | null)[],
-  stairs: (string | null)[],
+  halls: {
+    left: (string | null)[],
+    center: (string | null)[],
+    right: (string | null)[],
+  },
+  walls: {
+    left: (string | null)[],
+    center: (string | null)[],
+    right: (string | null)[]
+  },
+  doorHalls: {
+    left: (string | null)[],
+    center: (string | null)[],
+    right: (string | null)[],
+  },
+  doorWalls: {
+    left: (string | null)[],
+    center: (string | null)[],
+    right: (string | null)[]
+  },
+  stairs: {
+    left: (string | null)[],
+    center: (string | null)[],
+    right: (string | null)[]
+  },
   unit: (string | null)
 };
 
@@ -45,8 +85,11 @@ const dungeonImages = {
   wallsCenter: [wall_center_1, wall_center_2, wall_center_3, wall_center_4],
   wallsLeft: [wall_left_1, wall_left_2, wall_left_3, wall_left_4],
   wallsRight: [wall_right_1, wall_right_2, wall_right_3, wall_right_4],
-  doors: [door2, null, null, null],
-  stairs: [door2, null, null, null],
+  doorHallsLeft: [door_hall_left_0, door_hall_left_1, door_hall_left_2, door_hall_left_3],
+  doorHallsRight: [door_hall_right_0, door_hall_right_1, door_hall_right_2, door_hall_right_3],
+  doorWallsCenter: [door_wall_center_1, door_wall_center_2, door_wall_center_3, door_wall_center_4],
+  doorWallsLeft: [door_wall_left_1, door_wall_left_2, door_wall_left_3, door_wall_left_4],
+  doorWallsRight: [door_wall_right_1, door_wall_right_2, door_wall_right_3, door_wall_right_4],
   floorCeiling: floor_ceiling
 };
 
@@ -69,50 +112,57 @@ class DungeonRenderer {
       wallsCenter,
       wallsLeft,
       wallsRight,
-      doors,
-      stairs,
+      doorHallsLeft,
+      doorHallsRight,
+      doorWallsCenter,
+      doorWallsLeft,
+      doorWallsRight,
       floorCeiling
     } = dungeonImages;
     
     const images: RenderState = {
       floorCeiling,
-      left: [],
-      center: [],
-      right: [],
-      doors: [],
-      stairs: [],
+      halls: {
+        left: [],
+        center: [],
+        right: []
+      },
+      walls: {
+        left: [],
+        center: [],
+        right: []
+      },
+      doorHalls: {
+        left: [],
+        center: [],
+        right: []
+      },
+      doorWalls: {
+        left: [],
+        center: [],
+        right: []
+      },
+      stairs: {
+        left: [],
+        center: [],
+        right: []
+      },
       unit: null
     };
-    
+
     for (let i = 0; i < maxDepth; i++) {
-      const left = (isWallLike(tiles['left'][i], rotateLeft(direction)) || isDoor(tiles['left'][i]))
-        ? hallsLeft[i]
-        : (isWallLike(tiles['left'][i + 1], direction))
-        ? wallsLeft[i]
-        : null;
-      images['left'].push(left);
+      images.halls['left'].push(isWall(tiles['left'][i]) ? hallsLeft[i] : null);
+      images.walls['left'].push(isWall(tiles['left'][i + 1]) ? wallsLeft[i] : null);
+      images.doorHalls['left'].push(isDoor(tiles['left'][i]) ? doorHallsLeft[i] : null);
+      images.doorWalls['left'].push(isDoor(tiles['left'][i + 1]) ? doorWallsLeft[i] : null);
+
+      images.walls['center'].push(isWall(tiles['center'][i + 1]) ? wallsCenter[i] : null);
+      images.doorWalls['center'].push(isDoor(tiles['center'][i + 1]) ? doorWallsCenter[i] : null);
       
-      const center = (isWall(tiles['center'][i + 1]) || isDoor(tiles['center'][i + 1]) || isStairs(tiles['center'][i + 1]))
-        ? wallsCenter[i]
-        : null;
-      images['center'].push(center);
-      
-      const right = (isWallLike(tiles['right'][i], rotateRight(direction)) || isDoor(tiles['right'][i]))
-        ? hallsRight[i]
-        : (isWallLike(tiles['right'][i + 1], direction))
-        ? wallsRight[i]
-        : null;
-      images['right'].push(right);
-      
-      const door = (isDoorFacingDirection(tiles['center'][i + 1], direction))
-        ? doors[i]
-        : null;
-      images['doors'].push(door);
-      
-      const stair = (tiles['center'][i + 1]?.type === 'stairs')
-        ? stairs[i]
-        : null;
-      images['stairs'].push(stair);
+      images.halls['right'].push(isWall(tiles['right'][i]) ? hallsRight[i] : null);
+      images.walls['right'].push(isWall(tiles['right'][i + 1]) ? wallsRight[i] : null);
+      images.doorHalls['right'].push(isDoor(tiles['right'][i]) ? doorHallsRight[i] : null);
+      images.doorWalls['right'].push(isDoor(tiles['right'][i + 1]) ? doorWallsRight[i] : null);
     }
   
     const tile = getTile(level, coordinates);
@@ -126,11 +176,20 @@ class DungeonRenderer {
     await drawImage(images.floorCeiling, bufferContext);
 
     for (let i = 3; i >= 0; i--) {
-      const keys: (keyof RenderState)[] = ['left', 'center', 'right', 'doors', 'stairs'];
-      for (const category of keys) {
-        const image = images[category]?.[i];
-        if (image) {
-          await drawImage(image, bufferContext);
+      const keys: Direction[] = ['left', 'center', 'right'];
+      for (const direction of keys) {
+        const hall = images.halls[direction]?.[i];
+        const wall = images.walls[direction]?.[i];
+        const hallOrWall = hall ?? wall;
+        if (hallOrWall) {
+          await drawImage(hallOrWall, bufferContext);
+        }
+        const doorHall = images.doorHalls[direction]?.[i];
+        const doorWall = images.doorWalls[direction]?.[i];
+        if (hall && doorHall) {
+          await drawImage(doorHall, bufferContext);
+        } else if (doorWall && !hall) {
+          await drawImage(doorWall, bufferContext);
         }
       }
     }

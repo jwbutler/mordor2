@@ -1,5 +1,5 @@
 import { createAwesomeSword, createMediumSword } from './database/items';
-import { biggerLevel, manyKobolds } from './database/levels';
+import { biggerLevel, doorsTest, manyKobolds } from './database/levels';
 import { createPlayerUnit } from './database/units';
 import GameController from './GameController';
 import { Level } from './lib/levels';

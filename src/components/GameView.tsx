@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { GameState } from '../classes/GameState';
 import CombatView from './CombatView';
+import DesktopOnly from './DesktopOnly';
 import IntroView from './IntroView';
 import MainView from './MainView';
 import styles from './GameView.module.css';
@@ -41,7 +42,9 @@ const GameView = () => {
           </div>
         )}
         <div className={`${styles.column} ${styles.right}`}>
-          <UnitView unit={state.getPlayer().unit} player={state.getPlayer()} />
+          <DesktopOnly>
+            <UnitView unit={state.getPlayer().unit} player={state.getPlayer()} />
+          </DesktopOnly>
           {(state.getMenu() === 'combat') && <CombatView />}
           {(state.getPlayer().location === 'dungeon' && state.getMenu() !== 'combat') && <MinimapView />}
         </div>

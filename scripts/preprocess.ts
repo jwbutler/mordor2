@@ -65,7 +65,8 @@ const main = async () => {
   }
   for (const filename of readdirSync(wallDir)) {
     const image = await loadImage(`${wallDir}/${filename}`);
-    const outputBuffer = toBuffer(image);
+    const swapped = await replaceColors(image, getPaletteSwaps(filename));
+    const outputBuffer = toBuffer(swapped);
     const outputFilename = `${tmpDir}/${filename.replace('bmp', 'png').replaceAll('jpg', 'png').replaceAll('jpeg', 'png').replaceAll(/ /g, '_')}`;
     writeFileSync(outputFilename, outputBuffer);
     console.log(outputFilename);

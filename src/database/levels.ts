@@ -3,11 +3,10 @@ import type { Level } from '../lib/levels';
 import type { Tile } from '../lib/tiles';
 import { createKobold, createCrocDog, createMudMan } from './units';
 
-const floor = (): Tile => ({ type: 'floor', enemies: [], objects: [] });
-const wall = (): Tile => ({ type: 'wall', enemies: [], objects: [] });
-const horizontalDoor = (): Tile => ({ type: 'door_horizontal', enemies: [], objects: [] });
-const verticalDoor = (): Tile => ({ type: 'door_vertical', enemies: [], objects: [] });
-const stairs = (): Tile => ({ type: 'stairs', enemies: [], objects: [] });
+const floor = (): Tile => ({ type: 'floor', enemies: [], objects: [], door: false, stairs: false });
+const wall = (): Tile => ({ type: 'wall', enemies: [], objects: [], door: false, stairs: false });
+const door = (): Tile => ({ type: 'wall', enemies: [], objects: [], door: true, stairs: false });
+const stairs = (): Tile => ({ type: 'wall', enemies: [], objects: [], door: false, stairs: true });
 
 const fromString = (data: string, startingPoint: Coordinates, startingDirection: CompassDirection): Level => {
   const tiles: Tile[][] = [];
@@ -18,12 +17,11 @@ const fromString = (data: string, startingPoint: Coordinates, startingDirection:
     const row: Tile[] = [...rows[y].trim()].map(char => {
       switch (char) {
         case '#': return wall();
-        case '|': return horizontalDoor();
-        case '-': return verticalDoor();
+        case 'D': return door();
         case 'S': return stairs();
-        case 'C': return { type: 'floor', enemies: [createCrocDog()], objects: [] };
-        case 'K': return { type: 'floor', enemies: [createKobold()], objects: [] };
-        case 'M': return { type: 'floor', enemies: [createMudMan()], objects: [] };
+        case 'C': return { type: 'floor', enemies: [createCrocDog()], objects: [], door: false, stairs: false };
+        case 'K': return { type: 'floor', enemies: [createKobold()], objects: [], door: false, stairs: false };
+        case 'M': return { type: 'floor', enemies: [createMudMan()], objects: [], door: false, stairs: false };
         default:  return floor();
       }
     });
@@ -73,16 +71,26 @@ const biggerLevel = () => {
     # C  # # ## K ##
     # ##  K  ## # ##
     # K####     ####
-    ##   C  ###    S
+    ##   C  ###    D
     ################
   `;
   return fromString(data, { x: 14, y: 7 }, 'west');
 };
 
+const doorsTest = () => {
+  const data = `
+    ######
+    #    D
+    #    #
+    ######
+  `;
+  return fromString(data, { x: 1, y: 1 }, 'east');
+};
+
 const manyKobolds = () => {
   const data = `
     ################
-    #KKKKKKKKKKKKK S
+    #KKKKKKKKKKKKK D
     ################
   `;
   return fromString(data, { x: 14, y: 1 }, 'west');
@@ -91,6 +99,7 @@ const manyKobolds = () => {
 export {
   createFirstLevel,
   biggerLevel,
+  doorsTest,
   smallerLevel,
   manyKobolds
 };

@@ -38,6 +38,7 @@ type WallDef = {
 const main = async () => {
   mkdirSync(tmpDir, { recursive: true });
   await generateHallsAndWalls('walltexturegray');
+  await generateDoors('door_texture');
 };
 
 const generateHallsAndWalls = async (filename: string) => {
@@ -74,6 +75,40 @@ const generateHallsAndWalls = async (filename: string) => {
   }
 };
 
+const generateDoors = async (filename: string) => {
+  const image: Image = await loadImage(`${baseDir}/${filename}.png`);
+  const defs: WallDef[] = [];
+  // halls
+  const hallSides: Side[] = ['left', 'right'];
+  for (const side of hallSides) {
+    for (let depth = 0; depth <= 3; depth++) {
+      defs.push({ side, depth: depth as Depth, type: 'hall' });
+    }
+  }
+  const wallSides: Side[] = ['left', 'center', 'right'];
+  for (const side of wallSides) {
+    for (let depth = 1; depth <= 4; depth++) {
+      defs.push({ side, depth: depth as Depth, type: 'wall' });
+    }
+  }
+
+  for (const { depth, side, type } of defs) {
+    const filename = `door_${type}_${side}_${depth}.png`;
+    console.log(filename);
+    const path = `${tmpDir}/${filename}`;
+    const transform = getQuadrangle(type, side, depth);
+    console.log(JSON.stringify(transform));
+    const transformed = await transformImage(image, transform);
+    const flattened = await flattenColors(transformed, [Colors.DARK_GRAY, Colors.BLACK, Colors.BROWN, Colors.DARK_YELLOW, Colors.WHITE, Colors.TRANSPARENT]);
+    await writeImage(flattened, path);
+
+    // TODO bugged, Sharp sux
+    //const flipped = await flipHorizontal(flattened);
+    //const flippedPath = `${tmpDir}/${type}_${side}_${depth}_R.png`;
+    //await writeImage(flipped, flippedPath);
+  }
+};
+
 const getQuadrangle = (type: WallType, side: Side, depth: Depth): Quadrangle => {
   switch (type) {
     case 'wall': return getWallQuadrangle(side, depth);
@@ -93,7 +128,7 @@ const getWallQuadrangle = (side: Side, depth: Depth): Quadrangle => {
   
   switch (side) {
     case 'left':
-      left = getLeft(depth - 1 as Depth); // TODO this is wrong
+      left = getFarLeft(depth);
       right = getLeft(depth);
       break;
     case 'center':
@@ -102,7 +137,7 @@ const getWallQuadrangle = (side: Side, depth: Depth): Quadrangle => {
       break;
     case 'right':
       left = getRight(depth);
-      right = getRight(depth -1 as Depth); // TODO this is wrong
+      right = getFarRight(depth);
       break;
   }
   
@@ -135,8 +170,8 @@ const getHallQuadrangle = (side: Side, depth: Depth): Quadrangle => {
 
 const getLeft = (depth: Depth): number => {
   switch (depth) {
-    case 0: return -50;
-    case 1: return 100;
+    case 0: return -100;
+    case 1: return 80;
     case 2: return 200;
     case 3: return 260;
     case 4: return 300;
@@ -145,17 +180,37 @@ const getLeft = (depth: Depth): number => {
 
 const getRight = (depth: Depth): number => {
   switch (depth) {
-    case 0: return 690;
-    case 1: return 540;
+    case 0: return 740;
+    case 1: return 560;
     case 2: return 440;
     case 3: return 380;
     case 4: return 340;
   }
 };
 
+const getFarLeft = (depth: Depth): number => {
+  switch (depth) {
+    case 0: throw new Error();
+    case 1: return -160;
+    case 2: return 0;
+    case 3: return 140;
+    case 4: return 260;
+  }
+};
+
+const getFarRight = (depth: Depth): number => {
+  switch (depth) {
+    case 0: throw new Error();
+    case 1: return 840;
+    case 2: return 640;
+    case 3: return 500;
+    case 4: return 380;
+  }
+};
+
 const getTop = (depth: Depth): number => {
   switch (depth) {
-    case 0: return -375;
+    case 0: return -380;
     case 1: return -160;
     case 2: return 0;
     case 3: return 55;
@@ -165,7 +220,7 @@ const getTop = (depth: Depth): number => {
 
 const getBottom = (depth: Depth): number => {
   switch (depth) {
-    case 0: return 530;
+    case 0: return 570;
     case 1: return 370;
     case 2: return 260;
     case 3: return 190;
