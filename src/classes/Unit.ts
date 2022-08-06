@@ -61,6 +61,10 @@ class Unit {
     this.maxMana = getMaxMana(this);
     // TODO this.life = this.maxLife?
   };
+
+  takeDamage = (damage: number) => {
+    this.life = Math.max(0, this.life - damage);
+  };
 }
 
 export default Unit;
