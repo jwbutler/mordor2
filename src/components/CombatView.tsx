@@ -36,7 +36,7 @@ const CombatView = () => {
       <Button
         className={styles.button}
         onClick={heavyAttack}
-        disabled={!state.inputEnabled()}
+        disabled={!state.inputEnabled() || !HEAVY_ATTACK.canPayCost(state.getPlayer().unit)}
       >
         Heavy Attack
       </Button>

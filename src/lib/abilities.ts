@@ -19,6 +19,7 @@ interface AttackAbility extends Ability {
   getHitChance: (unit: Unit) => number;
   getDamage: (unit: Unit) => number;
   getHitMessage: (attacker: Unit, defender: Unit, damage: number) => string;
+  getPreDeathMessage: (attacker: Unit, defender: Unit) => string | null;
 }
 
 const useAttackAbility = async (ability: AttackAbility, attacker: Unit, defender: Unit) => {
@@ -28,7 +29,7 @@ const useAttackAbility = async (ability: AttackAbility, attacker: Unit, defender
   if (Math.random() < hitChance) {
     const dodgeChance = getDodgeChance(defender);
     if (Math.random() < dodgeChance) {
-      state.addMessage(`${defender.name} dodged ${attacker.name}'s attack.`);
+      state.addMessage(`${defender.name} dodges ${attacker.name}'s attack.`);
     } else {
       await playAudio(attacker.sprite.sounds.attack);
       const attackDamage = ability.getDamage(attacker);
@@ -39,7 +40,11 @@ const useAttackAbility = async (ability: AttackAbility, attacker: Unit, defender
       if (defender.life <= 0) {
         await sleep(shortSleepMillis);
         await playAudio(defender.sprite.sounds.die);
-        state.addMessage(`${defender.name} died.`);
+        const preDeathMessage = ability.getPreDeathMessage(attacker, defender);
+        if (preDeathMessage) {
+          state.addMessage(preDeathMessage);
+        }
+        state.addMessage(`${defender.name} dies.`);
         const playerUnit = state.getPlayer().unit;
 
         if (defender === playerUnit) {
@@ -51,7 +56,7 @@ const useAttackAbility = async (ability: AttackAbility, attacker: Unit, defender
           tile.enemies.splice(tile.enemies.indexOf(defender));
           const gold = 10;
           state.getPlayer().gold += gold;
-          state.addMessage(`You picked up ${gold} gold.`);
+          state.addMessage(`You pick up ${gold} gold.`);
           playerUnit.experience++;
 
           if (playerUnit.experience >= playerUnit.experienceToNextLevel) {
@@ -63,7 +68,7 @@ const useAttackAbility = async (ability: AttackAbility, attacker: Unit, defender
       }
     }
   } else {
-    state.addMessage(`${attacker.name} missed ${defender.name}.`);
+    state.addMessage(`${attacker.name} misses ${defender.name}.`);
   }
 };
 

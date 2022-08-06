@@ -42,11 +42,11 @@ const fromString = (data: string, startingPoint: Coordinates, startingDirection:
 const createFirstLevel = (): Level => {
   const data = `
     #######
-    #    K#
-    #####K#
-    #KKKKK#
-    #-#####
-    #     #
+    D    K#
+    ##### #
+    #C   K#
+    # #####
+    #C   M#
     #######
   `;
   return fromString(data, { x: 1, y: 1 }, 'east');
@@ -70,7 +70,7 @@ const biggerLevel = () => {
     #K## # # #### M#
     # C  # # ## K ##
     # ##  K  ## # ##
-    # K####     ####
+    # K####   # ####
     ##   C  ###    D
     ################
   `;

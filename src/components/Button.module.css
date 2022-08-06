@@ -5,8 +5,11 @@
   color: white;
   font-family: Alagard, serif;
   font-size: 24px;
-  cursor: pointer;
   padding: 5px 10px;
+}
+
+button:not(:disabled) {
+  cursor: pointer;
 }
 
 .button:active:not(:disabled) {

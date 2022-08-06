@@ -1,5 +1,5 @@
 import { createAwesomeSword, createMediumSword } from './database/items';
-import { biggerLevel, doorsTest, manyKobolds } from './database/levels';
+import { biggerLevel, createFirstLevel, doorsTest, manyKobolds } from './database/levels';
 import { createPlayerUnit } from './database/units';
 import GameController from './GameController';
 import { Level } from './lib/levels';
@@ -9,7 +9,7 @@ import Shop from './classes/Shop';
 import Unit from './classes/Unit';
 
 const App = () => {  
-  const level: Level = biggerLevel();
+  const level: Level = createFirstLevel();
   const playerUnit: Unit = createPlayerUnit();
 
   const player = new Player({
