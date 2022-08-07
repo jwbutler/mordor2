@@ -1,4 +1,4 @@
-import kobold_png from '../images/gen/kobold.png';
+import kobold_png from '../images/gen/kobold_1.png';
 import crocdog_png from '../images/gen/crocdog_1.png';
 import mudman_png from '../images/gen/mudman_1.png';
 
