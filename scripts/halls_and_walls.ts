@@ -37,8 +37,10 @@ type WallDef = {
 
 const main = async () => {
   mkdirSync(tmpDir, { recursive: true });
-  await generateHallsAndWalls('walltexturegray');
-  await generateDoors('door_texture');
+  await Promise.all([
+    generateHallsAndWalls('walltexturegray'),
+    generateDoors('door_texture')
+  ]);
 };
 
 const generateHallsAndWalls = async (filename: string) => {
@@ -58,21 +60,26 @@ const generateHallsAndWalls = async (filename: string) => {
     }
   }
 
+  const promises: Promise<void>[] = [];
+
   for (const { depth, side, type } of defs) {
     const filename = `${type}_${side}_${depth}.png`;
-    console.log(filename);
     const path = `${tmpDir}/${filename}`;
     const transform = getQuadrangle(type, side, depth);
-    console.log(JSON.stringify(transform));
-    const transformed = await transformImage(image, transform);
-    const flattened = await flattenColors(transformed, [Colors.DARK_GRAY, Colors.BLACK, Colors.WHITE, Colors.TRANSPARENT]);
-    await writeImage(flattened, path);
+    promises.push(new Promise(async (resolve) => {
+      const transformed = await transformImage(image, transform);
+      const flattened = await flattenColors(transformed, [Colors.DARK_GRAY, Colors.BLACK, Colors.WHITE, Colors.TRANSPARENT]);
+      console.log(filename);
+      resolve(await writeImage(flattened, path));
+    }));
 
     // TODO bugged, Sharp sux
     //const flipped = await flipHorizontal(flattened);
     //const flippedPath = `${tmpDir}/${type}_${side}_${depth}_R.png`;
     //await writeImage(flipped, flippedPath);
   }
+
+  await Promise.all(promises);
 };
 
 const generateDoors = async (filename: string) => {
@@ -92,21 +99,26 @@ const generateDoors = async (filename: string) => {
     }
   }
 
+  const promises: Promise<void>[] = [];
+
   for (const { depth, side, type } of defs) {
     const filename = `door_${type}_${side}_${depth}.png`;
-    console.log(filename);
     const path = `${tmpDir}/${filename}`;
     const transform = getQuadrangle(type, side, depth);
-    console.log(JSON.stringify(transform));
-    const transformed = await transformImage(image, transform);
-    const flattened = await flattenColors(transformed, [Colors.DARK_GRAY, Colors.BLACK, Colors.BROWN, Colors.DARK_YELLOW, Colors.WHITE, Colors.TRANSPARENT]);
-    await writeImage(flattened, path);
+    promises.push(new Promise(async (resolve) => {
+      const transformed = await transformImage(image, transform);
+      const flattened = await flattenColors(transformed, [Colors.DARK_GRAY, Colors.BLACK, Colors.BROWN, Colors.DARK_YELLOW, Colors.WHITE, Colors.TRANSPARENT]);
+    console.log(filename);
+      resolve(await writeImage(flattened, path));
+    }));
 
     // TODO bugged, Sharp sux
     //const flipped = await flipHorizontal(flattened);
     //const flippedPath = `${tmpDir}/${type}_${side}_${depth}_R.png`;
     //await writeImage(flipped, flippedPath);
   }
+
+  await Promise.all(promises);
 };
 
 const getQuadrangle = (type: WallType, side: Side, depth: Depth): Quadrangle => {

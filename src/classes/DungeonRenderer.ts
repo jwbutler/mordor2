@@ -1,4 +1,4 @@
-import floor_ceiling from '../images/gen/floor_ceiling.png';
+import background_side_walls from '../images/gen/background_side_walls.png';
 import hall_left_0 from '../images/gen/hall_left_0.png';
 import hall_left_1 from '../images/gen/hall_left_1.png';
 import hall_left_2 from '../images/gen/hall_left_2.png';
@@ -90,7 +90,7 @@ const dungeonImages = {
   doorWallsCenter: [door_wall_center_1, door_wall_center_2, door_wall_center_3, door_wall_center_4],
   doorWallsLeft: [door_wall_left_1, door_wall_left_2, door_wall_left_3, door_wall_left_4],
   doorWallsRight: [door_wall_right_1, door_wall_right_2, door_wall_right_3, door_wall_right_4],
-  floorCeiling: floor_ceiling
+  floorCeiling: background_side_walls
 };
 
 const drawImage = async (src: string, context: CanvasRenderingContext2D) => {

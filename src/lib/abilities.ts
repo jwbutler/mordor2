@@ -1,8 +1,9 @@
 import { GameState } from '../classes/GameState';
-import Unit from "../classes/Unit";
+import Unit from '../classes/Unit';
 import { sleep } from './promises';
 import { playAudio } from './sounds';
 import { getDodgeChance, getMitigatedDamage } from './stats';
+import swish_mp3 from '../sounds/swish.mp3';
 
 // copy-pasted, meh
 const shortSleepMillis = 150;
@@ -26,10 +27,13 @@ const useAttackAbility = async (ability: AttackAbility, attacker: Unit, defender
   attacker.mana -= ability.manaCost;
   const state = GameState.getInstance();
   const hitChance = ability.getHitChance(attacker);
+
   if (Math.random() < hitChance) {
     const dodgeChance = getDodgeChance(defender);
+
     if (Math.random() < dodgeChance) {
       state.addMessage(`${defender.name} dodges ${attacker.name}'s attack.`);
+      await playAudio(swish_mp3, longSleepMillis);
     } else {
       await playAudio(attacker.sprite.sounds.attack, longSleepMillis);
       const attackDamage = ability.getDamage(attacker);
@@ -41,6 +45,7 @@ const useAttackAbility = async (ability: AttackAbility, attacker: Unit, defender
         await sleep(shortSleepMillis);
         await playAudio(defender.sprite.sounds.die, longSleepMillis);
         const preDeathMessage = ability.getPreDeathMessage(attacker, defender);
+
         if (preDeathMessage) {
           state.addMessage(preDeathMessage);
         }
@@ -69,6 +74,7 @@ const useAttackAbility = async (ability: AttackAbility, attacker: Unit, defender
     }
   } else {
     state.addMessage(`${attacker.name} misses ${defender.name}.`);
+    await playAudio(swish_mp3, longSleepMillis);
   }
 };
 

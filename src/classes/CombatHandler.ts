@@ -1,11 +1,9 @@
-import { ATTACK, HEAVY_ATTACK } from '../database/abilities';
+import { ATTACK } from '../database/abilities';
 import { checkNotNull } from '../lib/preconditions';
-import { playAudio } from '../lib/sounds';
 import { GameState } from './GameState';
 import { randBoolean } from '../lib/random';
 import Unit from '../classes/Unit';
 import { sleep } from '../lib/promises';
-import { getAttackDamage, getDodgeChance, getHitChance, getMitigatedDamage } from '../lib/stats';
 import { Ability } from '../lib/abilities';
 
 const shortSleepMillis = 150;

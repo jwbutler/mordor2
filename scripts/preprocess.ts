@@ -1,4 +1,5 @@
 import _canvas from 'canvas';
+import { writeFile } from 'fs/promises';
 import rimraf from 'rimraf';
 const { loadImage } = _canvas;
 import { mkdirSync, readdirSync, writeFileSync } from 'fs';
@@ -66,23 +67,33 @@ const main = async () => {
   mkdirSync(tmpDir, { recursive: true });
   mkdirSync(wallDir, { recursive: true });
   mkdirSync(outDir, { recursive: true });
+
+  const promises: Promise<void>[] = [];
   
   for (const filename of readdirSync(baseDir)) {
-    const image = await loadImage(`${baseDir}/${filename}`);
-    const swapped = await replaceColors(image, getPaletteSwaps(filename));
-    const outputBuffer = toBuffer(swapped);
-    const outputFilename = `${tmpDir}/${filename.replace('bmp', 'png').replaceAll('jpg', 'png').replaceAll('jpeg', 'png').replaceAll(/ /g, '_')}`;
-    writeFileSync(outputFilename, outputBuffer);
-    console.log(outputFilename);
+    promises.push(new Promise(async (resolve) => {
+      const image = await loadImage(`${baseDir}/${filename}`);
+      const swapped = await replaceColors(image, getPaletteSwaps(filename));
+      const outputBuffer = toBuffer(swapped);
+      const outputFilename = `${tmpDir}/${filename.replace('bmp', 'png').replaceAll('jpg', 'png').replaceAll('jpeg', 'png').replaceAll(/ /g, '_')}`;
+      promises.push(writeFile(outputFilename, outputBuffer));
+      console.log(outputFilename);
+      resolve(await writeFile(outputFilename, outputBuffer));
+    }));
   }
+
   for (const filename of readdirSync(wallDir)) {
-    const image = await loadImage(`${wallDir}/${filename}`);
-    const swapped = await replaceColors(image, getPaletteSwaps(filename));
-    const outputBuffer = toBuffer(swapped);
-    const outputFilename = `${tmpDir}/${filename.replace('bmp', 'png').replaceAll('jpg', 'png').replaceAll('jpeg', 'png').replaceAll(/ /g, '_')}`;
-    writeFileSync(outputFilename, outputBuffer);
-    console.log(outputFilename);
+    promises.push(new Promise(async (resolve) => {
+      const image = await loadImage(`${wallDir}/${filename}`);
+      const swapped = await replaceColors(image, getPaletteSwaps(filename));
+      const outputBuffer = toBuffer(swapped);
+      const outputFilename = `${tmpDir}/${filename.replace('bmp', 'png').replaceAll('jpg', 'png').replaceAll('jpeg', 'png').replaceAll(/ /g, '_')}`;
+      console.log(outputFilename);
+      resolve(await writeFile(outputFilename, outputBuffer));
+    }));
   }
+
+  await Promise.all(promises);
 
   await imageMin([`${tmpDir}/*`], {
     destination: outDir,
