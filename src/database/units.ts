@@ -42,13 +42,13 @@ const createCrocDog = (): Unit => {
 const createMudMan = (): Unit => {
   const unit = new Unit({
     name: 'Mud Man',
-    level: 1,
+    level: 2,
     stats: {
-      strength: 6,
+      strength: 8,
       dexterity: 4,
       intelligence: 3,
       wisdom: 2,
-      constitution: 4
+      constitution: 6
     },
     sprite: mudManSprite
   });

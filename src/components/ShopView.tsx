@@ -18,15 +18,18 @@ const ShopView = () => {
   const [boughtAnything, setBoughtAnything] = useState(false);
 
   useEffect(() => {
-    playAudio(shopkeeper_what_do_you_want_mp3);
+    playAudio(shopkeeper_what_do_you_want_mp3).then(() => {});
+
+    return () => {
+      if (boughtAnything) {
+        playAudio(shopkeeper_come_back_soon_mp3).then(() => {});
+      } else {
+        playAudio(shopkeeper_thanks_for_nothing_mp3).then(() => {});
+      }
+    };
   }, []);
 
   const handleExit = async () => {
-    if (boughtAnything) {
-      await playAudio(shopkeeper_come_back_soon_mp3);
-    } else {
-      await playAudio(shopkeeper_thanks_for_nothing_mp3);
-    }
     state.getPlayer().location = 'town';
   };
 

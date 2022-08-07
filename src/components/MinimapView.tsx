@@ -1,11 +1,19 @@
 import { GameState } from '../classes/GameState';
 import { CompassDirection, Coordinates } from '../lib/geometry';
 import { Level } from '../lib/levels';
-import { Tile } from '../lib/tiles';
+import { isDoor, isFloor, isWall, Tile } from '../lib/tiles';
 import styles from './MinimapView.module.css';
 
 const tileClass = (tile: Tile | null, currentTile: Tile, currentDirection: CompassDirection): string => {
-  const classNames: string[] = [styles.tile, styles[tile?.type || 'wall']];
+  const classNames: string[] = [styles.tile];
+  if (isDoor(tile)) {
+    classNames.push(styles.door);
+  } else if (isWall(tile)) {
+    classNames.push(styles.wall);
+  } else if (isFloor(tile)) {
+    classNames.push(styles.floor);
+  }
+
   if (tile === currentTile) {
     classNames.push(styles.current);
     classNames.push(styles[currentDirection]);

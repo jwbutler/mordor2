@@ -40,6 +40,18 @@ const getPaletteSwaps = (filename: string): Pair<RGBA>[] => {
     ];
   } else if (filename.match(/arrow/g)) {
     return [];
+  } else if (filename.match(/crocdog/g)) {
+    return [
+      [Colors.GREEN, Colors.LIGHT_GRAY],
+      [Colors.BLUE, Colors.DARK_GRAY],
+      [Colors.YELLOW, Colors.TEAL],
+      [Colors.WHITE, Colors.TRANSPARENT]
+    ];
+  } else if (filename.match(/mudman/g)) {
+    return [
+      [Colors.GREEN, Colors.BROWN],
+      [Colors.WHITE, Colors.TRANSPARENT]
+    ];
   } else {
     return [
       [Colors.WHITE, Colors.TRANSPARENT]

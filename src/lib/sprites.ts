@@ -1,6 +1,6 @@
 import kobold_png from '../images/gen/kobold.png';
-import crocdog_png from '../images/gen/crocdog.png';
-import mudman_png from '../images/gen/mudman.png';
+import crocdog_png from '../images/gen/crocdog_1.png';
+import mudman_png from '../images/gen/mudman_1.png';
 
 import crocdog_attack_mp3 from '../sounds/crocdog_attack.mp3';
 import crocdog_die_mp3 from '../sounds/crocdog_die.mp3';

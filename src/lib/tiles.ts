@@ -13,7 +13,7 @@ type Tile = {
 
 const isWall = (tile: Tile | null) => tile?.type === 'wall';
 const isDoor = (tile: Tile | null) => tile?.door;
-
+const isFloor = (tile: Tile | null) => tile?.type === 'floor';
 const isStairs = (tile: Tile | null) => tile?.type === 'stairs';
 
 export type {
@@ -22,6 +22,7 @@ export type {
 
 export {
   isDoor,
-  isStairs, 
+  isFloor,
+  isStairs,
   isWall
 };
