@@ -1,6 +1,6 @@
 import styles from './ResourceMeter.module.css';
 
-type ResourceType = 'life' | 'mana' | 'experience';
+type ResourceType = 'life' | 'mana' | 'experience' | 'ap';
 
 type Props = {
   type: ResourceType,

@@ -38,8 +38,8 @@ type WallDef = {
 const main = async () => {
   mkdirSync(tmpDir, { recursive: true });
   await Promise.all([
-    generateHallsAndWalls('walltexturegray'),
-    generateDoors('door_texture')
+    generateHallsAndWalls('wall_texture_gritty'),
+    generateDoors('door_texture_gritty')
   ]);
 };
 
@@ -68,7 +68,7 @@ const generateHallsAndWalls = async (filename: string) => {
     const transform = getQuadrangle(type, side, depth);
     promises.push(new Promise(async (resolve) => {
       const transformed = await transformImage(image, transform);
-      const flattened = await flattenColors(transformed, [Colors.DARK_GRAY, Colors.BLACK, Colors.WHITE, Colors.TRANSPARENT]);
+      const flattened = await flattenColors(transformed, [Colors.DARK_GRAY, Colors.LIGHT_GRAY, Colors.BLACK, Colors.WHITE, Colors.TRANSPARENT]);
       console.log(filename);
       resolve(await writeImage(flattened, path));
     }));
@@ -107,8 +107,7 @@ const generateDoors = async (filename: string) => {
     const transform = getQuadrangle(type, side, depth);
     promises.push(new Promise(async (resolve) => {
       const transformed = await transformImage(image, transform);
-      const flattened = await flattenColors(transformed, [Colors.DARK_GRAY, Colors.BLACK, Colors.BROWN, Colors.DARK_YELLOW, Colors.WHITE, Colors.TRANSPARENT]);
-    console.log(filename);
+      const flattened = await flattenColors(transformed, [Colors.DARK_GRAY, Colors.LIGHT_GRAY, Colors.BLACK, Colors.BROWN, Colors.DARK_RED, Colors.DARK_YELLOW, Colors.WHITE, Colors.TRANSPARENT]);
       resolve(await writeImage(flattened, path));
     }));
 

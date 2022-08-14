@@ -18,39 +18,35 @@ const outDir = 'src/images/gen';
 const getPaletteSwaps = (filename: string): Pair<RGBA>[] => {
   if (filename.match(/hall/g)) {
     return [
-      [Colors.WHITE, Colors.TRANSPARENT],
-      [Colors.RED, Colors.DARK_GRAY]
+      [Colors.WHITE, Colors.TRANSPARENT]
     ];
   } else if (filename.match(/wall/g)) {
     return [
-      [Colors.WHITE, Colors.TRANSPARENT],
-      [Colors.RED, Colors.DARK_GRAY]
+      [Colors.WHITE, Colors.TRANSPARENT]
     ];
   } else if (filename.match(/floor/g)) {
     return [
       [Colors.WHITE, Colors.TRANSPARENT],
       [Colors.YELLOW, Colors.BROWN],
-      [Colors.BLUE, Colors.BROWN],
+      [Colors.BLUE, Colors.BROWN]
     ];
   } else if (filename.match(/door/g)) {
     return [
-      [Colors.WHITE, Colors.TRANSPARENT],
-      [Colors.MAGENTA, Colors.BROWN],
-      [Colors.BLUE, Colors.DARK_GRAY],
-      [Colors.YELLOW, Colors.DARK_YELLOW]
+      [Colors.WHITE, Colors.TRANSPARENT]
     ];
   } else if (filename.match(/arrow/g)) {
     return [];
   } else if (filename.match(/crocdog/g)) {
     return [
-      [Colors.GREEN, Colors.LIGHT_GRAY],
-      [Colors.BLUE, Colors.DARK_GRAY],
-      [Colors.YELLOW, Colors.TEAL],
-      [Colors.WHITE, Colors.TRANSPARENT]
+      [Colors.GREEN, Colors.TRANSPARENT]
     ];
   } else if (filename.match(/mudman/g)) {
     return [
-      [Colors.GREEN, Colors.BROWN],
+      [Colors.WHITE, Colors.TRANSPARENT]
+    ];
+  } else if (filename.match(/shopkeeper/g)) {
+    return [
+      [Colors.LIGHT_YELLOW, Colors.LIGHT_GRAY],
       [Colors.WHITE, Colors.TRANSPARENT]
     ];
   } else {
@@ -58,6 +54,10 @@ const getPaletteSwaps = (filename: string): Pair<RGBA>[] => {
       [Colors.WHITE, Colors.TRANSPARENT]
     ];
   }
+};
+
+const _isImageLikeFilename = (filename: string) => {
+  return ['png', 'bmp', 'gif', 'heic'].find(extension => filename.endsWith(extension));
 };
 
 const main = async () => {
@@ -71,7 +71,11 @@ const main = async () => {
   const promises: Promise<void>[] = [];
   
   for (const filename of readdirSync(baseDir)) {
+    if (!_isImageLikeFilename(filename)) {
+      continue;
+    }
     promises.push(new Promise(async (resolve) => {
+      console.log(`loading ${baseDir}/${filename}`);
       const image = await loadImage(`${baseDir}/${filename}`);
       const swapped = await replaceColors(image, getPaletteSwaps(filename));
       const outputBuffer = toBuffer(swapped);
@@ -83,6 +87,9 @@ const main = async () => {
   }
 
   for (const filename of readdirSync(wallDir)) {
+    if (!_isImageLikeFilename(filename)) {
+      continue;
+    }
     promises.push(new Promise(async (resolve) => {
       const image = await loadImage(`${wallDir}/${filename}`);
       const swapped = await replaceColors(image, getPaletteSwaps(filename));

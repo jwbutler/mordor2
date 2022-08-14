@@ -10,6 +10,8 @@ import MessagesView from './MessagesView';
 import MinimapView from './MinimapView';
 import UnitView from './UnitView';
 import MobileOnly from './MobileOnly';
+import { playLoop } from '../lib/sounds';
+import dungeon_music_mp3 from '../sounds/dungeon_music.mp3';
 
 const GameView = () => {
   const [ticks, setTicks] = useState(0);
@@ -23,6 +25,12 @@ const GameView = () => {
     const timer = setInterval(render, 50);
     return () => clearInterval(timer);
   }, [ticks]);
+
+  useEffect(() => {
+    setTimeout(() => {
+      playLoop(dungeon_music_mp3).then(() => {});
+    }, 3000);
+  }, []);
 
   return (
     <div className={styles.game}>

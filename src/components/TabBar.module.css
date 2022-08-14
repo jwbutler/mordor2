@@ -1,0 +1,35 @@
+.tabBar {
+  display: flex;
+  flex-direction: column;
+  border-top: none;
+}
+
+.tabs {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+}
+
+.tab {
+  border: 2px solid white;
+  border-radius: 10px 10px 0 0;
+  padding: 5px 10px;
+  flex: 1 1 auto;
+  user-select: none;
+  color: #808080;
+  text-align: center;
+  background-color: black;
+  font-family: Alagard, serif;
+  font-size: 24px;
+}
+
+.tab.selected {
+  border-bottom: none;
+  color: white;
+}
+
+.content {
+  border: 2px solid white;
+  border-top: none;
+  flex: 1 1 auto;
+}

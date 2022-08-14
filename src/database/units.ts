@@ -14,7 +14,7 @@ const createKobold = (): Unit => {
       dexterity: 4,
       intelligence: 3,
       wisdom: 2,
-      constitution: 2
+      constitution: 3
     },
     sprite: koboldSprite
   });
@@ -25,13 +25,13 @@ const createKobold = (): Unit => {
 const createCrocDog = (): Unit => {
   const unit = new Unit({
     name: 'Croc Dog',
-    level: 1,
+    level: 2,
     stats: {
-      strength: 4,
+      strength: 5,
       dexterity: 6,
       intelligence: 3,
       wisdom: 2,
-      constitution: 3
+      constitution: 4
     },
     sprite: crocDogSprite
   });
@@ -42,7 +42,7 @@ const createCrocDog = (): Unit => {
 const createMudMan = (): Unit => {
   const unit = new Unit({
     name: 'Mud Man',
-    level: 2,
+    level: 3,
     stats: {
       strength: 8,
       dexterity: 4,

@@ -1,53 +1,121 @@
 import { CombatHandler } from '../classes/CombatHandler';
 import { GameState } from '../classes/GameState';
-import { ATTACK, HEAVY_ATTACK } from '../database/abilities';
+import { ATTACK, FIREBALL, HEAVY_ATTACK, LESSER_HEAL } from '../database/abilities';
 import Button from './Button';
 import styles from './CombatView.module.css';
+import TabBar, { Tab } from './TabBar';
+import { Ability } from '../lib/abilities';
+import Unit from '../classes/Unit';
 
 // eslint-disable-next-line
 const CombatView = () => {
   const state = GameState.getInstance();
-  
+  const enemyUnit = state.getCombatState()?.defender!!;
+
   const attack = async () => {
     if (state.inputEnabled()) {
       state.disableInput();
-      await new CombatHandler().playTurnPair(ATTACK);
+      await new CombatHandler().playTurnPair(ATTACK, enemyUnit);
       state.enableInput();
     }
   };
 
-  const heavyAttack = async () => {
-    if (state.inputEnabled()) {
-      state.disableInput();
-      await new CombatHandler().playTurnPair(HEAVY_ATTACK);
-      state.enableInput();
+  const tabs: Tab[] = [
+    {
+      title: 'Melee',
+      content: (
+        <div className={styles.buttons}>
+          <ActionButton
+            ability={ATTACK}
+            target={enemyUnit}
+            index={1}
+          />
+          <ActionButton
+            ability={HEAVY_ATTACK}
+            target={enemyUnit}
+            index={2}
+          />
+        </div>
+      )
+    },
+    {
+      title: 'Magic',
+      content: (
+        <div className={styles.buttons}>
+          <ActionButton
+            ability={FIREBALL}
+            target={enemyUnit}
+            index={1}
+          />
+          <ActionButton
+            ability={LESSER_HEAL}
+            target={state.getPlayer().unit}
+            index={2}
+          />
+        </div>
+      )
+    },
+    {
+      title: 'Items',
+      content: (
+        <div className={styles.buttons}>
+          <ActionButton
+            ability={ATTACK}
+            target={enemyUnit}
+            index={1}
+          />
+          <ActionButton
+            ability={HEAVY_ATTACK}
+            target={enemyUnit}
+            index={2}
+          />
+        </div>
+      )
     }
-  };
+  ];
 
   return (
     <div className={styles.combat}>
       <Button
-        className={styles.button}
         onClick={attack}
         disabled={!state.inputEnabled()}
       >
         Attack
       </Button>
-      <Button
-        className={styles.button}
-        onClick={heavyAttack}
-        disabled={!state.inputEnabled() || !HEAVY_ATTACK.canPayCost(state.getPlayer().unit)}
-      >
-        Heavy Attack
-      </Button>
-      <Button className={styles.button} disabled>
-        Item
-      </Button>
-      <Button className={styles.button} disabled>
-        Run
-      </Button>
+      <TabBar tabs={tabs} />
     </div>
   );
 };
-    
+
+type ActionButtonProps = {
+  ability: Ability,
+  target: Unit,
+  index: number
+};
+
+const ActionButton = ({ ability, target, index }: ActionButtonProps) => {
+  const state = GameState.getInstance();
+  const playerUnit = state.getPlayer().unit;
+
+  const enabled = state.inputEnabled() && ability.canPayCost(playerUnit);
+
+  const handleClick = async () => {
+    if (enabled) {
+      state.disableInput();
+      await new CombatHandler().playTurnPair(ability, target);
+      state.enableInput();
+    }
+  };
+
+  return (
+    <button
+      className={styles.button}
+      onClick={handleClick}
+      disabled={!enabled}
+    >
+      {`${index}. ${ability.name} (${ability.getCostText()})`}
+    </button>
+  );
+};
+
 export default CombatView;

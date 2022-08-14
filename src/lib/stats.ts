@@ -1,4 +1,5 @@
 import Unit from '../classes/Unit';
+import { DamageType } from './abilities';
 
 type Stat =
   /**
@@ -93,10 +94,10 @@ const getMaxMana = (unit: Unit): number => {
   return mana;
 };
 
-const getMitigation = (unit: Unit): number => {
+const getMitigation = (unit: Unit, damageType: DamageType): number => {
   let mitigation = 0;
   for (const equipment of unit.getEquipment()) {
-    mitigation += equipment.mitigation;
+    mitigation += equipment.getMitigation(damageType);
   }
   return mitigation;
 };
@@ -109,8 +110,8 @@ const getDodgeChance = (unit: Unit): number => {
   return dodgeChance;
 };
 
-const getMitigatedDamage = (defender: Unit, incomingDamage: number): number =>
-  Math.round(incomingDamage * (1 - getMitigation(defender)));
+const getMitigatedDamage = (defender: Unit, incomingDamage: number, damageType: DamageType): number =>
+  Math.round(incomingDamage * (1 - getMitigation(defender, damageType)));
 
 const getHitChance = (unit: Unit): number => {
   let hitChance = 0.5;
