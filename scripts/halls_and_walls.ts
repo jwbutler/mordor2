@@ -232,7 +232,7 @@ const getTop = (depth: Depth): number => {
 const getBottom = (depth: Depth): number => {
   switch (depth) {
     case 0: return 570;
-    case 1: return 360;
+    case 1: return 370;
     case 2: return 260;
     case 3: return 190;
     case 4: return 150;

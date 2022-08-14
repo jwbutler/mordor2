@@ -19,16 +19,17 @@ const ShopView = () => {
 
   useEffect(() => {
     playAudio(shopkeeper_what_do_you_want_mp3).then(() => {});
+  }, []);
 
+  useEffect(() => {
     return () => {
-      console.log(boughtAnything);
       if (boughtAnything) {
         playAudio(shopkeeper_come_back_soon_mp3).then(() => {});
       } else {
         playAudio(shopkeeper_thanks_for_nothing_mp3).then(() => {});
       }
     };
-  }, []);
+  }, [boughtAnything]);
 
   const handleExit = async () => {
     state.getPlayer().location = 'town';
