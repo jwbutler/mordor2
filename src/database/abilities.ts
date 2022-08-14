@@ -9,6 +9,11 @@ import {
 import { getAttackDamage, getHitChance } from '../lib/stats';
 import fireball_mp3 from '../sounds/fireball.mp3';
 import heal_mp3 from '../sounds/heal.mp3';
+import { sleep } from '../lib/promises';
+
+// copy-pasted, meh
+const shortSleepMillis = 150;
+const longSleepMillis = 250;
 
 class Attack implements AttackAbility {
   readonly name = 'Attack';
@@ -17,6 +22,7 @@ class Attack implements AttackAbility {
 
   canPayCost = (unit: Unit) => unit.actionPoints >= this.actionPointCost;
   use = async (unit: Unit, target: Unit) => {
+    unit.actionPoints -= this.actionPointCost;
     await useAttackAbility(this, unit, target);
   };
 
@@ -37,6 +43,7 @@ class HeavyAttack implements AttackAbility {
 
   canPayCost = (unit: Unit) => unit.actionPoints >= this.actionPointCost;
   use = async (unit: Unit, target: Unit) => {
+    unit.actionPoints -= this.actionPointCost;
     await useAttackAbility(this, unit, target);
   };
 
@@ -51,6 +58,29 @@ class HeavyAttack implements AttackAbility {
   getCostText = () => `${this.actionPointCost} AP`;
 }
 
+class DoubleAttack implements AttackAbility {
+  readonly name = 'Attack';
+  readonly actionPointCost = 0;
+  readonly damageType = 'physical';
+
+  canPayCost = (unit: Unit) => unit.actionPoints >= this.actionPointCost;
+  use = async (unit: Unit, target: Unit) => {
+    unit.actionPoints -= this.actionPointCost;
+    await useAttackAbility(this, unit, target);
+    await sleep(longSleepMillis);
+    await useAttackAbility(this, unit, target);
+  };
+
+  getDamage = (unit: Unit): number => getAttackDamage(unit);
+  getHitChance = (unit: Unit): number => getHitChance(unit);
+
+  getHitMessage = (attacker: Unit, defender: Unit, damage: number): string =>
+    `BERSERK!!! ${attacker.name} hits ${defender.name} for ${damage}.`;
+  getPreDeathMessage = () => null;
+
+  getCostText = () => `${this.actionPointCost} AP`;
+}
+
 class Fireball implements AttackSpellAbility {
   readonly name = 'Fireball';
   readonly manaCost = 15;
@@ -58,6 +88,7 @@ class Fireball implements AttackSpellAbility {
 
   canPayCost = (unit: Unit) => unit.mana >= this.manaCost;
   use = async (unit: Unit, target: Unit) => {
+    unit.mana -= this.manaCost;
     await useAttackSpellAbility(this, unit, target);
   };
 
@@ -75,14 +106,15 @@ class Fireball implements AttackSpellAbility {
 
 class LesserHeal implements HealingSpellAbility {
   readonly name = 'Lesser Heal';
-  readonly manaCost = 10;
+  readonly manaCost = 15;
 
   canPayCost = (unit: Unit) => unit.mana >= this.manaCost;
   use = async (unit: Unit, target: Unit) => {
+    unit.mana -= this.manaCost;
     await useHealingSpellAbility(this, unit, target);
   };
 
-  getHealAmount = (caster: Unit): number => 15;
+  getHealAmount = (caster: Unit): number => 30;
   getSuccessChance = (caster: Unit): number => 1; // TODO
 
   getSuccessMessage = (caster: Unit, target: Unit, healAmount: number): string =>
@@ -95,12 +127,14 @@ class LesserHeal implements HealingSpellAbility {
 
 const ATTACK = new Attack();
 const HEAVY_ATTACK = new HeavyAttack();
+const DOUBLE_ATTACK = new DoubleAttack();
 const FIREBALL = new Fireball();
 const LESSER_HEAL = new LesserHeal();
 
 export {
   ATTACK,
   HEAVY_ATTACK,
+  DOUBLE_ATTACK,
   FIREBALL,
   LESSER_HEAL
 };

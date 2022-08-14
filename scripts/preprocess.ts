@@ -18,39 +18,35 @@ const outDir = 'src/images/gen';
 const getPaletteSwaps = (filename: string): Pair<RGBA>[] => {
   if (filename.match(/hall/g)) {
     return [
-      [Colors.WHITE, Colors.TRANSPARENT],
-      [Colors.RED, Colors.DARK_GRAY]
+      [Colors.WHITE, Colors.TRANSPARENT]
     ];
   } else if (filename.match(/wall/g)) {
     return [
-      [Colors.WHITE, Colors.TRANSPARENT],
-      [Colors.RED, Colors.DARK_GRAY]
+      [Colors.WHITE, Colors.TRANSPARENT]
     ];
   } else if (filename.match(/floor/g)) {
     return [
       [Colors.WHITE, Colors.TRANSPARENT],
       [Colors.YELLOW, Colors.BROWN],
-      [Colors.BLUE, Colors.BROWN],
+      [Colors.BLUE, Colors.BROWN]
     ];
   } else if (filename.match(/door/g)) {
     return [
-      [Colors.WHITE, Colors.TRANSPARENT],
-      [Colors.MAGENTA, Colors.BROWN],
-      [Colors.BLUE, Colors.DARK_GRAY],
-      [Colors.YELLOW, Colors.DARK_YELLOW]
+      [Colors.WHITE, Colors.TRANSPARENT]
     ];
   } else if (filename.match(/arrow/g)) {
     return [];
   } else if (filename.match(/crocdog/g)) {
     return [
-      [Colors.GREEN, Colors.LIGHT_GRAY],
-      [Colors.BLUE, Colors.DARK_GRAY],
-      [Colors.YELLOW, Colors.TEAL],
-      [Colors.WHITE, Colors.TRANSPARENT]
+      [Colors.GREEN, Colors.TRANSPARENT]
     ];
   } else if (filename.match(/mudman/g)) {
     return [
-      [Colors.GREEN, Colors.BROWN],
+      [Colors.WHITE, Colors.TRANSPARENT]
+    ];
+  } else if (filename.match(/shopkeeper/g)) {
+    return [
+      [Colors.LIGHT_YELLOW, Colors.LIGHT_GRAY],
       [Colors.WHITE, Colors.TRANSPARENT]
     ];
   } else {

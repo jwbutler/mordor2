@@ -9,7 +9,7 @@ import Shop from './classes/Shop';
 import Unit from './classes/Unit';
 
 const App = () => {  
-  const level: Level = createFirstLevel();
+  const level: Level = biggerLevel();
   const playerUnit: Unit = createPlayerUnit();
 
   const player = new Player({

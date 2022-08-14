@@ -4,7 +4,7 @@ import { buyItem, type InventoryItem } from '../lib/items';
 import { playAudio } from '../lib/sounds';
 import styles from './ShopView.module.css';
 import shop_png from '../images/gen/shop.png';
-import shopkeeper_png from '../images/gen/shopkeeper.png';
+import shopkeeper_png from '../images/gen/shopkeeper_shaded.png';
 import shopkeeper_what_do_you_want_mp3 from '../sounds/shopkeeper_what_do_you_want.mp3';
 import shopkeeper_anything_else_mp3 from '../sounds/shopkeeper_anything_else.mp3';
 import shopkeeper_no_gold_mp3 from '../sounds/shopkeeper_no_gold.mp3';
@@ -21,6 +21,7 @@ const ShopView = () => {
     playAudio(shopkeeper_what_do_you_want_mp3).then(() => {});
 
     return () => {
+      console.log(boughtAnything);
       if (boughtAnything) {
         playAudio(shopkeeper_come_back_soon_mp3).then(() => {});
       } else {
@@ -35,7 +36,7 @@ const ShopView = () => {
 
   return (
     <div className={styles.shop}>
-      <img className={styles.background}  src={shop_png} alt="" />
+      <img className={styles.background} src={shop_png} alt="" />
       <img className={styles.background} src={shopkeeper_png} alt="" />
       <div>Shop</div>
       <div className={styles.items}>
@@ -44,7 +45,9 @@ const ShopView = () => {
             item={item}
             price={item.value /* we could consider a markup here */}
             key={item.name}
-            onPurchase={() => setBoughtAnything(true)}
+            onPurchase={() => {
+              setBoughtAnything(true);
+            }}
           />)
         )}
       </div>

@@ -1,4 +1,4 @@
-import { ATTACK } from '../database/abilities';
+import { ATTACK, DOUBLE_ATTACK } from '../database/abilities';
 import { checkNotNull } from '../lib/preconditions';
 import { GameState } from './GameState';
 import { randBoolean } from '../lib/random';
@@ -9,14 +9,20 @@ import { Ability } from '../lib/abilities';
 const shortSleepMillis = 150;
 const longSleepMillis = 250;
 
-type PlayTurnProps = {
-  unit: Unit,
-  target: Unit,
-  ability: Ability
-}
-
 const chooseEnemyAbility = (enemy: Unit, playerUnit: Unit): Ability => {
+  // TODO this is a terrible way to do polymorphism
+  if (enemy.name.toLowerCase().includes('croc')) {
+    return DOUBLE_ATTACK;
+  }
   return ATTACK;
+};
+
+const endCombat = () => {
+  const state = GameState.getInstance();
+  state.setMenu(null);
+  state.setCombatState(null);
+  const playerUnit = state.getPlayer().unit;
+  playerUnit.actionPoints = playerUnit.maxActionPoints;
 };
 
 class CombatHandler {
@@ -53,8 +59,7 @@ class CombatHandler {
 
     if (target.life <= 0) {
       await sleep(longSleepMillis);
-      state.setMenu(null);
-      state.setCombatState(null);
+      endCombat();
     } else {
       // TODO: need to set target here too
       state.setCombatState({
@@ -64,11 +69,12 @@ class CombatHandler {
     }
   };
   
-  playTurnPair = async (ability: Ability, enemyUnit: Unit) => {
+  playTurnPair = async (ability: Ability, target: Unit) => {
     const state = GameState.getInstance();
     const playerUnit = state.getPlayer().unit;
+    const enemyUnit = state.getCombatState()?.defender!!;
     await sleep(shortSleepMillis);
-    await this.playTurn(playerUnit, enemyUnit, ability);
+    await this.playTurn(playerUnit, target, ability);
     await sleep(longSleepMillis);
     // to check if the CPU unit isn't dead
     if (state.getMenu() === 'combat') {

@@ -46,7 +46,6 @@ interface HealingSpellAbility extends Ability {
 }
 
 const useAttackAbility = async (ability: AttackAbility, attacker: Unit, defender: Unit) => {
-  attacker.actionPoints -= ability.actionPointCost;
   const state = GameState.getInstance();
   const hitChance = ability.getHitChance(attacker);
 
@@ -102,7 +101,6 @@ const useAttackAbility = async (ability: AttackAbility, attacker: Unit, defender
 };
 
 const useAttackSpellAbility = async (ability: AttackSpellAbility, attacker: Unit, defender: Unit) => {
-  attacker.mana -= ability.manaCost;
   const state = GameState.getInstance();
   const hitChance = ability.getHitChance(attacker);
 
@@ -113,7 +111,7 @@ const useAttackSpellAbility = async (ability: AttackSpellAbility, attacker: Unit
       state.addMessage(`${defender.name} dodges ${attacker.name}'s attack.`);
       await playAudio(swish_mp3, longSleepMillis);
     } else {
-      await playAudio(attacker.sprite.sounds.attack, longSleepMillis);
+      await playAudio(ability.getSound(), longSleepMillis);
       const attackDamage = ability.getDamage(attacker);
       const mitigatedDamage = getMitigatedDamage(defender, attackDamage, ability.damageType);
       state.addMessage(ability.getHitMessage(attacker, defender, mitigatedDamage));
@@ -158,7 +156,6 @@ const useAttackSpellAbility = async (ability: AttackSpellAbility, attacker: Unit
 };
 
 const useHealingSpellAbility = async (ability: HealingSpellAbility, caster: Unit, target: Unit) => {
-  caster.mana -= ability.manaCost;
   const state = GameState.getInstance();
   const successChance = ability.getSuccessChance(caster);
 
