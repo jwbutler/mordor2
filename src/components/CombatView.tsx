@@ -3,6 +3,7 @@ import { GameState } from '../classes/GameState';
 import { ATTACK, HEAVY_ATTACK } from '../database/abilities';
 import Button from './Button';
 import styles from './CombatView.module.css';
+import TabBar, { Tab } from './TabBar';
 
 // eslint-disable-next-line
 const CombatView = () => {
@@ -24,28 +25,78 @@ const CombatView = () => {
     }
   };
 
+  const tabs: Tab[] = [
+    {
+      title: 'Melee',
+      content: (
+        <div className={styles.buttons}>
+          <Button
+            className={styles.button}
+            onClick={attack}
+            disabled={!state.inputEnabled()}
+          >
+            Attack
+          </Button>
+          <Button
+            className={styles.button}
+            onClick={heavyAttack}
+            disabled={!state.inputEnabled() || !HEAVY_ATTACK.canPayCost(state.getPlayer().unit)}
+          >
+            Heavy Attack
+          </Button>
+        </div>
+      )
+    },
+    {
+      title: 'Magic',
+      content: (
+        <div className={styles.buttons}>
+          <Button
+            className={styles.button}
+            onClick={attack}
+            disabled={!state.inputEnabled()}
+          >
+            Attack
+          </Button>
+          <Button
+            className={styles.button}
+            onClick={heavyAttack}
+            disabled={!state.inputEnabled() || !HEAVY_ATTACK.canPayCost(state.getPlayer().unit)}
+          >
+            Heavy Attack
+          </Button>
+        </div>
+      )
+    },
+    {
+      title: 'Items',
+      content: (
+        <div className={styles.buttons}>
+          <Button
+            className={styles.button}
+            onClick={attack}
+            disabled={!state.inputEnabled()}
+          >
+            Attack
+          </Button>
+          <Button
+            className={styles.button}
+            onClick={heavyAttack}
+            disabled={!state.inputEnabled() || !HEAVY_ATTACK.canPayCost(state.getPlayer().unit)}
+          >
+            Heavy Attack
+          </Button>
+        </div>
+      )
+    }
+  ];
+
   return (
     <div className={styles.combat}>
-      <Button
-        className={styles.button}
-        onClick={attack}
-        disabled={!state.inputEnabled()}
-      >
+      <div className={styles.attack}>
         Attack
-      </Button>
-      <Button
-        className={styles.button}
-        onClick={heavyAttack}
-        disabled={!state.inputEnabled() || !HEAVY_ATTACK.canPayCost(state.getPlayer().unit)}
-      >
-        Heavy Attack
-      </Button>
-      <Button className={styles.button} disabled>
-        Item
-      </Button>
-      <Button className={styles.button} disabled>
-        Run
-      </Button>
+      </div>
+      <TabBar tabs={tabs} />
     </div>
   );
 };
