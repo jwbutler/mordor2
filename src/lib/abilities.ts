@@ -34,6 +34,15 @@ interface AttackSpellAbility extends Ability {
   getDamage: (unit: Unit) => number;
   getHitMessage: (attacker: Unit, defender: Unit, damage: number) => string;
   getPreDeathMessage: (attacker: Unit, defender: Unit) => string | null;
+  getSound: () => string;
+}
+
+interface HealingSpellAbility extends Ability {
+  manaCost: number;
+  getSuccessChance: (caster: Unit) => number;
+  getHealAmount: (caster: Unit) => number;
+  getSuccessMessage: (caster: Unit, target: Unit, healAmount: number) => string;
+  getSound: () => string;
 }
 
 const useAttackAbility = async (ability: AttackAbility, attacker: Unit, defender: Unit) => {
@@ -92,7 +101,7 @@ const useAttackAbility = async (ability: AttackAbility, attacker: Unit, defender
   }
 };
 
-const useSpellAttackAbility = async (ability: AttackSpellAbility, attacker: Unit, defender: Unit) => {
+const useAttackSpellAbility = async (ability: AttackSpellAbility, attacker: Unit, defender: Unit) => {
   attacker.mana -= ability.manaCost;
   const state = GameState.getInstance();
   const hitChance = ability.getHitChance(attacker);
@@ -148,11 +157,28 @@ const useSpellAttackAbility = async (ability: AttackSpellAbility, attacker: Unit
   }
 };
 
+const useHealingSpellAbility = async (ability: HealingSpellAbility, caster: Unit, target: Unit) => {
+  caster.mana -= ability.manaCost;
+  const state = GameState.getInstance();
+  const successChance = ability.getSuccessChance(caster);
+
+  if (Math.random() < successChance) {
+    await playAudio(ability.getSound(), longSleepMillis);
+    const healAmount = ability.getHealAmount(caster);
+    state.addMessage(ability.getSuccessMessage(caster, target, healAmount));
+    target.life = Math.min(target.maxLife, target.life + healAmount);
+  } else {
+    state.addMessage(`${caster.name} fails to heal ${caster.name}.`);
+  }
+};
+
 export {
   type Ability,
   type AttackAbility,
   type AttackSpellAbility,
+  type HealingSpellAbility,
   type DamageType,
   useAttackAbility,
-  useSpellAttackAbility
+  useAttackSpellAbility,
+  useHealingSpellAbility
 };
