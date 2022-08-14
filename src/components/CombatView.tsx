@@ -30,20 +30,16 @@ const CombatView = () => {
       title: 'Melee',
       content: (
         <div className={styles.buttons}>
-          <Button
-            className={styles.button}
+          <ActionButton
             onClick={attack}
             disabled={!state.inputEnabled()}
-          >
-            Attack
-          </Button>
-          <Button
-            className={styles.button}
+            label="1. Attack"
+          />
+          <ActionButton
             onClick={heavyAttack}
             disabled={!state.inputEnabled() || !HEAVY_ATTACK.canPayCost(state.getPlayer().unit)}
-          >
-            Heavy Attack
-          </Button>
+            label="2. Heavy Attack"
+          />
         </div>
       )
     },
@@ -51,20 +47,16 @@ const CombatView = () => {
       title: 'Magic',
       content: (
         <div className={styles.buttons}>
-          <Button
-            className={styles.button}
+          <ActionButton
             onClick={attack}
             disabled={!state.inputEnabled()}
-          >
-            Attack
-          </Button>
-          <Button
-            className={styles.button}
+            label="1. Attack"
+          />
+          <ActionButton
             onClick={heavyAttack}
             disabled={!state.inputEnabled() || !HEAVY_ATTACK.canPayCost(state.getPlayer().unit)}
-          >
-            Heavy Attack
-          </Button>
+            label="2. Heavy Attack"
+          />
         </div>
       )
     },
@@ -72,20 +64,16 @@ const CombatView = () => {
       title: 'Items',
       content: (
         <div className={styles.buttons}>
-          <Button
-            className={styles.button}
+          <ActionButton
             onClick={attack}
             disabled={!state.inputEnabled()}
-          >
-            Attack
-          </Button>
-          <Button
-            className={styles.button}
+            label="1. Attack"
+          />
+          <ActionButton
             onClick={heavyAttack}
             disabled={!state.inputEnabled() || !HEAVY_ATTACK.canPayCost(state.getPlayer().unit)}
-          >
-            Heavy Attack
-          </Button>
+            label="2. Heavy Attack"
+          />
         </div>
       )
     }
@@ -93,11 +81,32 @@ const CombatView = () => {
 
   return (
     <div className={styles.combat}>
-      <div className={styles.attack}>
+      <Button
+        onClick={attack}
+        disabled={!state.inputEnabled()}
+      >
         Attack
-      </div>
+      </Button>
       <TabBar tabs={tabs} />
     </div>
+  );
+};
+
+type ActionButtonProps = {
+  label: string,
+  disabled: boolean,
+  onClick: () => void
+};
+
+const ActionButton = ({ label, disabled, onClick }: ActionButtonProps) => {
+  return (
+    <button
+      className={styles.button}
+      onClick={onClick}
+      disabled={disabled}
+    >
+      {label}
+    </button>
   );
 };
     
