@@ -60,6 +60,10 @@ const getPaletteSwaps = (filename: string): Pair<RGBA>[] => {
   }
 };
 
+const _isImageLikeFilename = (filename: string) => {
+  return ['png', 'bmp', 'gif', 'heic'].find(extension => filename.endsWith(extension));
+};
+
 const main = async () => {
   rimraf.sync(tmpDir);
   rimraf.sync(outDir);
@@ -71,7 +75,11 @@ const main = async () => {
   const promises: Promise<void>[] = [];
   
   for (const filename of readdirSync(baseDir)) {
+    if (!_isImageLikeFilename(filename)) {
+      continue;
+    }
     promises.push(new Promise(async (resolve) => {
+      console.log(`loading ${baseDir}/${filename}`);
       const image = await loadImage(`${baseDir}/${filename}`);
       const swapped = await replaceColors(image, getPaletteSwaps(filename));
       const outputBuffer = toBuffer(swapped);
@@ -83,6 +91,9 @@ const main = async () => {
   }
 
   for (const filename of readdirSync(wallDir)) {
+    if (!_isImageLikeFilename(filename)) {
+      continue;
+    }
     promises.push(new Promise(async (resolve) => {
       const image = await loadImage(`${wallDir}/${filename}`);
       const swapped = await replaceColors(image, getPaletteSwaps(filename));

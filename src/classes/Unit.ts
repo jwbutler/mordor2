@@ -21,6 +21,8 @@ class Unit {
   maxMana: number;
   experience: number;
   experienceToNextLevel: number;
+  actionPoints: number;
+  maxActionPoints: number;
   private readonly equipment: Partial<Record<EquipmentSlot, Equipment>>;
   readonly sprite: Sprite;
 
@@ -34,6 +36,8 @@ class Unit {
     this.maxMana = getMaxMana(this);
     this.life = this.maxLife;
     this.mana = this.maxMana;
+    this.maxActionPoints = 10;
+    this.actionPoints = this.maxActionPoints;
     this.experienceToNextLevel = getExperienceToNextLevel(level);
     this.sprite = sprite;
   }
@@ -59,7 +63,7 @@ class Unit {
     this.stats.wisdom++;
     this.maxLife = getMaxLife(this);
     this.maxMana = getMaxMana(this);
-    // TODO this.life = this.maxLife?
+    // TODO this.life = this.maxLife? this.mana = this.maxMana?
   };
 
   takeDamage = (damage: number) => {

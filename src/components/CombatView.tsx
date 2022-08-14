@@ -1,26 +1,19 @@
 import { CombatHandler } from '../classes/CombatHandler';
 import { GameState } from '../classes/GameState';
-import { ATTACK, HEAVY_ATTACK } from '../database/abilities';
+import { ATTACK, FIREBALL, HEAVY_ATTACK } from '../database/abilities';
 import Button from './Button';
 import styles from './CombatView.module.css';
 import TabBar, { Tab } from './TabBar';
+import { Ability } from '../lib/abilities';
 
 // eslint-disable-next-line
 const CombatView = () => {
   const state = GameState.getInstance();
-  
+
   const attack = async () => {
     if (state.inputEnabled()) {
       state.disableInput();
       await new CombatHandler().playTurnPair(ATTACK);
-      state.enableInput();
-    }
-  };
-
-  const heavyAttack = async () => {
-    if (state.inputEnabled()) {
-      state.disableInput();
-      await new CombatHandler().playTurnPair(HEAVY_ATTACK);
       state.enableInput();
     }
   };
@@ -31,14 +24,12 @@ const CombatView = () => {
       content: (
         <div className={styles.buttons}>
           <ActionButton
-            onClick={attack}
-            disabled={!state.inputEnabled()}
-            label="1. Attack"
+            ability={ATTACK}
+            index={1}
           />
           <ActionButton
-            onClick={heavyAttack}
-            disabled={!state.inputEnabled() || !HEAVY_ATTACK.canPayCost(state.getPlayer().unit)}
-            label="2. Heavy Attack"
+            ability={HEAVY_ATTACK}
+            index={2}
           />
         </div>
       )
@@ -48,14 +39,8 @@ const CombatView = () => {
       content: (
         <div className={styles.buttons}>
           <ActionButton
-            onClick={attack}
-            disabled={!state.inputEnabled()}
-            label="1. Attack"
-          />
-          <ActionButton
-            onClick={heavyAttack}
-            disabled={!state.inputEnabled() || !HEAVY_ATTACK.canPayCost(state.getPlayer().unit)}
-            label="2. Heavy Attack"
+            ability={FIREBALL}
+            index={1}
           />
         </div>
       )
@@ -65,14 +50,12 @@ const CombatView = () => {
       content: (
         <div className={styles.buttons}>
           <ActionButton
-            onClick={attack}
-            disabled={!state.inputEnabled()}
-            label="1. Attack"
+            ability={ATTACK}
+            index={1}
           />
           <ActionButton
-            onClick={heavyAttack}
-            disabled={!state.inputEnabled() || !HEAVY_ATTACK.canPayCost(state.getPlayer().unit)}
-            label="2. Heavy Attack"
+            ability={HEAVY_ATTACK}
+            index={2}
           />
         </div>
       )
@@ -93,19 +76,31 @@ const CombatView = () => {
 };
 
 type ActionButtonProps = {
-  label: string,
-  disabled: boolean,
-  onClick: () => void
+  ability: Ability,
+  index: number
 };
 
-const ActionButton = ({ label, disabled, onClick }: ActionButtonProps) => {
+const ActionButton = ({ ability, index }: ActionButtonProps) => {
+  const state = GameState.getInstance();
+  const playerUnit = state.getPlayer().unit;
+
+  const enabled = state.inputEnabled() && ability.canPayCost(playerUnit);
+
+  const handleClick = async () => {
+    if (enabled) {
+      state.disableInput();
+      await new CombatHandler().playTurnPair(ability);
+      state.enableInput();
+    }
+  };
+
   return (
     <button
       className={styles.button}
-      onClick={onClick}
-      disabled={disabled}
+      onClick={handleClick}
+      disabled={!enabled}
     >
-      {label}
+      {`${index}. ${ability.name} (${ability.getCostText()})`}
     </button>
   );
 };

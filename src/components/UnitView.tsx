@@ -60,6 +60,19 @@ const UnitView = ({ unit, player }: Props) => {
           </td>
         </tr>
         <tr>
+          <td>Action Points</td>
+          <td>
+            <div className={styles.meter}>
+              <ResourceMeter
+                type="ap"
+                current={unit.actionPoints}
+                max={unit.maxActionPoints}
+              />
+            </div>
+            <div>{unit.actionPoints}/{unit.maxActionPoints}</div>
+          </td>
+        </tr>
+        <tr>
           <td>Gold</td>
           <td>{player.gold}</td>
         </tr>

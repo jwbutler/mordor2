@@ -1,6 +1,7 @@
 import { equipItem, type InventoryItem, type ItemType } from '../lib/items';
 import { Stats, zeroStats } from '../lib/stats';
 import { titleCase } from '../lib/strings';
+import { DamageType } from '../lib/abilities';
 
 type Props = {
   name: string,
@@ -11,7 +12,7 @@ type Props = {
   /**
    * Number from 0 to 1 (ratio of damage mitigated)
    */
-  mitigation?: number,
+  mitigation?: Partial<Record<DamageType, number>>,
   /**
    * Number from 0 to 1 (chance to dodge)
    */
@@ -30,7 +31,7 @@ class Equipment implements InventoryItem {
   /**
    * Number from 0 to 1 (ratio of damage mitigated)
    */
-  readonly mitigation: number;
+  readonly mitigation: Partial<Record<DamageType, number>>;
   /**
    * Number from 0 to 1 (chance to dodge)
    */
@@ -44,7 +45,7 @@ class Equipment implements InventoryItem {
     this.slot = slot;
     this.stats = { ...zeroStats(), ...stats };
     this.damage = damage ?? 0;
-    this.mitigation = mitigation ?? 0;
+    this.mitigation = mitigation ?? {};
     this.dodgeChance = dodgeChance ?? 0;
     this.life = life ?? 0;
     this.mana = mana ?? 0;
@@ -52,6 +53,10 @@ class Equipment implements InventoryItem {
 
   onUse = () => equipItem(this);
   equals = (item: InventoryItem) => JSON.stringify(this) === JSON.stringify(item); // should probably do this by hand
+
+  getMitigation(damageType: DamageType): number {
+    return this.mitigation[damageType] || 0;
+  }
 }
 
 type EquipmentSlot = 'mainHand' | 'offHand' | 'head' | 'body' | 'hands' | 'legs' | 'feet';
