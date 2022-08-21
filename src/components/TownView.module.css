@@ -1,5 +1,7 @@
 .town {}
-.background {}
+.background {
+  width: 100%;
+}
 
 .button {}
 .button.left {}

@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import { ReactNode, useEffect } from 'react';
 import { GameState } from '../classes/GameState';
 import ControlsView from './ControlsView';
 import DungeonView from './DungeonView';
@@ -9,9 +9,9 @@ import TownView from './TownView';
 
 const MainView = () => {
   const state = GameState.getInstance();
-  let content: ReactNode;
   const location = state.getPlayer().location;
 
+  let content: ReactNode;
   if (state.getMenu() === 'inventory') {
     content = <InventoryView />;
   } else if (location === 'dungeon') {

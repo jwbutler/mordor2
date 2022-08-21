@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { GameState } from './classes/GameState';
 import GameView from './components/GameView';
 import { navigate } from './lib/actions';
@@ -17,13 +17,13 @@ const GameController = () => {
       }
     }
   };
-  
+
   useEffect(() => {
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
   // eslint-disable-next-line
   }, []);
-  
+
   return (
     <GameView />
   );

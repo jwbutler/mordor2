@@ -18,18 +18,19 @@ const ShopView = () => {
   const [boughtAnything, setBoughtAnything] = useState(false);
 
   useEffect(() => {
+    state.addMessage('"What do you want?"');
     playAudio(shopkeeper_what_do_you_want_mp3).then(() => {});
-  }, []);
 
-  useEffect(() => {
     return () => {
       if (boughtAnything) {
+        state.addMessage('"Come back soon."');
         playAudio(shopkeeper_come_back_soon_mp3).then(() => {});
       } else {
+        state.addMessage('"Thanks for nothin\'."');
         playAudio(shopkeeper_thanks_for_nothing_mp3).then(() => {});
       }
     };
-  }, [boughtAnything]);
+  }, []);
 
   const handleExit = async () => {
     state.getPlayer().location = 'town';
@@ -72,8 +73,11 @@ const ItemView = ({ item, price, onPurchase }: ItemProps) => {
     if (player.gold >= price) {
       buyItem(item, price);
       onPurchase();
+      state.addMessage(`You bought a ${item.name} for ${price} gold.`);
+      state.addMessage('"Anything else?"');
       await playAudio(shopkeeper_anything_else_mp3);
     } else {
+      state.addMessage('"Come back when you have the dough, ya bum!"');
       await playAudio(shopkeeper_no_gold_mp3);
     }
   };

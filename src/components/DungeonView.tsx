@@ -25,7 +25,7 @@ const DungeonView = () => {
       }
     })();
   });
-  
+
   return (
     <>
       <canvas

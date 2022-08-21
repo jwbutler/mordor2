@@ -53,7 +53,7 @@ class CombatHandler {
     const state = GameState.getInstance();
     const combatState = checkNotNull(state.getCombatState());
     const { attacker, defender } = combatState;
-    
+
     await ability.use(unit, target);
     await sleep(longSleepMillis);
 
@@ -68,7 +68,7 @@ class CombatHandler {
       });
     }
   };
-  
+
   playTurnPair = async (ability: Ability, target: Unit) => {
     const state = GameState.getInstance();
     const playerUnit = state.getPlayer().unit;

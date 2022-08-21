@@ -8,7 +8,7 @@ import { GameState } from './classes/GameState';
 import Shop from './classes/Shop';
 import Unit from './classes/Unit';
 
-const App = () => {  
+const App = () => {
   const level: Level = biggerLevel();
   const playerUnit: Unit = createPlayerUnit();
 
@@ -23,7 +23,7 @@ const App = () => {
   const shop: Shop = new Shop();
   shop.addItem(createMediumSword());
   shop.addItem(createAwesomeSword());
-  
+
   const state = new GameState({ level, player, menu: null, shop });
   GameState.setInstance(state);
 

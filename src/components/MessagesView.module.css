@@ -9,11 +9,5 @@
   padding: 5px;
   scrollbar-color: silver #e0e0e0;
   outline: none;
-  border: none;
-}
-
-@media (min-width: 768px) {
-  .textarea {
-    border: 4px solid white;
-  }
+  border: 4px solid white;
 }

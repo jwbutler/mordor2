@@ -20,8 +20,6 @@ const navigate = async (relativeDirection: RelativeDirection) => {
       const direction = rotate(player.direction, relativeDirection);
 
       const nextTile = getTile(state.getLevel(), coordinates);
-      //if (isDoorFacingDirection(nextTile, direction)) {
-      //  player.coordinates = move(coordinates, direction); // assume the developer put a floor tile there...
       if (isDoor(nextTile)) {
         player.location = 'town';
         if (player.unit.life < player.unit.maxLife || player.unit.mana < player.unit.maxMana) {

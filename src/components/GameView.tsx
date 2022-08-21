@@ -17,7 +17,7 @@ const GameView = () => {
   const [ticks, setTicks] = useState(0);
 
   const state = GameState.getInstance();
-  
+
   useEffect(() => {
     const render = () => {
       setTicks(ticks + 1);
@@ -43,10 +43,12 @@ const GameView = () => {
           <div className={`${styles.column} ${styles.left}`}>
             <MainView />
             <MessagesView messages={state.getMessages()} />
-            <MobileOnly>
-              {(state.getMenu() === 'combat') && <CombatView />}
-              {(state.getPlayer().location === 'dungeon' && state.getMenu() !== 'combat') && <MinimapView />}
-            </MobileOnly>
+            {(state.getPlayer().location !== 'town') && (
+              <MobileOnly>
+                {(state.getMenu() === 'combat') && <CombatView />}
+                {(state.getPlayer().location === 'dungeon' && state.getMenu() !== 'combat') && <MinimapView />}
+              </MobileOnly>
+            )}
           </div>
         )}
         <div className={`${styles.column} ${styles.right}`}>
