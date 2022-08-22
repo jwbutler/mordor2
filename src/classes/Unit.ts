@@ -36,7 +36,7 @@ class Unit {
     this.maxMana = getMaxMana(this);
     this.life = this.maxLife;
     this.mana = this.maxMana;
-    this.maxActionPoints = 10;
+    this.maxActionPoints = 20;
     this.actionPoints = this.maxActionPoints;
     this.experienceToNextLevel = getExperienceToNextLevel(level);
     this.sprite = sprite;

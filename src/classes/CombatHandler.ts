@@ -22,7 +22,7 @@ const endCombat = () => {
   state.setMenu(null);
   state.setCombatState(null);
   const playerUnit = state.getPlayer().unit;
-  playerUnit.actionPoints = playerUnit.maxActionPoints;
+  // playerUnit.actionPoints = playerUnit.maxActionPoints;
 };
 
 class CombatHandler {
@@ -67,6 +67,7 @@ class CombatHandler {
         defender: attacker
       });
     }
+    unit.actionPoints = Math.min(unit.actionPoints + 1, unit.maxActionPoints);
   };
 
   playTurnPair = async (ability: Ability, target: Unit) => {

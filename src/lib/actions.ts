@@ -33,6 +33,7 @@ const navigate = async (relativeDirection: RelativeDirection) => {
       player.direction = direction;
 
       await loadTile();
+      player.unit.actionPoints = Math.min(player.unit.actionPoints + 1, player.unit.maxActionPoints);
       return;
     case 'town':
       switch (relativeDirection) {

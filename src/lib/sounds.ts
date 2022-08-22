@@ -15,21 +15,21 @@ export const playAudio = async (sound: string, durationMs?: number) => {
         BUSY = false;
         resolve();
       },
-      durationMs || (audio.duration * 1000)
+      durationMs ?? (audio.duration * 1000)
     );
   });
 };
 
-let MUSIC = false;
+let music: HTMLAudioElement | null = null;
 
 export const playLoop = async (sound: string) => {
-  if (MUSIC) {
-    return;
+  if (music) {
+    music.pause();
+    music = null; // I hope Javascript knows how to garbage collect
   }
 
-  MUSIC = true;
-  const audio = new Audio(sound);
-  audio.volume = 0.5;
-  audio.loop = true;
-  return audio.play();
+  music = new Audio(sound);
+  music.volume = 0.5;
+  music.loop = true;
+  return music.play();
 };

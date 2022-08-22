@@ -38,7 +38,7 @@ class Attack implements AttackAbility {
 
 class HeavyAttack implements AttackAbility {
   readonly name = 'Heavy Attack';
-  readonly actionPointCost = 5;
+  readonly actionPointCost = 10;
   readonly damageType = 'physical';
 
   canPayCost = (unit: Unit) => unit.actionPoints >= this.actionPointCost;
