@@ -1,5 +1,7 @@
 import { useEffect, useRef } from 'react';
 import DungeonRenderer from '../classes/DungeonRenderer';
+import { playLoop } from '../lib/sounds';
+import dungeon_music_mp3 from '../sounds/dungeon_music.mp3';
 import styles from './DungeonView.module.css';
 
 const renderer = new DungeonRenderer();
@@ -8,6 +10,12 @@ let rendering = false;
 const DungeonView = () => {
   const ref = useRef<HTMLCanvasElement>(null);
   const canvas = ref.current;
+
+  useEffect(() => {
+    setTimeout(() => {
+      playLoop(dungeon_music_mp3).then(() => {});
+    }, 3000);
+  }, []);
 
   useEffect(() => {
     (async () => {

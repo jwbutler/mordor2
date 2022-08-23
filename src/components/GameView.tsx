@@ -26,12 +26,6 @@ const GameView = () => {
     return () => clearInterval(timer);
   }, [ticks]);
 
-  useEffect(() => {
-    setTimeout(() => {
-      playLoop(dungeon_music_mp3).then(() => {});
-    }, 3000);
-  }, []);
-
   return (
     <div className={styles.game}>
       <MenuBar />
