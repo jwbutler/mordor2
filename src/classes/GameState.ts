@@ -6,7 +6,7 @@ import Shop from './Shop';
 import type { Tile } from '../lib/tiles';
 import Unit from '../classes/Unit';
 
-type Menu = 'intro' | 'combat' | 'inventory';
+type Menu = 'character' | 'combat' | 'intro' | 'inventory' | 'level_up';
 
 type Props = {
   level: Level,
@@ -28,7 +28,7 @@ class GameState {
   private menu: Menu | null;
   private combatState: CombatState | null;
   private readonly shop: Shop;
-  
+
   constructor({ level, player, menu, shop }: Props) {
     this.player = player;
     this.level = level;
@@ -38,7 +38,7 @@ class GameState {
     this.combatState = null;
     this.shop = shop;
   }
-  
+
   getLevel = (): Level => this.level;
   getPlayer = (): Player => this.player;
   getMenu = (): Menu | null => this.menu;

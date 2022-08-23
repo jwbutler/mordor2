@@ -2,7 +2,10 @@ import { CombatHandler } from '../classes/CombatHandler';
 import { GameState } from '../classes/GameState';
 import { Coordinates, move, RelativeDirection, rotate } from './geometry';
 import { getTile } from './levels';
+import { sleep } from './promises';
 import { isDoor, isStairs, isWall, Tile } from './tiles';
+
+const shortSleepMillis = 150; // meh
 
 const navigate = async (relativeDirection: RelativeDirection) => {
   const state = GameState.getInstance();
@@ -77,7 +80,21 @@ const loadTile = async () => {
   }
 };
 
+const levelUp = async () => {
+  const state = GameState.getInstance();
+  const playerUnit = state.getPlayer().unit;
+  playerUnit.experience++;
+
+  if (playerUnit.experience >= playerUnit.experienceToNextLevel) {
+    await sleep(shortSleepMillis);
+    playerUnit.levelUp();
+    state.addMessage(`You leveled up! Welcome to level ${playerUnit.level}.`);
+    state.setMenu('level_up');
+  }
+};
+
 export {
+  levelUp,
   navigate,
   returnToDungeon
 };

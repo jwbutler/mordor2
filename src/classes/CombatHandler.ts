@@ -1,4 +1,5 @@
 import { ATTACK, DOUBLE_ATTACK } from '../database/abilities';
+import { levelUp } from '../lib/actions';
 import { checkNotNull } from '../lib/preconditions';
 import { GameState } from './GameState';
 import { randBoolean } from '../lib/random';
@@ -17,12 +18,14 @@ const chooseEnemyAbility = (enemy: Unit, playerUnit: Unit): Ability => {
   return ATTACK;
 };
 
-const endCombat = () => {
+const endCombat = async () => {
   const state = GameState.getInstance();
   state.setMenu(null);
   state.setCombatState(null);
   const playerUnit = state.getPlayer().unit;
-  // playerUnit.actionPoints = playerUnit.maxActionPoints;
+  if (playerUnit.experience >= playerUnit.experienceToNextLevel) {
+    await levelUp();
+  }
 };
 
 class CombatHandler {
@@ -59,7 +62,7 @@ class CombatHandler {
 
     if (target.life <= 0) {
       await sleep(longSleepMillis);
-      endCombat();
+      await endCombat();
     } else {
       // TODO: need to set target here too
       state.setCombatState({
@@ -67,6 +70,7 @@ class CombatHandler {
         defender: attacker
       });
     }
+
     unit.actionPoints = Math.min(unit.actionPoints + 1, unit.maxActionPoints);
   };
 

@@ -11,6 +11,7 @@ const longSleepMillis = 250;
 
 interface Ability {
   name: string;
+  targetType: AbilityTargetType;
   canPayCost: (unit: Unit) => boolean;
   use: (unit: Unit, target: Unit) => Promise<void>;
   getCostText: () => string;
@@ -44,6 +45,8 @@ interface HealingSpellAbility extends Ability {
   getSuccessMessage: (caster: Unit, target: Unit, healAmount: number) => string;
   getSound: () => string;
 }
+
+type AbilityTargetType = 'self' | 'enemy';
 
 const useAttackAbility = async (ability: AttackAbility, attacker: Unit, defender: Unit) => {
   const state = GameState.getInstance();
@@ -85,12 +88,6 @@ const useAttackAbility = async (ability: AttackAbility, attacker: Unit, defender
           state.getPlayer().gold += gold;
           state.addMessage(`You pick up ${gold} gold.`);
           playerUnit.experience++;
-
-          if (playerUnit.experience >= playerUnit.experienceToNextLevel) {
-            await sleep(shortSleepMillis);
-            playerUnit.levelUp();
-            state.addMessage(`You leveled up! Welcome to level ${playerUnit.level}.`);
-          }
         }
       }
     }
@@ -140,12 +137,6 @@ const useAttackSpellAbility = async (ability: AttackSpellAbility, attacker: Unit
           state.getPlayer().gold += gold;
           state.addMessage(`You pick up ${gold} gold.`);
           playerUnit.experience++;
-
-          if (playerUnit.experience >= playerUnit.experienceToNextLevel) {
-            await sleep(shortSleepMillis);
-            playerUnit.levelUp();
-            state.addMessage(`You leveled up! Welcome to level ${playerUnit.level}.`);
-          }
         }
       }
     }

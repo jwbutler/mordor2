@@ -19,6 +19,7 @@ class Attack implements AttackAbility {
   readonly name = 'Attack';
   readonly actionPointCost = 0;
   readonly damageType = 'physical';
+  readonly targetType = 'enemy';
 
   canPayCost = (unit: Unit) => unit.actionPoints >= this.actionPointCost;
   use = async (unit: Unit, target: Unit) => {
@@ -40,6 +41,7 @@ class HeavyAttack implements AttackAbility {
   readonly name = 'Heavy Attack';
   readonly actionPointCost = 10;
   readonly damageType = 'physical';
+  readonly targetType = 'enemy';
 
   canPayCost = (unit: Unit) => unit.actionPoints >= this.actionPointCost;
   use = async (unit: Unit, target: Unit) => {
@@ -62,6 +64,7 @@ class DoubleAttack implements AttackAbility {
   readonly name = 'Attack';
   readonly actionPointCost = 0;
   readonly damageType = 'physical';
+  readonly targetType = 'enemy';
 
   canPayCost = (unit: Unit) => unit.actionPoints >= this.actionPointCost;
   use = async (unit: Unit, target: Unit) => {
@@ -85,6 +88,7 @@ class Fireball implements AttackSpellAbility {
   readonly name = 'Fireball';
   readonly manaCost = 15;
   readonly damageType = 'elemental';
+  readonly targetType = 'enemy';
 
   canPayCost = (unit: Unit) => unit.mana >= this.manaCost;
   use = async (unit: Unit, target: Unit) => {
@@ -107,6 +111,7 @@ class Fireball implements AttackSpellAbility {
 class LesserHeal implements HealingSpellAbility {
   readonly name = 'Lesser Heal';
   readonly manaCost = 15;
+  readonly targetType = 'self';
 
   canPayCost = (unit: Unit) => unit.mana >= this.manaCost;
   use = async (unit: Unit, target: Unit) => {

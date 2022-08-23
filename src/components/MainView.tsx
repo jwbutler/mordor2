@@ -1,8 +1,10 @@
 import { ReactNode, useEffect } from 'react';
 import { GameState } from '../classes/GameState';
+import CharacterView from './CharacterView';
 import ControlsView from './ControlsView';
 import DungeonView from './DungeonView';
 import InventoryView from './InventoryView';
+import LevelUpView from './LevelUpView';
 import styles from './MainView.module.css';
 import ShopView from './ShopView';
 import TownView from './TownView';
@@ -12,7 +14,11 @@ const MainView = () => {
   const location = state.getPlayer().location;
 
   let content: ReactNode;
-  if (state.getMenu() === 'inventory') {
+  if (state.getMenu() === 'character') {
+    content = <CharacterView />;
+  } else if (state.getMenu() === 'level_up') {
+    content = <LevelUpView />;
+  } else if (state.getMenu() === 'inventory') {
     content = <InventoryView />;
   } else if (location === 'dungeon') {
     content = <DungeonView />;
@@ -22,8 +28,10 @@ const MainView = () => {
     content = <ShopView />;
   }
 
-  const showControls = state.getMenu() !== 'intro'
+  const showControls = state.getMenu() !== 'character'
+    && state.getMenu() !== 'intro'
     && state.getMenu() !== 'inventory'
+    && state.getMenu() !== 'level_up'
     && state.inputEnabled();
 
   return (

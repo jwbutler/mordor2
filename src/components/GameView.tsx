@@ -10,8 +10,6 @@ import MessagesView from './MessagesView';
 import MinimapView from './MinimapView';
 import UnitView from './UnitView';
 import MobileOnly from './MobileOnly';
-import { playLoop } from '../lib/sounds';
-import dungeon_music_mp3 from '../sounds/dungeon_music.mp3';
 
 const GameView = () => {
   const [ticks, setTicks] = useState(0);

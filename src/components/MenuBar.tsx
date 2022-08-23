@@ -12,6 +12,9 @@ const MenuBar = () => {
 
   return (
     <header className={styles.menuBar}>
+      <Item onClick={() => toggleMenu('character')}>
+        Character
+      </Item>
       <Item onClick={() => toggleMenu('inventory')}>
         Inventory
       </Item>

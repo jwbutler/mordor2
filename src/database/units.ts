@@ -4,6 +4,7 @@ import { mudManSprite } from '../lib/sprites';
 import { playerSprite } from '../lib/sprites';
 import Unit from '../classes/Unit';
 import { createNoobSword } from './items';
+import { ATTACK } from './abilities';
 
 const createKobold = (): Unit => {
   const unit = new Unit({
@@ -16,7 +17,9 @@ const createKobold = (): Unit => {
       wisdom: 2,
       constitution: 3
     },
-    sprite: koboldSprite
+    sprite: koboldSprite,
+    meleeAbilities: [ATTACK],
+    spells: []
   });
   unit.equipItem(createNoobSword());
   return unit;
@@ -33,7 +36,9 @@ const createCrocDog = (): Unit => {
       wisdom: 2,
       constitution: 4
     },
-    sprite: crocDogSprite
+    sprite: crocDogSprite,
+    meleeAbilities: [ATTACK],
+    spells: []
   });
   unit.equipItem(createNoobSword());
   return unit;
@@ -50,7 +55,9 @@ const createMudMan = (): Unit => {
       wisdom: 2,
       constitution: 6
     },
-    sprite: mudManSprite
+    sprite: mudManSprite,
+    meleeAbilities: [ATTACK],
+    spells: []
   });
   unit.equipItem(createNoobSword());
   return unit;
@@ -67,7 +74,9 @@ const createPlayerUnit = (): Unit => {
       wisdom: 8,
       constitution: 8
     },
-    sprite: playerSprite // just a placeholder
+    sprite: playerSprite, // just a placeholder
+    meleeAbilities: [ATTACK],
+    spells: []
   });
   unit.equipItem(createNoobSword());
   return unit;
