@@ -49,6 +49,10 @@ const getPaletteSwaps = (filename: string): Pair<RGBA>[] => {
       [Colors.LIGHT_YELLOW, Colors.LIGHT_GRAY],
       [Colors.WHITE, Colors.TRANSPARENT]
     ];
+  } else if (filename.match(/ghoul/g)) {
+    return [
+      [Colors.CYAN, Colors.TRANSPARENT]
+    ];
   } else {
     return [
       [Colors.WHITE, Colors.TRANSPARENT]
@@ -69,7 +73,7 @@ const main = async () => {
   mkdirSync(outDir, { recursive: true });
 
   const promises: Promise<void>[] = [];
-  
+
   for (const filename of readdirSync(baseDir)) {
     if (!_isImageLikeFilename(filename)) {
       continue;
@@ -106,7 +110,7 @@ const main = async () => {
     destination: outDir,
     plugins: [optipngPlugin(), pngquantPlugin()]
   });
-  
+
   for (const filename of readdirSync(outDir)) {
     console.log(`${outDir}/${filename}`);
   }

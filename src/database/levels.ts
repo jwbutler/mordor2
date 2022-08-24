@@ -1,7 +1,7 @@
 import type { CompassDirection, Coordinates } from '../lib/geometry';
 import type { Level } from '../lib/levels';
 import type { Tile } from '../lib/tiles';
-import { createKobold, createCrocDog, createMudMan } from './units';
+import { createKobold, createCrocDog, createMudMan, createGhoul } from './units';
 
 const floor = (): Tile => ({ type: 'floor', enemies: [], objects: [], door: false, stairs: false });
 const wall = (): Tile => ({ type: 'wall', enemies: [], objects: [], door: false, stairs: false });
@@ -12,7 +12,7 @@ const fromString = (data: string, startingPoint: Coordinates, startingDirection:
   const tiles: Tile[][] = [];
   const rows = data.split('\n');
   const height = rows.length;
-  
+
   for (let y = 0; y < height; y++) {
     const row: Tile[] = [...rows[y].trim()].map(char => {
       switch (char) {
@@ -22,6 +22,7 @@ const fromString = (data: string, startingPoint: Coordinates, startingDirection:
         case 'C': return { type: 'floor', enemies: [createCrocDog()], objects: [], door: false, stairs: false };
         case 'K': return { type: 'floor', enemies: [createKobold()], objects: [], door: false, stairs: false };
         case 'M': return { type: 'floor', enemies: [createMudMan()], objects: [], door: false, stairs: false };
+        case 'G': return { type: 'floor', enemies: [createGhoul()], objects: [], door: false, stairs: false };
         default:  return floor();
       }
     });
@@ -65,13 +66,13 @@ const smallerLevel = (): Level => {
 const biggerLevel = () => {
   const data = `
     ################
-    #M   ######  K##
+    #G   ######  K##
     #### #C#C   # ##
     #K## # # #### M#
     #    # # ##K  ##
     # ##  K  ## # C#
-    # K####   # ####
-    ##   C  ###    D
+    # K#### ### ####
+    ##   C  #G     D
     ################
   `;
   return fromString(data, { x: 14, y: 7 }, 'west');

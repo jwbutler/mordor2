@@ -1,4 +1,4 @@
-import { koboldSprite } from '../lib/sprites';
+import { ghoulSprite, koboldSprite } from '../lib/sprites';
 import { crocDogSprite } from '../lib/sprites';
 import { mudManSprite } from '../lib/sprites';
 import { playerSprite } from '../lib/sprites';
@@ -82,9 +82,29 @@ const createPlayerUnit = (): Unit => {
   return unit;
 };
 
+const createGhoul = (): Unit => {
+  const unit = new Unit({
+    name: 'Ghoul',
+    level: 4,
+    stats: {
+      strength: 16,
+      dexterity: 2,
+      intelligence: 6,
+      wisdom: 4,
+      constitution: 10
+    },
+    sprite: ghoulSprite,
+    meleeAbilities: [ATTACK],
+    spells: []
+  });
+  unit.equipItem(createNoobSword());
+  return unit;
+};
+
 export {
   createKobold,
   createCrocDog,
   createPlayerUnit,
-  createMudMan
+  createMudMan,
+  createGhoul
 };
