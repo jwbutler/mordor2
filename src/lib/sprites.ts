@@ -1,4 +1,5 @@
 import kobold_png from '../images/gen/kobold_shaded.png';
+import kobold_warrior_png from '../images/gen/kobold_warrior.png';
 import crocdog_png from '../images/gen/crocdog_shaded.png';
 import mudman_png from '../images/gen/mudman_shaded.png';
 import ghoul_png from '../images/gen/ghoul_shaded.png';
@@ -44,6 +45,16 @@ const koboldSprite: Sprite = {
   }
 };
 
+const koboldWarriorSprite: Sprite = {
+  images: {
+    standing: kobold_warrior_png
+  },
+  sounds: {
+    attack: kobold_attack_mp3,
+    die: kobold_die_mp3
+  }
+};
+
 const crocDogSprite: Sprite = {
   images: {
     standing: crocdog_png
@@ -77,8 +88,9 @@ const ghoulSprite: Sprite = {
 export type { Sprite };
 export {
   crocDogSprite,
+  ghoulSprite,
   koboldSprite,
+  koboldWarriorSprite,
   mudManSprite,
-  playerSprite,
-  ghoulSprite
+  playerSprite
 };
