@@ -57,6 +57,10 @@ const getPaletteSwaps = (filename: string): Pair<RGBA>[] => {
     return [
       [Colors.CYAN, Colors.TRANSPARENT]
     ];
+  } else if (filename.match(/trainer/g)) {
+    return [
+      [Colors.CYAN, Colors.TRANSPARENT]
+    ];
   } else {
     return [
       [Colors.WHITE, Colors.TRANSPARENT]

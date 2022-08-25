@@ -20,16 +20,22 @@ export const playAudio = async (sound: string, durationMs?: number) => {
   });
 };
 
+let soundData: string | null = null;
 let music: HTMLAudioElement | null = null;
 
 export const playLoop = async (sound: string) => {
+  if (soundData === sound) {
+    return;
+  }
+
   if (music) {
     music.pause();
     music = null; // I hope Javascript knows how to garbage collect
   }
 
+  soundData = sound;
   music = new Audio(sound);
   music.volume = 0.5;
   music.loop = true;
-  return music.play();
+  await music.play();
 };

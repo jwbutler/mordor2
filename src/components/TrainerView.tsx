@@ -4,7 +4,7 @@ import { Ability, buyAbility } from '../lib/abilities';
 import { playAudio } from '../lib/sounds';
 import styles from './TrainerView.module.css';
 import shop_png from '../images/gen/shop.png';
-import shopkeeper_png from '../images/gen/shopkeeper_shaded.png';
+import trainer_png from '../images/gen/trainer_shaded.png';
 import shopkeeper_what_do_you_want_mp3 from '../sounds/shopkeeper_what_do_you_want.mp3';
 import shopkeeper_anything_else_mp3 from '../sounds/shopkeeper_anything_else.mp3';
 import shopkeeper_no_gold_mp3 from '../sounds/shopkeeper_no_gold.mp3';
@@ -38,9 +38,9 @@ const TrainerView = () => {
   };
 
   return (
-    <div className={styles.trainer}>
+    <div className={styles.trainerView}>
       <img className={styles.background} src={shop_png} alt="" />
-      <img className={styles.shopkeeper} src={shopkeeper_png} alt="" />
+      <img className={styles.trainer} src={trainer_png} alt="" />
       <div>Trainer</div>
       <div className={styles.abilities}>
         {abilities.map(ability => (
