@@ -37,7 +37,7 @@ const handleKeyDown = async (e: KeyboardEvent) => {
     }
   } else if (isNumberKey(e)) {
     if (state.getMenu() === 'combat') {
-
+      // TODO
     }
   }
 };

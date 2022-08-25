@@ -1,15 +1,16 @@
 import { CombatHandler } from '../classes/CombatHandler';
 import { GameState } from '../classes/GameState';
-import { ATTACK, FIREBALL, HEAVY_ATTACK, LESSER_HEAL } from '../database/abilities';
+import Unit from '../classes/Unit';
+import { ATTACK } from '../database/abilities';
+import { Ability } from '../lib/abilities';
 import Button from './Button';
 import styles from './CombatView.module.css';
 import TabBar, { Tab } from './TabBar';
-import { Ability } from '../lib/abilities';
-import Unit from '../classes/Unit';
 
 // eslint-disable-next-line
 const CombatView = () => {
   const state = GameState.getInstance();
+  const playerUnit = state.getPlayer().unit;
   const enemyUnit = state.getCombatState()?.defender!!;
 
   const attack = async () => {
@@ -25,16 +26,16 @@ const CombatView = () => {
       title: 'Melee',
       content: (
         <div className={styles.buttons}>
-          <ActionButton
-            ability={ATTACK}
-            target={enemyUnit}
-            index={1}
-          />
-          <ActionButton
-            ability={HEAVY_ATTACK}
-            target={enemyUnit}
-            index={2}
-          />
+          {playerUnit.getMeleeAbilities().map((ability, i) => {
+            return (
+              <ActionButton
+                ability={ability}
+                target={enemyUnit}
+                index={i + 1}
+                key={ability.name}
+              />
+            );
+          })}
         </div>
       )
     },
@@ -42,33 +43,25 @@ const CombatView = () => {
       title: 'Magic',
       content: (
         <div className={styles.buttons}>
-          <ActionButton
-            ability={FIREBALL}
-            target={enemyUnit}
-            index={1}
-          />
-          <ActionButton
-            ability={LESSER_HEAL}
-            target={state.getPlayer().unit}
-            index={2}
-          />
+          {playerUnit.getSpells().map((ability, i) => {
+            const target = (ability.targetType === 'enemy' ? enemyUnit : playerUnit);
+            return (
+              <ActionButton
+                ability={ability}
+                target={target}
+                index={i + 1}
+                key={ability.name}
+              />
+            );
+          })}
         </div>
       )
     },
     {
       title: 'Items',
       content: (
-        <div className={styles.buttons}>
-          <ActionButton
-            ability={ATTACK}
-            target={enemyUnit}
-            index={1}
-          />
-          <ActionButton
-            ability={HEAVY_ATTACK}
-            target={enemyUnit}
-            index={2}
-          />
+        <div>
+          TODO
         </div>
       )
     }

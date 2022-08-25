@@ -48,9 +48,13 @@ const navigate = async (relativeDirection: RelativeDirection) => {
         case 'forward':
           player.location = 'shop';
           return;
+        case 'right':
+          player.location = 'trainer';
+          return;
       }
       break;
     case 'shop':
+    case 'trainer':
       switch (relativeDirection) {
         case 'backward':
           player.location = 'town';

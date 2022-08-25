@@ -8,6 +8,7 @@ import LevelUpView from './LevelUpView';
 import styles from './MainView.module.css';
 import ShopView from './ShopView';
 import TownView from './TownView';
+import TrainerView from './TrainerView';
 
 const MainView = () => {
   const state = GameState.getInstance();
@@ -26,6 +27,8 @@ const MainView = () => {
     content = <TownView />;
   } else if (location === 'shop') {
     content = <ShopView />;
+  } else if (location === 'trainer') {
+    content = <TrainerView />;
   }
 
   const showControls = state.getMenu() !== 'character'

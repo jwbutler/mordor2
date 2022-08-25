@@ -1,4 +1,4 @@
-import { Ability, AttackAbility, AttackSpellAbility, HealingSpellAbility } from '../lib/abilities';
+import { Ability, MeleeAbility, AttackSpellAbility, HealingSpellAbility, SpellAbility } from '../lib/abilities';
 import { checkState } from '../lib/preconditions';
 import { getExperienceToNextLevel, getMaxLife, getMaxMana, Stat } from '../lib/stats';
 import type { Sprite } from '../lib/sprites';
@@ -10,7 +10,7 @@ type Props = {
   level: number,
   stats: Stats,
   sprite: Sprite,
-  meleeAbilities: AttackAbility[],
+  meleeAbilities: MeleeAbility[],
   spells: (AttackSpellAbility | HealingSpellAbility)[]
 };
 
@@ -28,8 +28,8 @@ class Unit {
   maxActionPoints: number;
   private readonly equipment: Partial<Record<EquipmentSlot, Equipment>>;
   readonly sprite: Sprite;
-  private readonly meleeAbilities: AttackAbility[];
-  private readonly spells: (AttackSpellAbility | HealingSpellAbility)[];
+  private readonly meleeAbilities: MeleeAbility[];
+  private readonly spells: SpellAbility[];
 
   constructor({ name, level, stats, sprite, meleeAbilities, spells }: Props) {
     this.name = name;
