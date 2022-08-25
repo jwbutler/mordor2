@@ -32,6 +32,7 @@ const MainView = () => {
     && state.getMenu() !== 'intro'
     && state.getMenu() !== 'inventory'
     && state.getMenu() !== 'level_up'
+    && state.getMenu() !== 'combat'
     && state.inputEnabled();
 
   return (
