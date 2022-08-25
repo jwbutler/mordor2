@@ -27,7 +27,7 @@ const createKobold = (): Unit => {
 
 const createKoboldWarrior = (): Unit => {
   const unit = new Unit({
-    name: 'Kobold',
+    name: 'Kobold Warrior',
     level: 3,
     stats: {
       strength: 7,
