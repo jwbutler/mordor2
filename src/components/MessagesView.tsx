@@ -19,7 +19,8 @@ const MessagesView = ({ messages }: Props) => {
   const handleScroll = (e: SyntheticEvent) => {
     const textarea = ref.current;
     if (textarea) {
-      setSnapToBottom(textarea.scrollTop >= textarea.scrollHeight - textarea.clientHeight);
+      const buffer = 3;
+      setSnapToBottom(textarea.scrollTop >= textarea.scrollHeight - textarea.clientHeight - buffer);
     }
   };
   

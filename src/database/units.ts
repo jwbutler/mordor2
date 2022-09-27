@@ -51,7 +51,7 @@ const createCrocDog = (): Unit => {
     sprite: crocDogSprite,
     meleeAbilities: [ATTACK, DOUBLE_ATTACK],
     spells: [],
-    controller: new DefaultEnemyController()
+    controller: new CrocDogController()
   });
   unit.equipItem(createNoobSword());
   return unit;

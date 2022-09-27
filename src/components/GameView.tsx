@@ -42,7 +42,7 @@ const GameView = () => {
         {(state.getMenu() !== 'intro') && (
           <div className={`${styles.column} ${styles.left}`}>
             <MainView />
-            <MessagesView messages={state.getMessages()} />
+            <MessagesView messages={['a','b','c','d','e','f','g','h','i','j', ...state.getMessages()]} />
             <MobileOnly>
               {(state.getMenu() === 'combat') && <CombatView />}
               {(state.getPlayer().location === 'dungeon' && state.getMenu() !== 'combat') && <MinimapView />}
