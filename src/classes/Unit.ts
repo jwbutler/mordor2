@@ -4,14 +4,14 @@ import type { Sprite } from '../lib/sprites';
 import type { Stats } from '../lib/stats';
 import Equipment, { EquipmentSlot } from './Equipment';
 import EnemyController from './EnemyController';
-import { AttackSpellAbility, HealingSpellAbility, MeleeAbility } from '../lib/abilities';
+import { AttackSpellAbility, HealingSpellAbility, AttackAbility } from '../lib/abilities';
 
 type Props = {
   name: string,
   level: number,
   stats: Stats,
   sprite: Sprite,
-  meleeAbilities: MeleeAbility[],
+  meleeAbilities: AttackAbility[],
   spells: (AttackSpellAbility | HealingSpellAbility)[],
   controller?: EnemyController
 };

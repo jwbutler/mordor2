@@ -1,6 +1,6 @@
 import Unit from '../classes/Unit';
 import {
-  MeleeAbility,
+  AttackAbility,
   AttackSpellAbility,
   HealingSpellAbility,
   useAttackAbility,
@@ -15,7 +15,7 @@ import { sleep } from '../lib/promises';
 const shortSleepMillis = 150;
 const longSleepMillis = 250;
 
-class Attack implements MeleeAbility {
+class Attack implements AttackAbility {
   readonly name = 'Attack';
   readonly actionPointCost = 0;
   readonly damageType = 'physical';
@@ -36,7 +36,7 @@ class Attack implements MeleeAbility {
   getCostText = () => `${this.actionPointCost} AP`;
 }
 
-class HeavyAttack implements MeleeAbility {
+class HeavyAttack implements AttackAbility {
   readonly name = 'Heavy Attack';
   readonly actionPointCost = 5;
   readonly damageType = 'physical';
@@ -58,7 +58,7 @@ class HeavyAttack implements MeleeAbility {
   getCostText = () => `${this.actionPointCost} AP`;
 }
 
-class DoubleAttack implements MeleeAbility {
+class DoubleAttack implements AttackAbility {
   readonly name = 'Attack';
   readonly actionPointCost = 0;
   readonly damageType = 'physical';
