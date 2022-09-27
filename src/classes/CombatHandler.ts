@@ -11,11 +11,8 @@ const shortSleepMillis = 150;
 const longSleepMillis = 250;
 
 const chooseEnemyAbility = (enemy: Unit, playerUnit: Unit): Ability => {
-  // TODO this is a terrible way to do polymorphism
-  if (enemy.name.toLowerCase().includes('croc')) {
-    return DOUBLE_ATTACK;
-  }
-  return ATTACK;
+  const controller = checkNotNull(enemy.controller);
+  return controller.chooseAbility(enemy, playerUnit);
 };
 
 const endCombat = async () => {

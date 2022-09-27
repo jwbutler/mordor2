@@ -4,6 +4,7 @@ import { getExperienceToNextLevel, getMaxLife, getMaxMana, Stat } from '../lib/s
 import type { Sprite } from '../lib/sprites';
 import type { Stats } from '../lib/stats';
 import Equipment, { EquipmentSlot } from './Equipment';
+import EnemyController from './EnemyController';
 
 type Props = {
   name: string,
@@ -11,7 +12,8 @@ type Props = {
   stats: Stats,
   sprite: Sprite,
   meleeAbilities: MeleeAbility[],
-  spells: (AttackSpellAbility | HealingSpellAbility)[]
+  spells: (AttackSpellAbility | HealingSpellAbility)[],
+  controller?: EnemyController
 };
 
 class Unit {
@@ -30,8 +32,9 @@ class Unit {
   readonly sprite: Sprite;
   private readonly meleeAbilities: MeleeAbility[];
   private readonly spells: SpellAbility[];
+  readonly controller: EnemyController | null;
 
-  constructor({ name, level, stats, sprite, meleeAbilities, spells }: Props) {
+  constructor({ name, level, stats, sprite, meleeAbilities, spells, controller }: Props) {
     this.name = name;
     this.level = level;
     this.stats = stats;
@@ -47,6 +50,7 @@ class Unit {
     this.sprite = sprite;
     this.meleeAbilities = meleeAbilities;
     this.spells = spells;
+    this.controller = controller ?? null;
   }
 
   getEquipment = (): Equipment[] => Object.values(this.equipment);
