@@ -18,7 +18,7 @@ interface Ability {
 
 type DamageType = 'physical' | 'elemental';
 
-interface AttackAbility extends Ability {
+interface MeleeAbility extends Ability {
   damageType: DamageType;
   actionPointCost: number;
   getHitChance: (unit: Unit) => number;
@@ -45,7 +45,7 @@ interface HealingSpellAbility extends Ability {
   getSound: () => string;
 }
 
-const useAttackAbility = async (ability: AttackAbility, attacker: Unit, defender: Unit) => {
+const useAttackAbility = async (ability: MeleeAbility, attacker: Unit, defender: Unit) => {
   const state = GameState.getInstance();
   const hitChance = ability.getHitChance(attacker);
 
@@ -171,7 +171,7 @@ const useHealingSpellAbility = async (ability: HealingSpellAbility, caster: Unit
 
 export {
   type Ability,
-  type AttackAbility,
+  type MeleeAbility,
   type AttackSpellAbility,
   type HealingSpellAbility,
   type DamageType,

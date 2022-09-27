@@ -20,6 +20,8 @@ const createKobold = (): Unit => {
       constitution: 3
     },
     sprite: koboldSprite,
+    meleeAbilities: [ATTACK],
+    spells: [],
     controller: new DefaultEnemyController()
   });
   unit.equipItem(createNoobSword());
@@ -47,6 +49,8 @@ const createCrocDog = (): Unit => {
       constitution: 4
     },
     sprite: crocDogSprite,
+    meleeAbilities: [ATTACK, DOUBLE_ATTACK],
+    spells: [],
     controller: new DefaultEnemyController()
   });
   unit.equipItem(createNoobSword());
@@ -65,6 +69,8 @@ const createMudMan = (): Unit => {
       constitution: 6
     },
     sprite: mudManSprite,
+    meleeAbilities: [ATTACK],
+    spells: [],
     controller: new DefaultEnemyController()
   });
   unit.equipItem(createNoobSword());
@@ -82,6 +88,8 @@ const createPlayerUnit = (): Unit => {
       wisdom: 8,
       constitution: 8
     },
+    meleeAbilities: [ATTACK],
+    spells: [],
     sprite: playerSprite
   });
   unit.equipItem(createNoobSword());
