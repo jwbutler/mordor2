@@ -4,6 +4,9 @@ import { mudManSprite } from '../lib/sprites';
 import { playerSprite } from '../lib/sprites';
 import Unit from '../classes/Unit';
 import { createNoobSword } from './items';
+import EnemyController, { DefaultEnemyController } from '../classes/EnemyController';
+import { Ability } from '../lib/abilities';
+import { ATTACK, DOUBLE_ATTACK } from './abilities';
 
 const createKobold = (): Unit => {
   const unit = new Unit({
@@ -16,11 +19,21 @@ const createKobold = (): Unit => {
       wisdom: 2,
       constitution: 3
     },
-    sprite: koboldSprite
+    sprite: koboldSprite,
+    controller: new DefaultEnemyController()
   });
   unit.equipItem(createNoobSword());
   return unit;
 };
+
+class CrocDogController implements EnemyController {
+  chooseAbility(unit: Unit, target: Unit): Ability {
+    if (unit.life / unit.maxLife <= 0.50) {
+      return DOUBLE_ATTACK;
+    }
+    return ATTACK;
+  }
+}
 
 const createCrocDog = (): Unit => {
   const unit = new Unit({
@@ -33,7 +46,8 @@ const createCrocDog = (): Unit => {
       wisdom: 2,
       constitution: 4
     },
-    sprite: crocDogSprite
+    sprite: crocDogSprite,
+    controller: new DefaultEnemyController()
   });
   unit.equipItem(createNoobSword());
   return unit;
@@ -50,7 +64,8 @@ const createMudMan = (): Unit => {
       wisdom: 2,
       constitution: 6
     },
-    sprite: mudManSprite
+    sprite: mudManSprite,
+    controller: new DefaultEnemyController()
   });
   unit.equipItem(createNoobSword());
   return unit;
@@ -67,7 +82,7 @@ const createPlayerUnit = (): Unit => {
       wisdom: 8,
       constitution: 8
     },
-    sprite: playerSprite // just a placeholder
+    sprite: playerSprite
   });
   unit.equipItem(createNoobSword());
   return unit;

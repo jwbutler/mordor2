@@ -5,7 +5,6 @@ const { loadImage } = _canvas;
 import { mkdirSync, readdirSync, writeFileSync } from 'fs';
 import imageMin from 'imagemin';
 import pngquantPlugin from 'imagemin-pngquant';
-import optipngPlugin from 'imagemin-optipng';
 import type { RGBA, Pair } from './types';
 import Colors from './colors';
 import { replaceColors, toBuffer } from './utils';
@@ -104,7 +103,7 @@ const main = async () => {
 
   await imageMin([`${tmpDir}/*`], {
     destination: outDir,
-    plugins: [optipngPlugin(), pngquantPlugin()]
+    plugins: [pngquantPlugin()]
   });
   
   for (const filename of readdirSync(outDir)) {

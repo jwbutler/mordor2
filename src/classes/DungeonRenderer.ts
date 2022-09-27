@@ -100,6 +100,7 @@ const drawImage = async (src: string, context: CanvasRenderingContext2D) => {
 
 class DungeonRenderer {
   renderTiles = async (buffer: HTMLCanvasElement) => {
+    const t1 = new Date().getTime();
     const state: GameState = GameState.getInstance();
     const level = state.getLevel();
     const coordinates = state.getPlayer().coordinates;
@@ -196,6 +197,8 @@ class DungeonRenderer {
     if (images.unit !== null) {
       await drawImage(images.unit, bufferContext);
     }
+    const t2 = new Date().getTime();
+    console.log(`Render time: ${t2 - t1} ms`);
   };
 }
 

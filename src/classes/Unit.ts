@@ -3,12 +3,14 @@ import { getExperienceToNextLevel, getMaxLife, getMaxMana } from '../lib/stats';
 import type { Sprite } from '../lib/sprites';
 import type { Stats } from '../lib/stats';
 import Equipment, { EquipmentSlot } from './Equipment';
+import EnemyController from './EnemyController';
 
 type Props = {
   name: string,
   level: number,
   stats: Stats,
-  sprite: Sprite
+  sprite: Sprite,
+  controller?: EnemyController
 };
 
 class Unit {
@@ -25,8 +27,9 @@ class Unit {
   maxActionPoints: number;
   private readonly equipment: Partial<Record<EquipmentSlot, Equipment>>;
   readonly sprite: Sprite;
+  readonly controller: EnemyController | null;
 
-  constructor({ name, level, stats, sprite }: Props) {
+  constructor({ name, level, stats, sprite, controller }: Props) {
     this.name = name;
     this.level = level;
     this.stats = stats;
@@ -40,6 +43,7 @@ class Unit {
     this.actionPoints = this.maxActionPoints;
     this.experienceToNextLevel = getExperienceToNextLevel(level);
     this.sprite = sprite;
+    this.controller = controller ?? null;
   }
 
   getEquipment = (): Equipment[] => Object.values(this.equipment);
