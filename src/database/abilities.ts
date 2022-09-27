@@ -1,10 +1,11 @@
 import Unit from '../classes/Unit';
 import {
-  AttackAbility,
+  MeleeAbility,
   AttackSpellAbility,
   HealingSpellAbility,
-  useAttackAbility,
-  useAttackSpellAbility, useHealingSpellAbility
+  useMeleeAbility,
+  useAttackSpellAbility,
+  useHealingSpellAbility
 } from '../lib/abilities';
 import { getAttackDamage, getHitChance } from '../lib/stats';
 import fireball_mp3 from '../sounds/fireball.mp3';
@@ -15,15 +16,16 @@ import { sleep } from '../lib/promises';
 const shortSleepMillis = 150;
 const longSleepMillis = 250;
 
-class Attack implements AttackAbility {
+class Attack extends MeleeAbility {
   readonly name = 'Attack';
   readonly actionPointCost = 0;
   readonly damageType = 'physical';
+  readonly targetType = 'enemy';
 
   canPayCost = (unit: Unit) => unit.actionPoints >= this.actionPointCost;
   use = async (unit: Unit, target: Unit) => {
     unit.actionPoints -= this.actionPointCost;
-    await useAttackAbility(this, unit, target);
+    await useMeleeAbility(this, unit, target);
   };
 
   getDamage = (unit: Unit): number => getAttackDamage(unit);
@@ -36,15 +38,16 @@ class Attack implements AttackAbility {
   getCostText = () => `${this.actionPointCost} AP`;
 }
 
-class HeavyAttack implements AttackAbility {
+class HeavyAttack extends MeleeAbility {
   readonly name = 'Heavy Attack';
-  readonly actionPointCost = 5;
+  readonly actionPointCost = 10;
   readonly damageType = 'physical';
+  readonly targetType = 'enemy';
 
   canPayCost = (unit: Unit) => unit.actionPoints >= this.actionPointCost;
   use = async (unit: Unit, target: Unit) => {
     unit.actionPoints -= this.actionPointCost;
-    await useAttackAbility(this, unit, target);
+    await useMeleeAbility(this, unit, target);
   };
 
   getDamage = (unit: Unit): number => 2 * getAttackDamage(unit);
@@ -58,17 +61,18 @@ class HeavyAttack implements AttackAbility {
   getCostText = () => `${this.actionPointCost} AP`;
 }
 
-class DoubleAttack implements AttackAbility {
+class DoubleAttack extends MeleeAbility {
   readonly name = 'Attack';
   readonly actionPointCost = 0;
   readonly damageType = 'physical';
+  readonly targetType = 'enemy';
 
   canPayCost = (unit: Unit) => unit.actionPoints >= this.actionPointCost;
   use = async (unit: Unit, target: Unit) => {
     unit.actionPoints -= this.actionPointCost;
-    await useAttackAbility(this, unit, target);
+    await useMeleeAbility(this, unit, target);
     await sleep(longSleepMillis);
-    await useAttackAbility(this, unit, target);
+    await useMeleeAbility(this, unit, target);
   };
 
   getDamage = (unit: Unit): number => getAttackDamage(unit);
@@ -81,10 +85,11 @@ class DoubleAttack implements AttackAbility {
   getCostText = () => `${this.actionPointCost} AP`;
 }
 
-class Fireball implements AttackSpellAbility {
+class Fireball extends AttackSpellAbility {
   readonly name = 'Fireball';
   readonly manaCost = 15;
   readonly damageType = 'elemental';
+  readonly targetType = 'enemy';
 
   canPayCost = (unit: Unit) => unit.mana >= this.manaCost;
   use = async (unit: Unit, target: Unit) => {
@@ -104,9 +109,10 @@ class Fireball implements AttackSpellAbility {
   getSound = (): string => fireball_mp3;
 }
 
-class LesserHeal implements HealingSpellAbility {
+class LesserHeal extends HealingSpellAbility {
   readonly name = 'Lesser Heal';
   readonly manaCost = 15;
+  readonly targetType = 'self';
 
   canPayCost = (unit: Unit) => unit.mana >= this.manaCost;
   use = async (unit: Unit, target: Unit) => {

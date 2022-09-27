@@ -47,7 +47,7 @@ main {
   flex: 0 1 auto;
 }
 
-.left > :nth-child(3) {
+.left > :last-child {
   flex: 1 1 auto;
 }
 

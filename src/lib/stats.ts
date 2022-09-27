@@ -1,5 +1,6 @@
 import Unit from '../classes/Unit';
 import { DamageType } from './abilities';
+import { titleCase } from './strings';
 
 type Stat =
   /**
@@ -26,6 +27,8 @@ type Stat =
 type Stats = Record<Stat, number>;
 
 const statValues: Stat[] = ['strength', 'dexterity', 'intelligence', 'wisdom', 'constitution'];
+
+const statToString = (stat: Stat): string => titleCase(stat);
 
 const zeroStats = (): Record<Stat, number> => ({
   strength: 0,
@@ -139,6 +142,7 @@ export {
   getMaxMana,
   getMitigatedDamage,
   getModifiedStats,
+  statToString,
   statValues,
   subtractStats,
   zeroStats

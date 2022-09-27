@@ -1,4 +1,5 @@
 import { ATTACK, DOUBLE_ATTACK } from '../database/abilities';
+import { levelUp } from '../lib/actions';
 import { checkNotNull } from '../lib/preconditions';
 import { GameState } from './GameState';
 import { randBoolean } from '../lib/random';
@@ -14,12 +15,14 @@ const chooseEnemyAbility = (enemy: Unit, playerUnit: Unit): Ability => {
   return controller.chooseAbility(enemy, playerUnit);
 };
 
-const endCombat = () => {
+const endCombat = async () => {
   const state = GameState.getInstance();
   state.setMenu(null);
   state.setCombatState(null);
   const playerUnit = state.getPlayer().unit;
-  playerUnit.actionPoints = playerUnit.maxActionPoints;
+  if (playerUnit.experience >= playerUnit.experienceToNextLevel) {
+    await levelUp();
+  }
 };
 
 class CombatHandler {
@@ -50,13 +53,13 @@ class CombatHandler {
     const state = GameState.getInstance();
     const combatState = checkNotNull(state.getCombatState());
     const { attacker, defender } = combatState;
-    
+
     await ability.use(unit, target);
     await sleep(longSleepMillis);
 
     if (target.life <= 0) {
       await sleep(longSleepMillis);
-      endCombat();
+      await endCombat();
     } else {
       // TODO: need to set target here too
       state.setCombatState({
@@ -64,8 +67,10 @@ class CombatHandler {
         defender: attacker
       });
     }
+
+    unit.actionPoints = Math.min(unit.actionPoints + 1, unit.maxActionPoints);
   };
-  
+
   playTurnPair = async (ability: Ability, target: Unit) => {
     const state = GameState.getInstance();
     const playerUnit = state.getPlayer().unit;

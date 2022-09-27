@@ -5,14 +5,16 @@ import { checkNotNull } from '../lib/preconditions';
 import Shop from './Shop';
 import type { Tile } from '../lib/tiles';
 import Unit from '../classes/Unit';
+import Trainer from './Trainer';
 
-type Menu = 'intro' | 'combat' | 'inventory';
+type Menu = 'character' | 'combat' | 'intro' | 'inventory' | 'level_up';
 
 type Props = {
   level: Level,
   player: Player,
   menu: Menu | null,
-  shop: Shop
+  shop: Shop,
+  trainer: Trainer
 };
 
 type CombatState = {
@@ -28,8 +30,9 @@ class GameState {
   private menu: Menu | null;
   private combatState: CombatState | null;
   private readonly shop: Shop;
-  
-  constructor({ level, player, menu, shop }: Props) {
+  private readonly trainer: Trainer;
+
+  constructor({ level, player, menu, shop, trainer }: Props) {
     this.player = player;
     this.level = level;
     this._enableInput = true;
@@ -37,8 +40,9 @@ class GameState {
     this.menu = menu;
     this.combatState = null;
     this.shop = shop;
+    this.trainer = trainer;
   }
-  
+
   getLevel = (): Level => this.level;
   getPlayer = (): Player => this.player;
   getMenu = (): Menu | null => this.menu;
@@ -51,6 +55,7 @@ class GameState {
   getCombatState = () => this.combatState;
   setCombatState = (combatState: CombatState | null) => { this.combatState = combatState; };
   getShop = () => this.shop;
+  getTrainer = () => this.trainer;
 
   getCurrentTile = (): Tile => checkNotNull(getTile(this.level, this.player.coordinates));
 

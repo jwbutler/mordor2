@@ -4,7 +4,7 @@
   height: 100%;
 }
 
-.background {
+.background,.shopkeeper {
   position: absolute;
   left: 0;
   top: 0;

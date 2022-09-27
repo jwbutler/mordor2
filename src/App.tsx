@@ -1,3 +1,5 @@
+import Trainer from './classes/Trainer';
+import { FIREBALL, HEAVY_ATTACK, LESSER_HEAL } from './database/abilities';
 import { createAwesomeSword, createMediumSword } from './database/items';
 import { biggerLevel, createFirstLevel, doorsTest, manyKobolds } from './database/levels';
 import { createPlayerUnit } from './database/units';
@@ -8,7 +10,7 @@ import { GameState } from './classes/GameState';
 import Shop from './classes/Shop';
 import Unit from './classes/Unit';
 
-const App = () => {  
+const App = () => {
   const level: Level = biggerLevel();
   const playerUnit: Unit = createPlayerUnit();
 
@@ -23,8 +25,13 @@ const App = () => {
   const shop: Shop = new Shop();
   shop.addItem(createMediumSword());
   shop.addItem(createAwesomeSword());
-  
-  const state = new GameState({ level, player, menu: null, shop });
+
+  const trainer: Trainer = new Trainer();
+  trainer.addAbility(HEAVY_ATTACK);
+  trainer.addAbility(FIREBALL);
+  trainer.addAbility(LESSER_HEAL);
+
+  const state = new GameState({ level, player, menu: null, shop, trainer });
   GameState.setInstance(state);
 
   return (

@@ -1,7 +1,7 @@
 import type { CompassDirection, Coordinates } from '../lib/geometry';
 import type { Level } from '../lib/levels';
 import type { Tile } from '../lib/tiles';
-import { createKobold, createCrocDog, createMudMan } from './units';
+import { createKobold, createCrocDog, createMudMan, createGhoul, createKoboldWarrior } from './units';
 
 const floor = (): Tile => ({ type: 'floor', enemies: [], objects: [], door: false, stairs: false });
 const wall = (): Tile => ({ type: 'wall', enemies: [], objects: [], door: false, stairs: false });
@@ -12,7 +12,7 @@ const fromString = (data: string, startingPoint: Coordinates, startingDirection:
   const tiles: Tile[][] = [];
   const rows = data.split('\n');
   const height = rows.length;
-  
+
   for (let y = 0; y < height; y++) {
     const row: Tile[] = [...rows[y].trim()].map(char => {
       switch (char) {
@@ -20,8 +20,10 @@ const fromString = (data: string, startingPoint: Coordinates, startingDirection:
         case 'D': return door();
         case 'S': return stairs();
         case 'C': return { type: 'floor', enemies: [createCrocDog()], objects: [], door: false, stairs: false };
-        case 'K': return { type: 'floor', enemies: [createKobold()], objects: [], door: false, stairs: false };
+        case 'k': return { type: 'floor', enemies: [createKobold()], objects: [], door: false, stairs: false };
+        case 'K': return { type: 'floor', enemies: [createKoboldWarrior()], objects: [], door: false, stairs: false };
         case 'M': return { type: 'floor', enemies: [createMudMan()], objects: [], door: false, stairs: false };
+        case 'G': return { type: 'floor', enemies: [createGhoul()], objects: [], door: false, stairs: false };
         default:  return floor();
       }
     });
@@ -42,9 +44,9 @@ const fromString = (data: string, startingPoint: Coordinates, startingDirection:
 const createFirstLevel = (): Level => {
   const data = `
     #######
-    D  C K#
+    D  C k#
     ##### #
-    #C   K#
+    #C   k#
     # #####
     #C   M#
     #######
@@ -55,7 +57,7 @@ const createFirstLevel = (): Level => {
 const smallerLevel = (): Level => {
   const data = `
     #####
-    # K #
+    # k #
     ### #
     #####
   `;
@@ -65,13 +67,13 @@ const smallerLevel = (): Level => {
 const biggerLevel = () => {
   const data = `
     ################
-    #M   ######  K##
+    #G   ######  k##
     #### #C#C   # ##
     #K## # # #### M#
-    #    # # ##K  ##
-    # ##  K  ## # C#
-    # K####   # ####
-    ##   C  ###    D
+    #    # # ##k  ##
+    # ##  k  ## # C#
+    # K#### ### ####
+    ##   C  #K     D
     ################
   `;
   return fromString(data, { x: 14, y: 7 }, 'west');

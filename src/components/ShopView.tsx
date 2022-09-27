@@ -13,20 +13,23 @@ import shopkeeper_thanks_for_nothing_mp3 from '../sounds/shopkeeper_thanks_for_n
 
 const ShopView = () => {
   const state = GameState.getInstance();
-  const items = state.getShop().getItems();
-
-  const [boughtAnything, setBoughtAnything] = useState(false);
+  const shop = state.getShop();
+  const items = shop.getItems();
 
   useEffect(() => {
-    playAudio(shopkeeper_what_do_you_want_mp3).then(() => {});
+    state.addMessage('"What do you want?"');
+    playAudio(shopkeeper_what_do_you_want_mp3, 0).then(() => {});
+    shop.startSession();
 
     return () => {
-      console.log(boughtAnything);
-      if (boughtAnything) {
-        playAudio(shopkeeper_come_back_soon_mp3).then(() => {});
+      if (shop.purchasedAnyItems()) {
+        state.addMessage('"Come back soon."');
+        playAudio(shopkeeper_come_back_soon_mp3, 0).then(() => {});
       } else {
-        playAudio(shopkeeper_thanks_for_nothing_mp3).then(() => {});
+        state.addMessage('"Thanks for nothin\'."');
+        playAudio(shopkeeper_thanks_for_nothing_mp3, 0).then(() => {});
       }
+      shop.endSession();
     };
   }, []);
 
@@ -46,7 +49,7 @@ const ShopView = () => {
             price={item.value /* we could consider a markup here */}
             key={item.name}
             onPurchase={() => {
-              setBoughtAnything(true);
+              shop.logItemPurchase(item);
             }}
           />)
         )}
@@ -71,9 +74,12 @@ const ItemView = ({ item, price, onPurchase }: ItemProps) => {
     if (player.gold >= price) {
       buyItem(item, price);
       onPurchase();
-      await playAudio(shopkeeper_anything_else_mp3);
+      state.addMessage(`You bought a ${item.name} for ${price} gold.`);
+      state.addMessage('"Anything else?"');
+      await playAudio(shopkeeper_anything_else_mp3, 0);
     } else {
-      await playAudio(shopkeeper_no_gold_mp3);
+      state.addMessage('"Come back when you have the dough, ya bum!"');
+      await playAudio(shopkeeper_no_gold_mp3, 0);
     }
   };
 

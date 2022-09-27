@@ -1,3 +1,3 @@
-type Location = 'dungeon' | 'town' | 'shop' | 'tavern';
+type Location = 'dungeon' | 'shop' | 'tavern' | 'town' | 'trainer';
 
 export type { Location };
