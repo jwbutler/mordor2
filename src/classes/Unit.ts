@@ -5,13 +5,13 @@ import type { Sprite } from '../lib/sprites';
 import type { Stats } from '../lib/stats';
 import Equipment, { EquipmentSlot } from './Equipment';
 import EnemyController from './EnemyController';
-import { AttackSpellAbility, HealingSpellAbility, AttackAbility } from '../lib/abilities';
 
 type Props = {
   name: string,
   level: number,
   stats: Stats,
   sprite: Sprite,
+  meleeAbilities: MeleeAbility[],
   spells: (AttackSpellAbility | HealingSpellAbility)[],
   controller?: EnemyController
 };
@@ -33,7 +33,8 @@ class Unit {
   private readonly meleeAbilities: MeleeAbility[];
   private readonly spells: SpellAbility[];
   readonly controller: EnemyController | null;
-  constructor({ name, level, stats, sprite, meleeAbilities, spells }: Props) {
+
+  constructor({ name, level, stats, sprite, meleeAbilities, spells, controller }: Props) {
     this.name = name;
     this.level = level;
     this.stats = stats;

@@ -1,6 +1,5 @@
 import { GameState } from '../classes/GameState';
 import Unit from '../classes/Unit';
-import { InventoryItem } from './items';
 import { checkState } from './preconditions';
 import { sleep } from './promises';
 import { playAudio } from './sounds';

@@ -33,6 +33,7 @@ const GameView = () => {
         )}
         {(state.getMenu() !== 'intro') && (
           <div className={`${styles.column} ${styles.left}`}>
+            <MainView />
             <MessagesView messages={state.getMessages()} />
             {(state.getPlayer().location !== 'town') && (
               <MobileOnly>
