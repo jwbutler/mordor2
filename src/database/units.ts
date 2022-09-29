@@ -41,7 +41,8 @@ const createKoboldWarrior = (): Unit => {
     },
     sprite: koboldWarriorSprite,
     meleeAbilities: [ATTACK],
-    spells: []
+    spells: [],
+    controller: new DefaultEnemyController()
   });
   unit.equipItem(createNoobSword());
   return unit;
