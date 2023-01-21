@@ -1,7 +1,14 @@
 import type { CompassDirection, Coordinates } from '../lib/geometry';
 import type { Level } from '../lib/levels';
 import type { Tile } from '../lib/tiles';
-import { createKobold, createCrocDog, createMudMan, createGhoul, createKoboldWarrior } from './units';
+import {
+  createKobold,
+  createCrocDog,
+  createMudMan,
+  createGhoul,
+  createKoboldWarrior,
+  createRandomEnemy
+} from './units';
 
 const floor = (): Tile => ({ type: 'floor', enemies: [], objects: [], door: false, stairs: false });
 const wall = (): Tile => ({ type: 'wall', enemies: [], objects: [], door: false, stairs: false });
@@ -24,6 +31,7 @@ const fromString = (data: string, startingPoint: Coordinates, startingDirection:
         case 'K': return { type: 'floor', enemies: [createKoboldWarrior()], objects: [], door: false, stairs: false };
         case 'M': return { type: 'floor', enemies: [createMudMan()], objects: [], door: false, stairs: false };
         case 'G': return { type: 'floor', enemies: [createGhoul()], objects: [], door: false, stairs: false };
+        case 'E': return { type: 'floor', enemies: [createRandomEnemy()], objects: [], door: false, stairs: false };
         default:  return floor();
       }
     });
@@ -41,7 +49,7 @@ const fromString = (data: string, startingPoint: Coordinates, startingDirection:
   };
 };
 
-const createFirstLevel = (): Level => {
+export const createFirstLevel = (): Level => {
   const data = `
     #######
     D  C k#
@@ -64,7 +72,7 @@ const smallerLevel = (): Level => {
   return fromString(data, { x: 1, y: 1 }, 'east');
 };
 
-const biggerLevel = () => {
+export const biggerLevel = () => {
   const data = `
     ################
     #G   ######  k##
@@ -77,6 +85,42 @@ const biggerLevel = () => {
     ################
   `;
   return fromString(data, { x: 14, y: 7 }, 'west');
+};
+
+export const willLevel = () => {
+  const data = `
+    ##############################
+    #   E     E#                 #
+    #  # ### # # ##### ## ## ### #
+    # ## ### # # # E   #E  # # # #
+    # #  # # # # #E ## ### # #   #
+    # #  #   # # # ###     # # # #
+    # ####E# #     #   ### # ### #
+    # #EE### #### ## # ##  # ##  #
+    # #      #### #### ##E # ##E #
+    # ######      # E  ## ## ## ##
+    #     E########  # ##E## # E##
+    # ### ############ #  ## #  ##
+    # ###           ##    ## ## ##
+    # ##E E######## ### ####E## ##
+    # ###E######### ### #### ##  #
+    #             #        #    E#
+    ############# # ###### ##### #
+    #      ###### # # #### #   # #
+    # #### ###### # # #  # # # # #
+    # ####        # #    # # # # #
+    # #### ###### # ##E### # # # #
+    # E##  ###### # ## ### # #E  #
+    #  ## E#      #       E# # # #
+    # ### ## ############### # # #
+    #  ##  # #####          E# # #
+    #E ##E # ##### ####### ### # #
+    ######## #   E ####### ### # #
+    ######## #E # E     E      # #
+    #        ###################S#
+    ##############################
+  `;
+  return fromString(data, { x: 1, y: 28 }, 'east');
 };
 
 const doorsTest = () => {
