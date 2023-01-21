@@ -62,7 +62,7 @@ export const createFirstLevel = (): Level => {
   return fromString(data, { x: 1, y: 1 }, 'east');
 };
 
-const smallerLevel = (): Level => {
+export const smallerLevel = (): Level => {
   const data = `
     #####
     # k #
@@ -117,13 +117,13 @@ export const willLevel = () => {
     #E ##E # ##### ####### ### # #
     ######## #   E ####### ### # #
     ######## #E # E     E      # #
-    #        ###################S#
+    D        ###################S#
     ##############################
   `;
   return fromString(data, { x: 1, y: 28 }, 'east');
 };
 
-const doorsTest = () => {
+export const doorsTest = () => {
   const data = `
     ######
     #    D
@@ -133,19 +133,11 @@ const doorsTest = () => {
   return fromString(data, { x: 1, y: 1 }, 'east');
 };
 
-const manyKobolds = () => {
+export const manyKobolds = () => {
   const data = `
     ################
     #KKKKKKKKKKKKK D
     ################
   `;
   return fromString(data, { x: 14, y: 1 }, 'west');
-};
-
-export {
-  createFirstLevel,
-  biggerLevel,
-  doorsTest,
-  smallerLevel,
-  manyKobolds
 };
