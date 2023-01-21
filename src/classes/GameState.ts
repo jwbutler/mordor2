@@ -62,7 +62,6 @@ class GameState {
   private static instance: GameState | null;
 
   static setInstance = (state: GameState) => { GameState.instance = state; };
-
   static getInstance = (): GameState => checkNotNull(GameState.instance);
 }
 

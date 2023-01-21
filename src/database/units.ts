@@ -7,8 +7,9 @@ import { createNoobSword } from './items';
 import EnemyController, { DefaultEnemyController } from '../classes/EnemyController';
 import { Ability } from '../lib/abilities';
 import { ATTACK, DOUBLE_ATTACK } from './abilities';
+import { randChoice } from '../lib/random';
 
-const createKobold = (): Unit => {
+export const createKobold = (): Unit => {
   const unit = new Unit({
     name: 'Kobold',
     level: 1,
@@ -28,7 +29,7 @@ const createKobold = (): Unit => {
   return unit;
 };
 
-const createKoboldWarrior = (): Unit => {
+export const createKoboldWarrior = (): Unit => {
   const unit = new Unit({
     name: 'Kobold Warrior',
     level: 3,
@@ -57,7 +58,7 @@ class CrocDogController implements EnemyController {
   }
 }
 
-const createCrocDog = (): Unit => {
+export const createCrocDog = (): Unit => {
   const unit = new Unit({
     name: 'Croc Dog',
     level: 2,
@@ -77,7 +78,7 @@ const createCrocDog = (): Unit => {
   return unit;
 };
 
-const createMudMan = (): Unit => {
+export const createMudMan = (): Unit => {
   const unit = new Unit({
     name: 'Mud Man',
     level: 3,
@@ -97,7 +98,7 @@ const createMudMan = (): Unit => {
   return unit;
 };
 
-const createPlayerUnit = (): Unit => {
+export const createPlayerUnit = (): Unit => {
   const unit = new Unit({
     name: 'Player Guy',
     level: 1,
@@ -116,7 +117,7 @@ const createPlayerUnit = (): Unit => {
   return unit;
 };
 
-const createGhoul = (): Unit => {
+export const createGhoul = (): Unit => {
   const unit = new Unit({
     name: 'Ghoul',
     level: 4,
@@ -129,17 +130,17 @@ const createGhoul = (): Unit => {
     },
     sprite: ghoulSprite,
     meleeAbilities: [ATTACK],
-    spells: []
+    spells: [],
+    controller: new DefaultEnemyController()
   });
   unit.equipItem(createNoobSword());
   return unit;
 };
 
-export {
+export const createRandomEnemy = (): Unit => randChoice([
   createCrocDog,
   createGhoul,
   createKobold,
   createKoboldWarrior,
-  createMudMan,
-  createPlayerUnit
-};
+  createMudMan
+])();

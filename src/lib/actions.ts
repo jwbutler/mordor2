@@ -7,7 +7,7 @@ import { isDoor, isStairs, isWall, Tile } from './tiles';
 
 const shortSleepMillis = 150; // meh
 
-const navigate = async (relativeDirection: RelativeDirection) => {
+export const navigate = async (relativeDirection: RelativeDirection) => {
   const state = GameState.getInstance();
   if (!state.inputEnabled() || state.getMenu() !== null) {
     return;
@@ -64,7 +64,7 @@ const navigate = async (relativeDirection: RelativeDirection) => {
   }
 };
 
-const returnToDungeon = async () => {
+export const returnToDungeon = async () => {
   const state = GameState.getInstance();
   const player = state.getPlayer();
   const level = state.getLevel();
@@ -84,7 +84,7 @@ const loadTile = async () => {
   }
 };
 
-const levelUp = async () => {
+export const levelUp = async () => {
   const state = GameState.getInstance();
   const playerUnit = state.getPlayer().unit;
   playerUnit.experience++;
@@ -95,10 +95,4 @@ const levelUp = async () => {
     state.addMessage(`You leveled up! Welcome to level ${playerUnit.level}.`);
     state.setMenu('level_up');
   }
-};
-
-export {
-  levelUp,
-  navigate,
-  returnToDungeon
 };
