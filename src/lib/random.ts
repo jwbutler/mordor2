@@ -6,7 +6,6 @@ import { head } from './arrays';
 export const randInt = (min: number, max: number): number => Math.floor(Math.random() * (max - min + 1) + min);
 export const randBoolean = () => randInt(0, 1) === 1;
 export const random = () => Math.random();
-
 export const randChoice = <T>(list: T[]): T => list[randInt(0, list.length - 1)];
 
 /**

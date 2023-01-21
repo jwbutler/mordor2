@@ -5,7 +5,7 @@ canvas.width = 640;
 canvas.height = 480;
 const context = canvas.getContext('2d') as CanvasRenderingContext2D;
 
-const createImage = async (src: string): Promise<ImageData> => {
+export const createImage = async (src: string): Promise<ImageData> => {
   if (cache[src]) {
     return cache[src];
   }
@@ -17,8 +17,4 @@ const createImage = async (src: string): Promise<ImageData> => {
   
   context.drawImage(img, 0, 0);
   return context.getImageData(0, 0, img.width, img.height);
-};
-
-export {
-  createImage
 };
