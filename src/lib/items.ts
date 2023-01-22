@@ -25,15 +25,16 @@ const buyItem = (item: InventoryItem, price: number) => {
 const equipItem = (item: Equipment) => {
   const state = GameState.getInstance();
   const player = state.getPlayer();
-  const equippedItem = player.unit.getEquippedItem(item.slot);
+  const playerUnit = player.getUnit();
+  const equippedItem = playerUnit.getEquippedItem(item.slot);
 
   if (equippedItem !== null) {
     player.inventory.addItem(equippedItem);
-    player.unit.unequipItem(equippedItem);
+    playerUnit.unequipItem(equippedItem);
   }
 
   player.inventory.removeItem(item);
-  player.unit.equipItem(item);
+  playerUnit.equipItem(item);
 };
 
 export type {

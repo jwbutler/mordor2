@@ -12,7 +12,7 @@ import TrainerView from './TrainerView';
 
 const MainView = () => {
   const state = GameState.getInstance();
-  const location = state.getPlayer().location;
+  const location = state.getPlayer().getLocation();
 
   let content: ReactNode;
   if (state.getMenu() === 'character') {

@@ -1,17 +1,20 @@
-import { CombatHandler } from '../classes/CombatHandler';
-import { GameState } from '../classes/GameState';
-import Unit from '../classes/Unit';
-import { ATTACK } from '../database/abilities';
-import { Ability } from '../lib/abilities';
-import Button from './Button';
-import styles from './CombatView.module.css';
-import TabBar, { Tab } from './TabBar';
+import { CombatHandler } from '../../classes/CombatHandler';
+import { GameState } from '../../classes/GameState';
+import Unit from '../../classes/Unit';
+import { ATTACK } from '../../database/abilities';
+import { Ability } from '../../lib/abilities';
+import Button from '../Button';
+import UnitView from '../UnitView';
+import styles from './CombatScreen.module.css';
+import DungeonView from '../DungeonView';
+import TabBar, { Tab } from '../TabBar';
+import { Viewport } from '../Viewport';
 
-// eslint-disable-next-line
-const CombatView = () => {
+const CombatScreen = () => {
   const state = GameState.getInstance();
-  const playerUnit = state.getPlayer().unit;
-  const enemyUnit = state.getCombatState()?.defender!!;
+  const player = state.getPlayer();
+  const playerUnit = player.getUnit();
+  const enemyUnit = state.getCombatState()!.defender!;
 
   const attack = async () => {
     if (state.inputEnabled()) {
@@ -69,13 +72,22 @@ const CombatView = () => {
 
   return (
     <div className={styles.combat}>
-      <Button
-        onClick={attack}
-        disabled={!state.inputEnabled()}
-      >
-        Attack
-      </Button>
-      <TabBar tabs={tabs} />
+      <DungeonView />
+      <div className={styles.unit}>
+        <UnitView
+          unit={playerUnit}
+          player={player}
+        />
+      </div>
+      <div className={styles.buttons}>
+        <Button
+          onClick={attack}
+          disabled={!state.inputEnabled()}
+        >
+          Attack
+        </Button>
+        <TabBar tabs={tabs} />
+      </div>
     </div>
   );
 };
@@ -88,7 +100,7 @@ type ActionButtonProps = {
 
 const ActionButton = ({ ability, target, index }: ActionButtonProps) => {
   const state = GameState.getInstance();
-  const playerUnit = state.getPlayer().unit;
+  const playerUnit = state.getPlayer().getUnit();
 
   const enabled = state.inputEnabled() && ability.canPayCost(playerUnit);
 
@@ -111,4 +123,4 @@ const ActionButton = ({ ability, target, index }: ActionButtonProps) => {
   );
 };
 
-export default CombatView;
+export default CombatScreen;

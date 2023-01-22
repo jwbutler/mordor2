@@ -92,7 +92,7 @@ const useMeleeAbility = async (ability: MeleeAbility, attacker: Unit, defender: 
         }
 
         state.addMessage(`${defender.name} dies.`);
-        const playerUnit = state.getPlayer().unit;
+        const playerUnit = state.getPlayer().getUnit();
 
         if (defender === playerUnit) {
           alert('GAME OVER!');
@@ -141,7 +141,7 @@ const useAttackSpellAbility = async (ability: AttackSpellAbility, attacker: Unit
         }
 
         state.addMessage(`${defender.name} dies.`);
-        const playerUnit = state.getPlayer().unit;
+        const playerUnit = state.getPlayer().getUnit();
 
         if (defender === playerUnit) {
           alert('GAME OVER!');
@@ -180,15 +180,16 @@ const useHealingSpellAbility = async (ability: HealingSpellAbility, caster: Unit
 const buyAbility = (ability: Ability, price: number) => {
   const player = GameState.getInstance().getPlayer();
   const trainer = GameState.getInstance().getTrainer();
+  const playerUnit = player.getUnit();
 
   checkState(player.gold >= price);
   player.spendGold(price);
   switch (ability.type) {
     case 'melee':
-      player.unit.getMeleeAbilities().push(ability as MeleeAbility);
+      playerUnit.getMeleeAbilities().push(ability as MeleeAbility);
       break;
     case 'spell':
-      player.unit.getSpells().push(ability as SpellAbility);
+      playerUnit.getSpells().push(ability as SpellAbility);
       break;
   }
   trainer.removeAbility(ability);

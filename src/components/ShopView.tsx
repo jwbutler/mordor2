@@ -34,7 +34,7 @@ const ShopView = () => {
   }, []);
 
   const handleExit = async () => {
-    state.getPlayer().location = 'town';
+    state.getPlayer().moveTo({ location: 'town' });
   };
 
   return (

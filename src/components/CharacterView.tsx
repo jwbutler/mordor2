@@ -4,7 +4,7 @@ import { statToString, statValues } from '../lib/stats';
 
 const CharacterView = () => {
   const state = GameState.getInstance();
-  const playerUnit = state.getPlayer().unit;
+  const playerUnit = state.getPlayer().getUnit();
 
   return (
     <div>

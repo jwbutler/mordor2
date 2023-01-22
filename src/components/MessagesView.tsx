@@ -1,4 +1,3 @@
-import { SyntheticEvent, useEffect, useRef, useState } from 'react';
 import styles from './MessagesView.module.css';
 
 type Props = {
@@ -6,32 +5,13 @@ type Props = {
 };
 
 const MessagesView = ({ messages }: Props) => {
-  const ref = useRef<HTMLTextAreaElement>(null);
-  const [snapToBottom, setSnapToBottom] = useState(true);
-  
-  useEffect(() => {
-    const textarea = ref.current;
-    if (textarea && snapToBottom) {
-      textarea.scrollTop = textarea.scrollHeight;
-    }
-  }, [messages, snapToBottom]);
-  
-  const handleScroll = (e: SyntheticEvent) => {
-    const textarea = ref.current;
-    if (textarea) {
-      const buffer = 3;
-      setSnapToBottom(textarea.scrollTop >= textarea.scrollHeight - textarea.clientHeight - buffer);
-    }
-  };
-  
+  const n = 4;
+  const messagesToDisplay = messages.slice(messages.length - n, messages.length);
+
   return (
-    <textarea
-      ref={ref}
-      className={styles.textarea}
-      value={messages.join('\n')}
-      onScroll={handleScroll}
-      readOnly
-    />
+    <div className={styles.textarea}>
+      {messagesToDisplay.join('\n')}
+    </div>
   );
 };
 

@@ -8,7 +8,47 @@ type Props = {
   player: Player
 };
 
+const useCondensedView = true;
+
 const UnitView = ({ unit, player }: Props) => {
+  if (useCondensedView) {
+    return (
+      <div className={styles.unit}>
+        <div>{unit.name}</div>
+        <div className={styles.row}>
+          <div className={styles.meter}>
+            <ResourceMeter
+              type="life"
+              current={unit.life}
+              max={unit.maxLife}
+            />
+          </div>
+          <div>{unit.life}/{unit.maxLife}</div>
+        </div>
+        <div className={styles.row}>
+          <div className={styles.meter}>
+            <ResourceMeter
+              type="mana"
+              current={unit.mana}
+              max={unit.maxMana}
+            />
+          </div>
+          <div>{unit.mana}/{unit.maxMana}</div>
+        </div>
+        <div className={styles.row}>
+          <div className={styles.meter}>
+            <ResourceMeter
+              type="experience"
+              current={unit.experience}
+              max={unit.experienceToNextLevel}
+            />
+          </div>
+          <div>{unit.experience}/{unit.experienceToNextLevel}</div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <table className={styles.unit}>
       <tbody>

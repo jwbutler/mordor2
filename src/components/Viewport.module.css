@@ -1,0 +1,12 @@
+.viewport {
+  border: 4px solid white;
+  width: 640px;
+  height: 480px;
+  position: relative;
+}
+
+.footer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+}

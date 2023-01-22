@@ -19,7 +19,7 @@ const endCombat = async () => {
   const state = GameState.getInstance();
   state.setMenu(null);
   state.setCombatState(null);
-  const playerUnit = state.getPlayer().unit;
+  const playerUnit = state.getPlayer().getUnit();
   if (playerUnit.experience >= playerUnit.experienceToNextLevel) {
     await levelUp();
   }
@@ -28,7 +28,7 @@ const endCombat = async () => {
 class CombatHandler {
   startCombat = async (enemy: Unit) => {
     const state = GameState.getInstance();
-    const playerUnit = state.getPlayer().unit;
+    const playerUnit = state.getPlayer().getUnit();
     state.addMessage(`${enemy.name} appeared.`);
     await sleep(shortSleepMillis);
 
@@ -73,8 +73,8 @@ class CombatHandler {
 
   playTurnPair = async (ability: Ability, target: Unit) => {
     const state = GameState.getInstance();
-    const playerUnit = state.getPlayer().unit;
-    const enemyUnit = state.getCombatState()?.defender!!;
+    const playerUnit = state.getPlayer().getUnit();
+    const enemyUnit = state.getCombatState()!.defender!;
     await sleep(shortSleepMillis);
     await this.playTurn(playerUnit, target, ability);
     await sleep(longSleepMillis);

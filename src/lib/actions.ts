@@ -13,8 +13,9 @@ const navigate = async (relativeDirection: RelativeDirection) => {
     return;
   }
   const player = state.getPlayer();
+  const playerUnit = player.getUnit();
 
-  switch (player.location) {
+  switch (player.getLocation()) {
     case 'dungeon':
       const coordinates: Coordinates = (relativeDirection === 'forward')
         ? move(player.coordinates, player.direction)
@@ -24,10 +25,10 @@ const navigate = async (relativeDirection: RelativeDirection) => {
 
       const nextTile = getTile(state.getLevel(), coordinates);
       if (isDoor(nextTile)) {
-        player.location = 'town';
-        if (player.unit.life < player.unit.maxLife || player.unit.mana < player.unit.maxMana) {
-          player.unit.life = player.unit.maxLife;
-          player.unit.mana = player.unit.maxMana;
+        player.moveTo({ location: 'town' });
+        if (playerUnit.life < playerUnit.maxLife || playerUnit.mana < playerUnit.maxMana) {
+          playerUnit.life = playerUnit.maxLife;
+          playerUnit.mana = playerUnit.maxMana;
           state.addMessage('You feel much better.');
         }
       } else if (!isWall(nextTile)) {
@@ -36,20 +37,22 @@ const navigate = async (relativeDirection: RelativeDirection) => {
       player.direction = direction;
 
       await loadTile();
-      player.unit.actionPoints = Math.min(player.unit.actionPoints + 1, player.unit.maxActionPoints);
+      playerUnit.actionPoints = Math.min(playerUnit.actionPoints + 1, playerUnit.maxActionPoints);
       return;
     case 'town':
       switch (relativeDirection) {
         case 'backward':
-          player.location = 'dungeon';
-          player.coordinates = state.getLevel().startingPoint;
-          player.direction = state.getLevel().startingDirection;
+          player.moveTo({
+            location: 'dungeon',
+            coordinates: state.getLevel().startingPoint,
+            direction: state.getLevel().startingDirection
+          });
           return;
         case 'forward':
-          player.location = 'shop';
+          player.moveTo({ location: 'shop' });
           return;
         case 'right':
-          player.location = 'trainer';
+          player.moveTo({ location: 'trainer' });
           return;
       }
       break;
@@ -57,7 +60,7 @@ const navigate = async (relativeDirection: RelativeDirection) => {
     case 'trainer':
       switch (relativeDirection) {
         case 'backward':
-          player.location = 'town';
+          player.moveTo({ location: 'town' });
           return;
       }
       break;
@@ -68,9 +71,11 @@ const returnToDungeon = async () => {
   const state = GameState.getInstance();
   const player = state.getPlayer();
   const level = state.getLevel();
-  player.coordinates = level.startingPoint;
-  player.direction = level.startingDirection;
-  player.location = 'dungeon';
+  player.moveTo({
+    coordinates: level.startingPoint,
+    direction: level.startingDirection,
+    location: 'dungeon'
+  });
 };
 
 const loadTile = async () => {
@@ -86,7 +91,7 @@ const loadTile = async () => {
 
 const levelUp = async () => {
   const state = GameState.getInstance();
-  const playerUnit = state.getPlayer().unit;
+  const playerUnit = state.getPlayer().getUnit();
   playerUnit.experience++;
 
   if (playerUnit.experience >= playerUnit.experienceToNextLevel) {

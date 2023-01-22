@@ -8,7 +8,7 @@ const LevelUpView = () => {
 
   return (
     <div className={styles.levelUp}>
-      <div>Welcome to level {state.getPlayer().unit.level}!</div>
+      <div>Welcome to level {state.getPlayer().getUnit().level}!</div>
       <div>Choose a stat to increase:</div>
       {statValues.map(stat => (<IncreaseStatButton stat={stat} key={stat} />))}
     </div>
@@ -21,7 +21,7 @@ type ButtonProps = {
 
 const IncreaseStatButton = ({ stat }: ButtonProps) => {
   const state = GameState.getInstance();
-  const playerUnit = state.getPlayer().unit;
+  const playerUnit = state.getPlayer().getUnit();
 
   const handleClick = () => {
     if (confirm(`Are you sure you want to increase ${stat}?`)) {

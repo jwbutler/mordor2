@@ -7,7 +7,7 @@ type Props = {};
 const InventoryView = () => {
   const state = GameState.getInstance();
   const items = state.getPlayer().inventory.getItems();
-  const equipped = state.getPlayer().unit.getEquipment();
+  const equipped = state.getPlayer().getUnit().getEquipment();
 
   return (
     <div className={styles.inventory}>
