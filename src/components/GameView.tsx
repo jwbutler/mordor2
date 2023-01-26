@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { ReactNode, useEffect, useState } from 'react';
 import { GameState } from '../classes/GameState';
 import CombatView from './CombatView';
 import DesktopOnly from './DesktopOnly';
@@ -34,29 +34,39 @@ const GameView = ({ state }: Props) => {
           <IntroView onComplete={() => state.setMenu(null)} />
         )}
         {(state.getMenu() !== 'intro') && (
-          <div className={`${styles.column} ${styles.left}`}>
-            <MainView state={state} />
-            <MessagesView messages={state.getMessages()} />
-            {(state.getPlayer().location !== 'town') && (
-              <MobileOnly>
-                {(state.getMenu() === 'combat') && <CombatView state={state} />}
-                {(state.getPlayer().location === 'dungeon' && state.getMenu() !== 'combat') && (
-                  <MinimapView state={state} />
-                )}
-              </MobileOnly>
-            )}
-          </div>
+          <>
+            <Panel type="top-left">
+              <MainView state={state} />
+            </Panel>
+            <Panel type="bottom-left">
+              <MessagesView messages={state.getMessages()} />
+            </Panel>
+            <Panel type="top-right">
+              <UnitView unit={state.getPlayer().unit} player={state.getPlayer()} />
+            </Panel>
+            <Panel type="bottom-right">
+              {(state.getMenu() === 'combat') && <CombatView state={state} />}
+              {(state.getPlayer().location === 'dungeon' && state.getMenu() !== 'combat') && (
+                <MinimapView state={state} width={7} height={5} />
+              )}
+            </Panel>
+          </>
         )}
-        <div className={`${styles.column} ${styles.right}`}>
-          <DesktopOnly>
-            <UnitView unit={state.getPlayer().unit} player={state.getPlayer()} />
-          </DesktopOnly>
-          {(state.getMenu() === 'combat') && <CombatView state={state} />}
-          {(state.getPlayer().location === 'dungeon' && state.getMenu() !== 'combat') && (
-            <MinimapView state={state} />
-          )}
-        </div>
       </main>
+    </div>
+  );
+};
+
+type PanelType = 'top-left' | 'bottom-left' | 'top-right' | 'bottom-right';
+type PanelProps = {
+  type: PanelType,
+  children: ReactNode
+};
+
+const Panel = ({ type, children }: PanelProps) => {
+  return (
+    <div className={`${styles.panel} ${styles[type]}`}>
+      {children}
     </div>
   );
 };

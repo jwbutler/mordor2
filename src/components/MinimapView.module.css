@@ -6,6 +6,7 @@
   align-items: stretch;
   overflow: hidden;
   background-color: gray;
+  border: 4px solid white;
 }
 
 .row {
@@ -54,20 +55,13 @@
 }
 
 .arrow.south::after {
-  content: '↓'; 
+  content: '↓';
 }
 
 .arrow.east::after {
-  content: '→'; 
+  content: '→';
 }
 
 .arrow.west::after {
-  content: '←'; 
-}
-
-@media (min-width: 768px) {
-  .map {
-    height: 320px;
-    border: 4px solid white;
-  }
+  content: '←';
 }

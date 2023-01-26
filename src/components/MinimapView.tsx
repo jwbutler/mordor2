@@ -22,13 +22,13 @@ const tileClass = (tile: Tile | null, currentTile: Tile, currentDirection: Compa
   return classNames.join(' ');
 };
 
-const getVisibleTiles = (level: Level, coordinates: Coordinates, radius: number) => {
+const getVisibleTiles = (level: Level, coordinates: Coordinates, width: number, height: number) => {
   const visibleTiles = [];
 
-  const minY = coordinates.y - radius;
-  const maxY = coordinates.y + radius;
-  const minX = coordinates.x - radius;
-  const maxX = coordinates.x + radius;
+  const minY = coordinates.y - (height - 1) / 2;
+  const maxY = coordinates.y + (height - 1) / 2;
+  const minX = coordinates.x - (width - 1) / 2;
+  const maxX = coordinates.x + (width - 1) / 2;
 
   for (let y = minY; y <= maxY; y++) {
     const row: (Tile | null)[] = [];
@@ -41,12 +41,14 @@ const getVisibleTiles = (level: Level, coordinates: Coordinates, radius: number)
 };
 
 type Props = Readonly<{
-  state: GameState
+  state: GameState,
+  width: number,
+  height: number
 }>;
 
-const MinimapView = ({ state }: Props) => {
+const MinimapView = ({ state, width, height }: Props) => {
   const coordinates = state.getPlayer().coordinates;
-  const visibleTiles = getVisibleTiles(state.getLevel(), coordinates, 3);
+  const visibleTiles = getVisibleTiles(state.getLevel(), coordinates, width, height);
   const direction = state.getPlayer().direction;
 
   return (
