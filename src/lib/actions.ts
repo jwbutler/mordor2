@@ -7,8 +7,7 @@ import { isDoor, isStairs, isWall, Tile } from './tiles';
 
 const shortSleepMillis = 150; // meh
 
-export const navigate = async (relativeDirection: RelativeDirection) => {
-  const state = GameState.getInstance();
+export const navigate = async (state: GameState, relativeDirection: RelativeDirection) => {
   if (!state.inputEnabled() || state.getMenu() !== null) {
     return;
   }
@@ -35,7 +34,7 @@ export const navigate = async (relativeDirection: RelativeDirection) => {
       }
       player.direction = direction;
 
-      await loadTile();
+      await loadTile(state);
       player.unit.actionPoints = Math.min(player.unit.actionPoints + 1, player.unit.maxActionPoints);
       return;
     case 'town':
@@ -64,8 +63,7 @@ export const navigate = async (relativeDirection: RelativeDirection) => {
   }
 };
 
-export const returnToDungeon = async () => {
-  const state = GameState.getInstance();
+export const returnToDungeon = async (state: GameState) => {
   const player = state.getPlayer();
   const level = state.getLevel();
   player.coordinates = level.startingPoint;
@@ -73,19 +71,17 @@ export const returnToDungeon = async () => {
   player.location = 'dungeon';
 };
 
-const loadTile = async () => {
-  const state = GameState.getInstance();
+const loadTile = async (state: GameState) => {
   const player = state.getPlayer();
   const tile = state.getLevel().tiles[player.coordinates.y][player.coordinates.x] as Tile;
   if (tile.enemies.length > 0 && tile.enemies[0].life > 0) {
     state.disableInput();
-    await new CombatHandler().startCombat(tile.enemies[0]);
+    await new CombatHandler({ state }).startCombat(tile.enemies[0]);
     state.enableInput();
   }
 };
 
-export const levelUp = async () => {
-  const state = GameState.getInstance();
+export const levelUp = async (state: GameState) => {
   const playerUnit = state.getPlayer().unit;
   playerUnit.experience++;
 

@@ -10,25 +10,28 @@ import ShopView from './ShopView';
 import TownView from './TownView';
 import TrainerView from './TrainerView';
 
-const MainView = () => {
-  const state = GameState.getInstance();
+type Props = Readonly<{
+  state: GameState
+}>;
+
+const MainView = ({ state }: Props) => {
   const location = state.getPlayer().location;
 
   let content: ReactNode;
   if (state.getMenu() === 'character') {
-    content = <CharacterView />;
+    content = <CharacterView playerUnit={state.getPlayer().unit} />;
   } else if (state.getMenu() === 'level_up') {
-    content = <LevelUpView />;
+    content = <LevelUpView state={state} />;
   } else if (state.getMenu() === 'inventory') {
-    content = <InventoryView />;
+    content = <InventoryView player={state.getPlayer()} />;
   } else if (location === 'dungeon') {
-    content = <DungeonView />;
+    content = <DungeonView state={state} />;
   } else if (location === 'town') {
-    content = <TownView />;
+    content = <TownView state={state} />;
   } else if (location === 'shop') {
-    content = <ShopView />;
+    content = <ShopView state={state} />;
   } else if (location === 'trainer') {
-    content = <TrainerView />;
+    content = <TrainerView state={state} />;
   }
 
   const showControls = state.getMenu() !== 'character'
@@ -41,7 +44,7 @@ const MainView = () => {
   return (
     <div className={styles.viewport}>
       {content}
-      {showControls && <ControlsView />}
+      {showControls && <ControlsView state={state} />}
     </div>
   );
 };

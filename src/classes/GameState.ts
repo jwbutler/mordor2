@@ -9,23 +9,23 @@ import Trainer from './Trainer';
 
 type Menu = 'character' | 'combat' | 'intro' | 'inventory' | 'level_up';
 
-type Props = {
-  level: Level,
-  player: Player,
+type Props = Readonly<{
+  level: Level | null,
+  player: Player | null,
   menu: Menu | null,
   shop: Shop,
   trainer: Trainer
-};
+}>;
 
-type CombatState = {
+type CombatState = Readonly<{
   attacker: Unit,
   defender: Unit
-};
+}>;
 
 class GameState {
-  private readonly player: Player;
+  private player: Player | null;
   private readonly messages: string[];
-  private level: Level;
+  private level: Level | null;
   private _enableInput: boolean;
   private menu: Menu | null;
   private combatState: CombatState | null;
@@ -43,8 +43,12 @@ class GameState {
     this.trainer = trainer;
   }
 
-  getLevel = (): Level => this.level;
-  getPlayer = (): Player => this.player;
+  getLevel = (): Level => checkNotNull(this.level);
+  setLevel = (level: Level) => { this.level = level; };
+
+  getPlayer = (): Player => checkNotNull(this.player);
+  setPlayer = (player: Player) => { this.player = player; };
+
   getMenu = (): Menu | null => this.menu;
   setMenu = (menu: Menu | null) => { this.menu = menu; };
   getMessages = () => [...this.messages];
@@ -57,12 +61,9 @@ class GameState {
   getShop = () => this.shop;
   getTrainer = () => this.trainer;
 
-  getCurrentTile = (): Tile => checkNotNull(getTile(this.level, this.player.coordinates));
+  getCurrentTile = (): Tile => checkNotNull(getTile(this.getLevel(), this.getPlayer().coordinates));
 
   private static instance: GameState | null;
-
-  static setInstance = (state: GameState) => { GameState.instance = state; };
-  static getInstance = (): GameState => checkNotNull(GameState.instance);
 }
 
 export {

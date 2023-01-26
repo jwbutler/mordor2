@@ -1,13 +1,16 @@
 import Equipment from '../classes/Equipment';
+import { GameState } from '../classes/GameState';
 
-const createNoobSword = (): Equipment => new Equipment({
+const createNoobSword = (state: GameState): Equipment => new Equipment({
+  state,
   name: 'Noob Sword',
   slot: 'mainHand',
   damage: 2,
   value: 10
 });
 
-const createMediumSword = (): Equipment => new Equipment({
+const createMediumSword = (state: GameState): Equipment => new Equipment({
+  state,
   name: 'Medium Sword',
   slot: 'mainHand',
   stats: { dexterity: 2 },
@@ -15,7 +18,8 @@ const createMediumSword = (): Equipment => new Equipment({
   value: 100
 });
 
-const createAwesomeSword = (): Equipment => new Equipment({
+const createAwesomeSword = (state: GameState): Equipment => new Equipment({
+  state,
   name: 'Awesome Sword',
   slot: 'mainHand',
   stats: { dexterity: 4, constitution: 4 },

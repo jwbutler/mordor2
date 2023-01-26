@@ -1,3 +1,4 @@
+import { GameState } from '../classes/GameState';
 import { ghoulSprite, koboldSprite, koboldWarriorSprite } from '../lib/sprites';
 import { crocDogSprite } from '../lib/sprites';
 import { mudManSprite } from '../lib/sprites';
@@ -9,7 +10,7 @@ import { Ability } from '../lib/abilities';
 import { ATTACK, DOUBLE_ATTACK } from './abilities';
 import { randChoice } from '../lib/random';
 
-export const createKobold = (): Unit => {
+export const createKobold = (state: GameState): Unit => {
   const unit = new Unit({
     name: 'Kobold',
     level: 1,
@@ -25,11 +26,11 @@ export const createKobold = (): Unit => {
     spells: [],
     controller: new DefaultEnemyController()
   });
-  unit.equipItem(createNoobSword());
+  unit.equipItem(createNoobSword(state));
   return unit;
 };
 
-export const createKoboldWarrior = (): Unit => {
+export const createKoboldWarrior = (state: GameState): Unit => {
   const unit = new Unit({
     name: 'Kobold Warrior',
     level: 3,
@@ -45,7 +46,7 @@ export const createKoboldWarrior = (): Unit => {
     spells: [],
     controller: new DefaultEnemyController()
   });
-  unit.equipItem(createNoobSword());
+  unit.equipItem(createNoobSword(state));
   return unit;
 };
 
@@ -58,7 +59,7 @@ class CrocDogController implements EnemyController {
   }
 }
 
-export const createCrocDog = (): Unit => {
+export const createCrocDog = (state: GameState): Unit => {
   const unit = new Unit({
     name: 'Croc Dog',
     level: 2,
@@ -74,11 +75,11 @@ export const createCrocDog = (): Unit => {
     spells: [],
     controller: new CrocDogController()
   });
-  unit.equipItem(createNoobSword());
+  unit.equipItem(createNoobSword(state));
   return unit;
 };
 
-export const createMudMan = (): Unit => {
+export const createMudMan = (state: GameState): Unit => {
   const unit = new Unit({
     name: 'Mud Man',
     level: 3,
@@ -94,11 +95,11 @@ export const createMudMan = (): Unit => {
     spells: [],
     controller: new DefaultEnemyController()
   });
-  unit.equipItem(createNoobSword());
+  unit.equipItem(createNoobSword(state));
   return unit;
 };
 
-export const createPlayerUnit = (): Unit => {
+export const createPlayerUnit = (state: GameState): Unit => {
   const unit = new Unit({
     name: 'Player Guy',
     level: 1,
@@ -113,11 +114,11 @@ export const createPlayerUnit = (): Unit => {
     spells: [],
     sprite: playerSprite
   });
-  unit.equipItem(createNoobSword());
+  unit.equipItem(createNoobSword(state));
   return unit;
 };
 
-export const createGhoul = (): Unit => {
+export const createGhoul = (state: GameState): Unit => {
   const unit = new Unit({
     name: 'Ghoul',
     level: 4,
@@ -133,14 +134,14 @@ export const createGhoul = (): Unit => {
     spells: [],
     controller: new DefaultEnemyController()
   });
-  unit.equipItem(createNoobSword());
+  unit.equipItem(createNoobSword(state));
   return unit;
 };
 
-export const createRandomEnemy = (): Unit => randChoice([
+export const createRandomEnemy = (state: GameState): Unit => randChoice([
   createCrocDog,
   createGhoul,
   createKobold,
   createKoboldWarrior,
   createMudMan
-])();
+])(state);

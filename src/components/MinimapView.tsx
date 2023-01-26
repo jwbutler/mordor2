@@ -29,7 +29,7 @@ const getVisibleTiles = (level: Level, coordinates: Coordinates, radius: number)
   const maxY = coordinates.y + radius;
   const minX = coordinates.x - radius;
   const maxX = coordinates.x + radius;
-  
+
   for (let y = minY; y <= maxY; y++) {
     const row: (Tile | null)[] = [];
     for (let x = minX; x <= maxX; x++) {
@@ -40,12 +40,15 @@ const getVisibleTiles = (level: Level, coordinates: Coordinates, radius: number)
   return visibleTiles;
 };
 
-const MinimapView = () => {
-  const state = GameState.getInstance();
+type Props = Readonly<{
+  state: GameState
+}>;
+
+const MinimapView = ({ state }: Props) => {
   const coordinates = state.getPlayer().coordinates;
   const visibleTiles = getVisibleTiles(state.getLevel(), coordinates, 3);
   const direction = state.getPlayer().direction;
-  
+
   return (
     <div className={styles.map}>
       {visibleTiles.map((row, y) => (

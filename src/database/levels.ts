@@ -1,3 +1,4 @@
+import { GameState } from '../classes/GameState';
 import type { CompassDirection, Coordinates } from '../lib/geometry';
 import type { Level } from '../lib/levels';
 import type { Tile } from '../lib/tiles';
@@ -15,7 +16,12 @@ const wall = (): Tile => ({ type: 'wall', enemies: [], objects: [], door: false,
 const door = (): Tile => ({ type: 'wall', enemies: [], objects: [], door: true, stairs: false });
 const stairs = (): Tile => ({ type: 'wall', enemies: [], objects: [], door: false, stairs: true });
 
-const fromString = (data: string, startingPoint: Coordinates, startingDirection: CompassDirection): Level => {
+const fromString = (
+  data: string,
+  startingPoint: Coordinates,
+  startingDirection: CompassDirection,
+  state: GameState
+): Level => {
   const tiles: Tile[][] = [];
   const rows = data.split('\n');
   const height = rows.length;
@@ -26,12 +32,12 @@ const fromString = (data: string, startingPoint: Coordinates, startingDirection:
         case '#': return wall();
         case 'D': return door();
         case 'S': return stairs();
-        case 'C': return { type: 'floor', enemies: [createCrocDog()], objects: [], door: false, stairs: false };
-        case 'k': return { type: 'floor', enemies: [createKobold()], objects: [], door: false, stairs: false };
-        case 'K': return { type: 'floor', enemies: [createKoboldWarrior()], objects: [], door: false, stairs: false };
-        case 'M': return { type: 'floor', enemies: [createMudMan()], objects: [], door: false, stairs: false };
-        case 'G': return { type: 'floor', enemies: [createGhoul()], objects: [], door: false, stairs: false };
-        case 'E': return { type: 'floor', enemies: [createRandomEnemy()], objects: [], door: false, stairs: false };
+        case 'C': return { type: 'floor', enemies: [createCrocDog(state)], objects: [], door: false, stairs: false };
+        case 'k': return { type: 'floor', enemies: [createKobold(state)], objects: [], door: false, stairs: false };
+        case 'K': return { type: 'floor', enemies: [createKoboldWarrior(state)], objects: [], door: false, stairs: false };
+        case 'M': return { type: 'floor', enemies: [createMudMan(state)], objects: [], door: false, stairs: false };
+        case 'G': return { type: 'floor', enemies: [createGhoul(state)], objects: [], door: false, stairs: false };
+        case 'E': return { type: 'floor', enemies: [createRandomEnemy(state)], objects: [], door: false, stairs: false };
         default:  return floor();
       }
     });
@@ -49,7 +55,7 @@ const fromString = (data: string, startingPoint: Coordinates, startingDirection:
   };
 };
 
-export const createFirstLevel = (): Level => {
+export const createFirstLevel = (state: GameState): Level => {
   const data = `
     #######
     D  C k#
@@ -59,20 +65,20 @@ export const createFirstLevel = (): Level => {
     #C   M#
     #######
   `;
-  return fromString(data, { x: 1, y: 1 }, 'east');
+  return fromString(data, { x: 1, y: 1 }, 'east', state);
 };
 
-export const smallerLevel = (): Level => {
+export const smallerLevel = (state: GameState): Level => {
   const data = `
     #####
     # k #
     ### #
     #####
   `;
-  return fromString(data, { x: 1, y: 1 }, 'east');
+  return fromString(data, { x: 1, y: 1 }, 'east', state);
 };
 
-export const biggerLevel = () => {
+export const biggerLevel = (state: GameState) => {
   const data = `
     ################
     #G   ######  k##
@@ -84,10 +90,10 @@ export const biggerLevel = () => {
     ##   C  #K     D
     ################
   `;
-  return fromString(data, { x: 14, y: 7 }, 'west');
+  return fromString(data, { x: 14, y: 7 }, 'west', state);
 };
 
-export const willLevel = () => {
+export const willLevel = (state: GameState) => {
   const data = `
     ##############################
     #   E     E#                 #
@@ -120,24 +126,24 @@ export const willLevel = () => {
     D        ###################S#
     ##############################
   `;
-  return fromString(data, { x: 1, y: 28 }, 'east');
+  return fromString(data, { x: 1, y: 28 }, 'east', state);
 };
 
-export const doorsTest = () => {
+export const doorsTest = (state: GameState) => {
   const data = `
     ######
     #    D
     #    #
     ######
   `;
-  return fromString(data, { x: 1, y: 1 }, 'east');
+  return fromString(data, { x: 1, y: 1 }, 'east', state);
 };
 
-export const manyKobolds = () => {
+export const manyKobolds = (state: GameState) => {
   const data = `
     ################
     #KKKKKKKKKKKKK D
     ################
   `;
-  return fromString(data, { x: 14, y: 1 }, 'west');
+  return fromString(data, { x: 14, y: 1 }, 'west', state);
 };

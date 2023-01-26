@@ -2,7 +2,7 @@ import Equipment from '../classes/Equipment';
 import { GameState } from '../classes/GameState';
 import { checkState } from './preconditions';
 
-interface InventoryItem {
+export interface InventoryItem {
   name: string;
   type: ItemType;
   value: number;
@@ -10,11 +10,11 @@ interface InventoryItem {
   equals: (item: InventoryItem) => boolean;
 }
 
-type ItemType = 'equipment';
+export type ItemType = 'equipment';
 
-const buyItem = (item: InventoryItem, price: number) => {
-  const player = GameState.getInstance().getPlayer();
-  const shop = GameState.getInstance().getShop();
+export const buyItem = (item: InventoryItem, price: number, state: GameState) => {
+  const player = state.getPlayer();
+  const shop = state.getShop();
 
   checkState(player.gold >= price);
   player.spendGold(price);
@@ -22,8 +22,7 @@ const buyItem = (item: InventoryItem, price: number) => {
   shop.removeItem(item);
 };
 
-const equipItem = (item: Equipment) => {
-  const state = GameState.getInstance();
+export const equipItem = (item: Equipment, state: GameState) => {
   const player = state.getPlayer();
   const equippedItem = player.unit.getEquippedItem(item.slot);
 
@@ -34,14 +33,4 @@ const equipItem = (item: Equipment) => {
 
   player.inventory.removeItem(item);
   player.unit.equipItem(item);
-};
-
-export type {
-  InventoryItem,
-  ItemType
-};
-
-export {
-  buyItem,
-  equipItem
 };

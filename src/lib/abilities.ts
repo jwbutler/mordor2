@@ -1,6 +1,5 @@
 import { GameState } from '../classes/GameState';
 import Unit from '../classes/Unit';
-import { checkState } from './preconditions';
 import { sleep } from './promises';
 import { playAudio } from './sounds';
 import { getDodgeChance, getMitigatedDamage } from './stats';
@@ -18,7 +17,7 @@ interface Ability {
   readonly type: AbilityType;
   readonly targetType: AbilityTargetType;
   readonly canPayCost: (unit: Unit) => boolean;
-  readonly use: (unit: Unit, target: Unit) => Promise<void>;
+  readonly use: (unit: Unit, target: Unit, state: GameState) => Promise<void>;
   readonly getCostText: () => string;
 }
 
@@ -27,7 +26,7 @@ abstract class AbstractAbility implements Ability {
   abstract readonly type: AbilityType;
   abstract readonly targetType: AbilityTargetType;
   abstract readonly canPayCost: (unit: Unit) => boolean;
-  abstract readonly use: (unit: Unit, target: Unit) => Promise<void>;
+  abstract readonly use: (unit: Unit, target: Unit, state: GameState) => Promise<void>;
   abstract readonly getCostText: () => string;
 }
 
@@ -65,8 +64,7 @@ abstract class HealingSpellAbility extends SpellAbility {
 
 type AbilityTargetType = 'self' | 'enemy';
 
-const useMeleeAbility = async (ability: MeleeAbility, attacker: Unit, defender: Unit) => {
-  const state = GameState.getInstance();
+export const useMeleeAbility = async (ability: MeleeAbility, attacker: Unit, defender: Unit, state: GameState) => {
   const hitChance = ability.getHitChance(attacker);
 
   if (Math.random() < hitChance) {
@@ -114,8 +112,7 @@ const useMeleeAbility = async (ability: MeleeAbility, attacker: Unit, defender: 
   }
 };
 
-const useAttackSpellAbility = async (ability: AttackSpellAbility, attacker: Unit, defender: Unit) => {
-  const state = GameState.getInstance();
+const useAttackSpellAbility = async (ability: AttackSpellAbility, attacker: Unit, defender: Unit, state: GameState) => {
   const hitChance = ability.getHitChance(attacker);
 
   if (Math.random() < hitChance) {
@@ -163,8 +160,7 @@ const useAttackSpellAbility = async (ability: AttackSpellAbility, attacker: Unit
   }
 };
 
-const useHealingSpellAbility = async (ability: HealingSpellAbility, caster: Unit, target: Unit) => {
-  const state = GameState.getInstance();
+const useHealingSpellAbility = async (ability: HealingSpellAbility, caster: Unit, target: Unit, state: GameState) => {
   const successChance = ability.getSuccessChance(caster);
 
   if (Math.random() < successChance) {
@@ -177,23 +173,6 @@ const useHealingSpellAbility = async (ability: HealingSpellAbility, caster: Unit
   }
 };
 
-const buyAbility = (ability: Ability, price: number) => {
-  const player = GameState.getInstance().getPlayer();
-  const trainer = GameState.getInstance().getTrainer();
-
-  checkState(player.gold >= price);
-  player.spendGold(price);
-  switch (ability.type) {
-    case 'melee':
-      player.unit.getMeleeAbilities().push(ability as MeleeAbility);
-      break;
-    case 'spell':
-      player.unit.getSpells().push(ability as SpellAbility);
-      break;
-  }
-  trainer.removeAbility(ability);
-};
-
 export {
   type Ability,
   type AbilityTargetType,
@@ -203,8 +182,6 @@ export {
   HealingSpellAbility,
   MeleeAbility,
   SpellAbility,
-  buyAbility,
-  useMeleeAbility,
   useAttackSpellAbility,
   useHealingSpellAbility
 };

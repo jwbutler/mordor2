@@ -11,10 +11,12 @@ import MinimapView from './MinimapView';
 import UnitView from './UnitView';
 import MobileOnly from './MobileOnly';
 
-const GameView = () => {
-  const [ticks, setTicks] = useState(0);
+type Props = Readonly<{
+  state: GameState
+}>;
 
-  const state = GameState.getInstance();
+const GameView = ({ state }: Props) => {
+  const [ticks, setTicks] = useState(0);
 
   useEffect(() => {
     const render = () => {
@@ -26,19 +28,21 @@ const GameView = () => {
 
   return (
     <div className={styles.game}>
-      <MenuBar />
+      <MenuBar state={state} />
       <main>
         {(state.getMenu() === 'intro') && (
           <IntroView onComplete={() => state.setMenu(null)} />
         )}
         {(state.getMenu() !== 'intro') && (
           <div className={`${styles.column} ${styles.left}`}>
-            <MainView />
+            <MainView state={state} />
             <MessagesView messages={state.getMessages()} />
             {(state.getPlayer().location !== 'town') && (
               <MobileOnly>
-                {(state.getMenu() === 'combat') && <CombatView />}
-                {(state.getPlayer().location === 'dungeon' && state.getMenu() !== 'combat') && <MinimapView />}
+                {(state.getMenu() === 'combat') && <CombatView state={state} />}
+                {(state.getPlayer().location === 'dungeon' && state.getMenu() !== 'combat') && (
+                  <MinimapView state={state} />
+                )}
               </MobileOnly>
             )}
           </div>
@@ -47,8 +51,10 @@ const GameView = () => {
           <DesktopOnly>
             <UnitView unit={state.getPlayer().unit} player={state.getPlayer()} />
           </DesktopOnly>
-          {(state.getMenu() === 'combat') && <CombatView />}
-          {(state.getPlayer().location === 'dungeon' && state.getMenu() !== 'combat') && <MinimapView />}
+          {(state.getMenu() === 'combat') && <CombatView state={state} />}
+          {(state.getPlayer().location === 'dungeon' && state.getMenu() !== 'combat') && (
+            <MinimapView state={state} />
+          )}
         </div>
       </main>
     </div>

@@ -1,4 +1,3 @@
-import { ATTACK, DOUBLE_ATTACK } from '../database/abilities';
 import { levelUp } from '../lib/actions';
 import { checkNotNull } from '../lib/preconditions';
 import { GameState } from './GameState';
@@ -7,27 +6,27 @@ import Unit from '../classes/Unit';
 import { sleep } from '../lib/promises';
 import { Ability } from '../lib/abilities';
 
-const shortSleepMillis = 150;
-const longSleepMillis = 250;
+const shortSleepMillis = 100;
+const longSleepMillis = 150;
 
 const chooseEnemyAbility = (enemy: Unit, playerUnit: Unit): Ability => {
   const controller = checkNotNull(enemy.controller);
   return controller.chooseAbility(enemy, playerUnit);
 };
 
-const endCombat = async () => {
-  const state = GameState.getInstance();
-  state.setMenu(null);
-  state.setCombatState(null);
-  const playerUnit = state.getPlayer().unit;
-  if (playerUnit.experience >= playerUnit.experienceToNextLevel) {
-    await levelUp();
-  }
-};
+type Props = Readonly<{
+  state: GameState
+}>;
 
 class CombatHandler {
+  private readonly state: GameState;
+
+  constructor({ state }: Props) {
+    this.state = state;
+  }
+
   startCombat = async (enemy: Unit) => {
-    const state = GameState.getInstance();
+    const { state } = this;
     const playerUnit = state.getPlayer().unit;
     state.addMessage(`${enemy.name} appeared.`);
     await sleep(shortSleepMillis);
@@ -49,17 +48,27 @@ class CombatHandler {
     }
   };
 
+  endCombat = async () => {
+    const { state } = this;
+    state.setMenu(null);
+    state.setCombatState(null);
+    const playerUnit = state.getPlayer().unit;
+    if (playerUnit.experience >= playerUnit.experienceToNextLevel) {
+      await levelUp(state);
+    }
+  };
+
   playTurn = async (unit: Unit, target: Unit, ability: Ability) => {
-    const state = GameState.getInstance();
+    const { state } = this;
     const combatState = checkNotNull(state.getCombatState());
     const { attacker, defender } = combatState;
 
-    await ability.use(unit, target);
+    await ability.use(unit, target, state);
     await sleep(longSleepMillis);
 
     if (target.life <= 0) {
       await sleep(longSleepMillis);
-      await endCombat();
+      await this.endCombat();
     } else {
       // TODO: need to set target here too
       state.setCombatState({
@@ -72,7 +81,7 @@ class CombatHandler {
   };
 
   playTurnPair = async (ability: Ability, target: Unit) => {
-    const state = GameState.getInstance();
+    const { state } = this;
     const playerUnit = state.getPlayer().unit;
     const enemyUnit = state.getCombatState()?.defender!!;
     await sleep(shortSleepMillis);

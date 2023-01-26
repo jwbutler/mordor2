@@ -1,13 +1,15 @@
 import { GameState } from '../classes/GameState';
+import Player from '../classes/Player';
 import { InventoryItem } from '../lib/items';
 import styles from './InventoryView.module.css';
 
-type Props = {};
+type Props = Readonly<{
+  player: Player
+}>;
 
-const InventoryView = () => {
-  const state = GameState.getInstance();
-  const items = state.getPlayer().inventory.getItems();
-  const equipped = state.getPlayer().unit.getEquipment();
+const InventoryView = ({ player }: Props) => {
+  const items = player.inventory.getItems();
+  const equipped = player.unit.getEquipment();
 
   return (
     <div className={styles.inventory}>

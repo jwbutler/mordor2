@@ -1,11 +1,12 @@
 /** Not to be confused with UnitView... */
-import { GameState } from '../classes/GameState';
+import Unit from '../classes/Unit';
 import { statToString, statValues } from '../lib/stats';
 
-const CharacterView = () => {
-  const state = GameState.getInstance();
-  const playerUnit = state.getPlayer().unit;
+type Props = Readonly<{
+  playerUnit: Unit
+}>;
 
+const CharacterView = ({ playerUnit }: Props) => {
   return (
     <div>
       {statValues.map(stat => (

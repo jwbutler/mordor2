@@ -99,14 +99,13 @@ const drawImage = async (src: string, context: CanvasRenderingContext2D) => {
 };
 
 class DungeonRenderer {
-  renderTiles = async (buffer: HTMLCanvasElement) => {
+  renderTiles = async (state: GameState, buffer: HTMLCanvasElement) => {
     const t1 = new Date().getTime();
-    const state: GameState = GameState.getInstance();
     const level = state.getLevel();
     const coordinates = state.getPlayer().coordinates;
     const direction = state.getPlayer().direction;
     const tiles: Record<TileViewColumn, (Tile | null)[]> = getTilesInView(level, coordinates, direction, maxDepth);
-  
+
     const {
       hallsLeft,
       hallsRight,
@@ -120,7 +119,7 @@ class DungeonRenderer {
       doorWallsRight,
       floorCeiling
     } = dungeonImages;
-    
+
     const images: RenderState = {
       floorCeiling,
       halls: {
@@ -159,20 +158,20 @@ class DungeonRenderer {
 
       images.walls['center'].push(isWall(tiles['center'][i + 1]) ? wallsCenter[i] : null);
       images.doorWalls['center'].push(isDoor(tiles['center'][i + 1]) ? doorWallsCenter[i] : null);
-      
+
       images.halls['right'].push(isWall(tiles['right'][i]) ? hallsRight[i] : null);
       images.walls['right'].push(isWall(tiles['right'][i + 1]) ? wallsRight[i] : null);
       images.doorHalls['right'].push(isDoor(tiles['right'][i]) ? doorHallsRight[i] : null);
       images.doorWalls['right'].push(isDoor(tiles['right'][i + 1]) ? doorWallsRight[i] : null);
     }
-  
+
     const tile = getTile(level, coordinates);
     const enemy = tile?.enemies[0];
     if ((enemy?.life || 0) > 0) {
       images['unit'] = enemy?.sprite?.images.standing || null;
     }
-    
-    const bufferContext = buffer.getContext('2d') as CanvasRenderingContext2D;
+
+    const bufferContext = buffer.getContext('2d')!;
     bufferContext.fillStyle = 'black';
     await drawImage(images.floorCeiling, bufferContext);
 
@@ -198,7 +197,7 @@ class DungeonRenderer {
       await drawImage(images.unit, bufferContext);
     }
     const t2 = new Date().getTime();
-    console.log(`Render time: ${t2 - t1} ms`);
+    console.debug(`Render time: ${t2 - t1} ms`);
   };
 }
 

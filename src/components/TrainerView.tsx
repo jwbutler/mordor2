@@ -1,6 +1,8 @@
 import { useEffect } from 'react';
 import { GameState } from '../classes/GameState';
-import { Ability, buyAbility } from '../lib/abilities';
+import Trainer from '../classes/Trainer';
+import { Ability, MeleeAbility, SpellAbility } from '../lib/abilities';
+import { checkState } from '../lib/preconditions';
 import { playAudio } from '../lib/sounds';
 import styles from './TrainerView.module.css';
 import shop_png from '../images/gen/shop.png';
@@ -11,8 +13,11 @@ import shopkeeper_no_gold_mp3 from '../sounds/shopkeeper_no_gold.mp3';
 import shopkeeper_come_back_soon_mp3 from '../sounds/shopkeeper_come_back_soon.mp3';
 import shopkeeper_thanks_for_nothing_mp3 from '../sounds/shopkeeper_thanks_for_nothing.mp3';
 
-const TrainerView = () => {
-  const state = GameState.getInstance();
+type Props = Readonly<{
+  state: GameState
+}>;
+
+const TrainerView = ({ state }: Props) => {
   const trainer = state.getTrainer();
   const abilities = trainer.getAbilities();
 
@@ -33,6 +38,23 @@ const TrainerView = () => {
     };
   }, []);
 
+  const buyAbility = (ability: Ability, price: number) => {
+    const player = state.getPlayer();
+    const trainer = state.getTrainer();
+
+    checkState(player.gold >= price);
+    player.spendGold(price);
+    switch (ability.type) {
+      case 'melee':
+        player.unit.getMeleeAbilities().push(ability as MeleeAbility);
+        break;
+      case 'spell':
+        player.unit.getSpells().push(ability as SpellAbility);
+        break;
+    }
+    trainer.removeAbility(ability);
+  };
+
   const handleExit = async () => {
     state.getPlayer().location = 'town';
   };
@@ -45,12 +67,12 @@ const TrainerView = () => {
       <div className={styles.abilities}>
         {abilities.map(ability => (
           <AbilityView
+            state={state}
+            trainer={state.getTrainer()}
             ability={ability}
             price={100 /* TODO */}
             key={ability.name}
-            onPurchase={() => {
-              trainer.logAbilityPurchase(ability);
-            }}
+            buyAbility={buyAbility}
           />)
         )}
       </div>
@@ -61,19 +83,20 @@ const TrainerView = () => {
   );
 };
 
-type AbilityProps = {
+type AbilityProps = Readonly<{
+  state: GameState,
+  trainer: Trainer,
   ability: Ability,
   price: number,
-  onPurchase: () => void
-};
+  buyAbility: (ability: Ability, price: number) => void
+}>;
 
-const AbilityView = ({ ability, price, onPurchase }: AbilityProps) => {
+const AbilityView = ({ state, trainer, ability, price, buyAbility }: AbilityProps) => {
   const onClick = async () => {
-    const state = GameState.getInstance();
     const player = state.getPlayer();
     if (player.gold >= price) {
       buyAbility(ability, price);
-      onPurchase();
+      trainer.logAbilityPurchase(ability);
       state.addMessage(`You bought ${ability.name} for ${price} gold.`);
       state.addMessage('"Anything else?"');
       await playAudio(shopkeeper_anything_else_mp3, 0);

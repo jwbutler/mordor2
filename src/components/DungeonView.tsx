@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react';
 import DungeonRenderer from '../classes/DungeonRenderer';
+import { GameState } from '../classes/GameState';
 import { playLoop } from '../lib/sounds';
 import dungeon_music_mp3 from '../sounds/dungeon_music.mp3';
 import styles from './DungeonView.module.css';
@@ -7,7 +8,11 @@ import styles from './DungeonView.module.css';
 const renderer = new DungeonRenderer();
 let rendering = false;
 
-const DungeonView = () => {
+type Props = Readonly<{
+  state: GameState
+}>;
+
+const DungeonView = ({ state }: Props) => {
   const ref = useRef<HTMLCanvasElement>(null);
   const canvas = ref.current;
 
@@ -24,7 +29,7 @@ const DungeonView = () => {
         const buffer = document.createElement('canvas');
         buffer.width = canvas.width;
         buffer.height = canvas.height;
-        await renderer.renderTiles(buffer);
+        await renderer.renderTiles(state, buffer);
         const bufferContext = buffer.getContext('2d') as CanvasRenderingContext2D;
         const imageData = bufferContext.getImageData(0, 0, buffer.width, buffer.height);
         const canvasContext = canvas.getContext('2d') as CanvasRenderingContext2D;

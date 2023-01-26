@@ -2,11 +2,12 @@ import { GameState, Menu } from '../classes/GameState';
 import Button from './Button';
 import styles from './MenuBar.module.css';
 
-type Props = {};
+type Props = Readonly<{
+  state: GameState
+}>;
 
-const MenuBar = () => {
+const MenuBar = ({ state }: Props) => {
   const toggleMenu = (menu: Menu) => {
-    const state = GameState.getInstance();
     state.setMenu(state.getMenu() !== menu ? menu : null);
   };
 

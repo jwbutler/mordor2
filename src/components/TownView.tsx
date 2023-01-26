@@ -5,12 +5,15 @@ import styles from './TownView.module.css';
 import town_png from '../images/gen/town.png';
 import all_nighter_keyboard from '../sounds/all_nighter_keyboard.mp3';
 
-const TownView = () => {
+type Props = Readonly<{
+  state: GameState
+}>;
+
+const TownView = ({ state }: Props) => {
   useEffect(() => {
     playLoop(all_nighter_keyboard).then(() => {});
   }, []);
 
-  const state = GameState.getInstance();
   return (
     <div className={styles.town}>
       <img className={styles.background} src={town_png} alt="" />

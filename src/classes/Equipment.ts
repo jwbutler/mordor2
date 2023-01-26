@@ -2,8 +2,10 @@ import { equipItem, type InventoryItem, type ItemType } from '../lib/items';
 import { Stats, zeroStats } from '../lib/stats';
 import { titleCase } from '../lib/strings';
 import { DamageType } from '../lib/abilities';
+import { GameState } from './GameState';
 
-type Props = {
+type Props = Readonly<{
+  state: GameState,
   name: string,
   value: number,
   slot: EquipmentSlot,
@@ -19,9 +21,10 @@ type Props = {
   dodgeChance?: number,
   life?: 0,
   mana?: 0
-};
+}>;
 
 class Equipment implements InventoryItem {
+  private readonly state: GameState;
   readonly type: ItemType = 'equipment';
   readonly value: number;
   readonly name: string;
@@ -39,7 +42,8 @@ class Equipment implements InventoryItem {
   readonly life: 0;
   readonly mana: 0;
 
-  constructor({ name, value, slot, stats, damage, mitigation, dodgeChance, life, mana }: Props) {
+  constructor({ state, name, value, slot, stats, damage, mitigation, dodgeChance, life, mana }: Props) {
+    this.state = state;
     this.name = name;
     this.value = value;
     this.slot = slot;
@@ -51,7 +55,7 @@ class Equipment implements InventoryItem {
     this.mana = mana ?? 0;
   }
 
-  onUse = () => equipItem(this);
+  onUse = () => equipItem(this, this.state);
   equals = (item: InventoryItem) => JSON.stringify(this) === JSON.stringify(item); // should probably do this by hand
 
   getMitigation(damageType: DamageType): number {

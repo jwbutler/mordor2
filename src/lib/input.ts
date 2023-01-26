@@ -24,15 +24,13 @@ const getRelativeDirection = (e: KeyboardEvent): RelativeDirection | null => {
 const isDirectionKey = (e: KeyboardEvent) => getRelativeDirection(e) !== null;
 const isNumberKey = (e: KeyboardEvent) => parseInt(e.key) >= 0 && parseInt(e.key) <= 9;
 
-const handleKeyDown = async (e: KeyboardEvent) => {
-  const state = GameState.getInstance();
-  const player = state.getPlayer();
+const handleKeyDown = async (e: KeyboardEvent, state: GameState) => {
   if (isDirectionKey(e)) {
     const relativeDirection = getRelativeDirection(e);
 
     if (state.getMenu() === null && state.inputEnabled()) {
       if (relativeDirection) {
-        await navigate(relativeDirection);
+        await navigate(state, relativeDirection);
       }
     }
   } else if (isNumberKey(e)) {

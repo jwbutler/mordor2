@@ -7,16 +7,18 @@ import Button from './Button';
 import styles from './CombatView.module.css';
 import TabBar, { Tab } from './TabBar';
 
-// eslint-disable-next-line
-const CombatView = () => {
-  const state = GameState.getInstance();
+type Props = Readonly<{
+  state: GameState
+}>;
+
+const CombatView = ({ state }: Props) => {
   const playerUnit = state.getPlayer().unit;
   const enemyUnit = state.getCombatState()?.defender!!;
 
   const attack = async () => {
     if (state.inputEnabled()) {
       state.disableInput();
-      await new CombatHandler().playTurnPair(ATTACK, enemyUnit);
+      await new CombatHandler({ state }).playTurnPair(ATTACK, enemyUnit);
       state.enableInput();
     }
   };
@@ -29,6 +31,7 @@ const CombatView = () => {
           {playerUnit.getMeleeAbilities().map((ability, i) => {
             return (
               <ActionButton
+                state={state}
                 ability={ability}
                 target={enemyUnit}
                 index={i + 1}
@@ -47,6 +50,7 @@ const CombatView = () => {
             const target = (ability.targetType === 'enemy' ? enemyUnit : playerUnit);
             return (
               <ActionButton
+                state={state}
                 ability={ability}
                 target={target}
                 index={i + 1}
@@ -81,13 +85,13 @@ const CombatView = () => {
 };
 
 type ActionButtonProps = {
+  state: GameState,
   ability: Ability,
   target: Unit,
   index: number
 };
 
-const ActionButton = ({ ability, target, index }: ActionButtonProps) => {
-  const state = GameState.getInstance();
+const ActionButton = ({ state, ability, target, index }: ActionButtonProps) => {
   const playerUnit = state.getPlayer().unit;
 
   const enabled = state.inputEnabled() && ability.canPayCost(playerUnit);
@@ -95,7 +99,7 @@ const ActionButton = ({ ability, target, index }: ActionButtonProps) => {
   const handleClick = async () => {
     if (enabled) {
       state.disableInput();
-      await new CombatHandler().playTurnPair(ability, target);
+      await new CombatHandler({ state }).playTurnPair(ability, target);
       state.enableInput();
     }
   };

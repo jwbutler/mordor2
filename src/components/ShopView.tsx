@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { GameState } from '../classes/GameState';
 import { buyItem, type InventoryItem } from '../lib/items';
 import { playAudio } from '../lib/sounds';
@@ -11,8 +11,11 @@ import shopkeeper_no_gold_mp3 from '../sounds/shopkeeper_no_gold.mp3';
 import shopkeeper_come_back_soon_mp3 from '../sounds/shopkeeper_come_back_soon.mp3';
 import shopkeeper_thanks_for_nothing_mp3 from '../sounds/shopkeeper_thanks_for_nothing.mp3';
 
-const ShopView = () => {
-  const state = GameState.getInstance();
+type Props = Readonly<{
+  state: GameState
+}>;
+
+const ShopView = ({ state }: Props) => {
   const shop = state.getShop();
   const items = shop.getItems();
 
@@ -45,6 +48,7 @@ const ShopView = () => {
       <div className={styles.items}>
         {items.map(item => (
           <ItemView
+            state={state}
             item={item}
             price={item.value /* we could consider a markup here */}
             key={item.name}
@@ -61,18 +65,18 @@ const ShopView = () => {
   );
 };
 
-type ItemProps = {
+type ItemProps = Readonly<{
+  state: GameState,
   item: InventoryItem,
   price: number,
   onPurchase: () => void
-};
+}>;
 
-const ItemView = ({ item, price, onPurchase }: ItemProps) => {
+const ItemView = ({ state, item, price, onPurchase }: ItemProps) => {
   const onClick = async () => {
-    const state = GameState.getInstance();
     const player = state.getPlayer();
     if (player.gold >= price) {
-      buyItem(item, price);
+      buyItem(item, price, state);
       onPurchase();
       state.addMessage(`You bought a ${item.name} for ${price} gold.`);
       state.addMessage('"Anything else?"');

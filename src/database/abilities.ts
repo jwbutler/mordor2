@@ -1,3 +1,4 @@
+import { GameState } from '../classes/GameState';
 import Unit from '../classes/Unit';
 import {
   MeleeAbility,
@@ -23,9 +24,9 @@ class Attack extends MeleeAbility {
   readonly targetType = 'enemy';
 
   canPayCost = (unit: Unit) => unit.actionPoints >= this.actionPointCost;
-  use = async (unit: Unit, target: Unit) => {
+  use = async (unit: Unit, target: Unit, state: GameState) => {
     unit.actionPoints -= this.actionPointCost;
-    await useMeleeAbility(this, unit, target);
+    await useMeleeAbility(this, unit, target, state);
   };
 
   getDamage = (unit: Unit): number => getAttackDamage(unit);
@@ -45,9 +46,9 @@ class HeavyAttack extends MeleeAbility {
   readonly targetType = 'enemy';
 
   canPayCost = (unit: Unit) => unit.actionPoints >= this.actionPointCost;
-  use = async (unit: Unit, target: Unit) => {
+  use = async (unit: Unit, target: Unit, state: GameState) => {
     unit.actionPoints -= this.actionPointCost;
-    await useMeleeAbility(this, unit, target);
+    await useMeleeAbility(this, unit, target, state);
   };
 
   getDamage = (unit: Unit): number => 2 * getAttackDamage(unit);
@@ -68,11 +69,11 @@ class DoubleAttack extends MeleeAbility {
   readonly targetType = 'enemy';
 
   canPayCost = (unit: Unit) => unit.actionPoints >= this.actionPointCost;
-  use = async (unit: Unit, target: Unit) => {
+  use = async (unit: Unit, target: Unit, state: GameState) => {
     unit.actionPoints -= this.actionPointCost;
-    await useMeleeAbility(this, unit, target);
+    await useMeleeAbility(this, unit, target, state);
     await sleep(longSleepMillis);
-    await useMeleeAbility(this, unit, target);
+    await useMeleeAbility(this, unit, target, state);
   };
 
   getDamage = (unit: Unit): number => getAttackDamage(unit);
@@ -92,9 +93,9 @@ class Fireball extends AttackSpellAbility {
   readonly targetType = 'enemy';
 
   canPayCost = (unit: Unit) => unit.mana >= this.manaCost;
-  use = async (unit: Unit, target: Unit) => {
+  use = async (unit: Unit, target: Unit, state: GameState) => {
     unit.mana -= this.manaCost;
-    await useAttackSpellAbility(this, unit, target);
+    await useAttackSpellAbility(this, unit, target, state);
   };
 
   getDamage = (unit: Unit): number => 15;
@@ -115,9 +116,9 @@ class LesserHeal extends HealingSpellAbility {
   readonly targetType = 'self';
 
   canPayCost = (unit: Unit) => unit.mana >= this.manaCost;
-  use = async (unit: Unit, target: Unit) => {
+  use = async (unit: Unit, target: Unit, state: GameState) => {
     unit.mana -= this.manaCost;
-    await useHealingSpellAbility(this, unit, target);
+    await useHealingSpellAbility(this, unit, target, state);
   };
 
   getHealAmount = (caster: Unit): number => 30;
