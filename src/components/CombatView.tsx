@@ -8,7 +8,8 @@ import styles from './CombatView.module.css';
 import TabBar, { Tab } from './TabBar';
 
 type Props = Readonly<{
-  state: GameState
+  state: GameState,
+  render: () => void
 }>;
 
 const CombatView = ({ state }: Props) => {
@@ -18,7 +19,7 @@ const CombatView = ({ state }: Props) => {
   const attack = async () => {
     if (state.inputEnabled()) {
       state.disableInput();
-      await new CombatHandler({ state }).playTurnPair(ATTACK, enemyUnit);
+      await new CombatHandler({ state, render }).playTurnPair(ATTACK, enemyUnit);
       state.enableInput();
     }
   };
@@ -84,12 +85,13 @@ const CombatView = ({ state }: Props) => {
   );
 };
 
-type ActionButtonProps = {
+type ActionButtonProps = Readonly<{
   state: GameState,
+  render: () => void
   ability: Ability,
   target: Unit,
   index: number
-};
+}>;
 
 const ActionButton = ({ state, ability, target, index }: ActionButtonProps) => {
   const playerUnit = state.getPlayer().unit;
@@ -99,7 +101,7 @@ const ActionButton = ({ state, ability, target, index }: ActionButtonProps) => {
   const handleClick = async () => {
     if (enabled) {
       state.disableInput();
-      await new CombatHandler({ state }).playTurnPair(ability, target);
+      await new CombatHandler({ state, render }).playTurnPair(ability, target);
       state.enableInput();
     }
   };

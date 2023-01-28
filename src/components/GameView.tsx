@@ -1,7 +1,6 @@
 import { ReactNode, useEffect, useState } from 'react';
 import { GameState } from '../classes/GameState';
 import CombatView from './CombatView';
-import DesktopOnly from './DesktopOnly';
 import IntroView from './IntroView';
 import MainView from './MainView';
 import styles from './GameView.module.css';
@@ -9,7 +8,6 @@ import MenuBar from './MenuBar';
 import MessagesView from './MessagesView';
 import MinimapView from './MinimapView';
 import UnitView from './UnitView';
-import MobileOnly from './MobileOnly';
 
 type Props = Readonly<{
   state: GameState
@@ -18,13 +16,7 @@ type Props = Readonly<{
 const GameView = ({ state }: Props) => {
   const [ticks, setTicks] = useState(0);
 
-  useEffect(() => {
-    const render = () => {
-      setTicks(ticks + 1);
-    };
-    const timer = setInterval(render, 50);
-    return () => clearInterval(timer);
-  }, [ticks]);
+  const render = () => setTicks(ticks + 1);
 
   return (
     <div className={styles.game}>
@@ -58,10 +50,10 @@ const GameView = ({ state }: Props) => {
 };
 
 type PanelType = 'top-left' | 'bottom-left' | 'top-right' | 'bottom-right';
-type PanelProps = {
+type PanelProps = Readonly<{
   type: PanelType,
   children: ReactNode
-};
+}>;
 
 const Panel = ({ type, children }: PanelProps) => {
   return (

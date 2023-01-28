@@ -15,20 +15,24 @@ const chooseEnemyAbility = (enemy: Unit, playerUnit: Unit): Ability => {
 };
 
 type Props = Readonly<{
-  state: GameState
+  state: GameState,
+  render: () => void
 }>;
 
 class CombatHandler {
   private readonly state: GameState;
+  private readonly render: () => void;
 
-  constructor({ state }: Props) {
+  constructor({ state, render }: Props) {
     this.state = state;
+    this.render = render;
   }
 
   startCombat = async (enemy: Unit) => {
-    const { state } = this;
+    const { state, render } = this;
     const playerUnit = state.getPlayer().unit;
     state.addMessage(`${enemy.name} appeared.`);
+    render();
     await sleep(shortSleepMillis);
 
     if (randBoolean()) {
@@ -39,35 +43,40 @@ class CombatHandler {
       state.setMenu('combat');
       const enemyAbility = chooseEnemyAbility(enemy, playerUnit);
       await this.playTurn(enemy, playerUnit, enemyAbility);
+      render();
     } else {
       state.setCombatState({
         attacker: playerUnit,
         defender: enemy
       });
       state.setMenu('combat');
+      render();
     }
   };
 
   endCombat = async () => {
-    const { state } = this;
+    const { state, render } = this;
     state.setMenu(null);
     state.setCombatState(null);
     const playerUnit = state.getPlayer().unit;
     if (playerUnit.experience >= playerUnit.experienceToNextLevel) {
       await levelUp(state);
     }
+    render();
   };
 
   playTurn = async (unit: Unit, target: Unit, ability: Ability) => {
-    const { state } = this;
+    const { state, render } = this;
     const combatState = checkNotNull(state.getCombatState());
     const { attacker, defender } = combatState;
 
     await ability.use(unit, target, state);
+    render();
     await sleep(longSleepMillis);
 
     if (target.life <= 0) {
       await sleep(longSleepMillis);
+      render();
       await this.endCombat();
     } else {
       // TODO: need to set target here too
@@ -81,12 +90,15 @@ class CombatHandler {
   };
 
   playTurnPair = async (ability: Ability, target: Unit) => {
-    const { state } = this;
+    const { state, render } = this;
+    render();
     const playerUnit = state.getPlayer().unit;
     const enemyUnit = state.getCombatState()?.defender!!;
     await sleep(shortSleepMillis);
     await this.playTurn(playerUnit, target, ability);
+    render();
     await sleep(longSleepMillis);
+    render();
     // to check if the CPU unit isn't dead
     if (state.getMenu() === 'combat') {
       const enemyAbility = chooseEnemyAbility(enemyUnit, playerUnit);

@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import Trainer from './classes/Trainer';
 import GameView from './components/GameView';
 import { FIREBALL, HEAVY_ATTACK, LESSER_HEAL } from './database/abilities';
@@ -13,7 +13,6 @@ import Shop from './classes/Shop';
 import Unit from './classes/Unit';
 
 const App = () => {
-
   const shop: Shop = new Shop();
 
   const trainer: Trainer = new Trainer();
